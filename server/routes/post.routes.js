@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as PostController from '../controllers/post.controller';
-import * as validate from '../controllers/userService';
+
+
 const router = new Router();
 
 // Get all Posts
@@ -17,7 +18,7 @@ router.route('/posts/:cuid').delete(PostController.deletePost);
 
 // step one, validateAccessCode
 // working. ("/api" before the route when used in postman);
-router.route('/validate').post(validate.validateAccessCode);
-
+// router.route('/validate').post(validate.validateAccessCode);
+// no longer used. it is now being call from server to its specific modules(validateAccessCode)
 
 export default router;

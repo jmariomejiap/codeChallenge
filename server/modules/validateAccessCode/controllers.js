@@ -1,6 +1,6 @@
-import ChallengeAttempt from '.../models/challenge_attempt';
+import ChallengeAttempt from '../../models/challenge_attempt';
 import jwt from 'jsonwebtoken';
-import * as config from '.../config';
+import * as config from '../../config';
 
 export function validateAccessCode(req, res, next) {
   if (!req.body.accessCode || !req.body.passCode) {
@@ -25,7 +25,8 @@ export function validateAccessCode(req, res, next) {
             if (error) {
               res.status(500).json({ result: 'error', error: 'internal_error' });
             } else {
-              res.status(200).json({ result: 'ok', token: tokenValue, error: '' });
+              // res.status(200).json({ result: 'ok', token: tokenValue, error: '' });  // if res not here error is thrown when trying to commit.
+              req.token = tokenValue; // eslint-disable-line no-param-reassign
               next();
               return;
             }
