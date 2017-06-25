@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
 import validate from 'mongoose-validator';
+import jwt from 'jsonwebtoken';
+import * as config from '../config';
+
+const Schema = mongoose.Schema;
 
 const emailValidator = [
   validate({
@@ -25,5 +28,33 @@ const challengeAttempt = new Schema({
   challengeId: { type: 'String', required: true, validate: mongoIdValidator },
   status: { type: 'String', required: true, enum: ['not_started', 'in_progress', 'completed'] },
 });
+
+challengeAttempt.statics.verifyAccess = function verifyAccess(accessCode, passCode, done) {
+  this.find({ accessCode, passCode }, (err, fData) => {
+    if (err) {
+      done(err, null);
+    }
+    if (fData.length === 0) {
+      done(null, 'invalid');
+    } else {
+      const chaAttemptData = fData[0];
+      if (chaAttemptData.status === 'completed') {
+        done(null, 'completed');
+      } else {
+        const payLoad = { challengeAttemptId: chaAttemptData._id };
+        const options = {};
+        const key = config.default.secretKey;
+
+        jwt.sign(payLoad, key, options, (error, tokenValue) => {
+          if (error) {
+            done(error, null);
+          } else {
+            done(null, tokenValue);
+          }
+        });
+      }
+    }
+  });
+};
 
 export default mongoose.model('ChallengeAttempt', challengeAttempt);
