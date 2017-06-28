@@ -3,8 +3,7 @@ import * as Controller from './controllers';
 
 const router = new Router();
 
-// step one, validateAccessCode
-router.post('/accesscode/',
+router.post('/challengeattempt/',
   Controller.validateParams,
   Controller.loadChallengeAttempt,
   Controller.validateAttemptStatus,

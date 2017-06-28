@@ -55,7 +55,7 @@ app.use(compression());
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist')));
-app.use('/challengeattempt', challengeAttempt);
+app.use('/api/v1', challengeAttempt);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {

@@ -15,20 +15,22 @@ export function validateParams(req, res, next) {
 export function loadChallengeAttempt(req, res, next) {
   const accessCodeValue = req.validatedParams.accessCode;
   const passCodeValue = req.validatedParams.passCode;
-  return ChallengeAttempt.findOne({ accessCode: accessCodeValue, passCode: passCodeValue }, (err, data) => {
-    if (err) {
+  return ChallengeAttempt.findOne({ accessCode: accessCodeValue, passCode: passCodeValue })
+    .then((challengeAttempt) => {
+      if (!challengeAttempt) {
+        return res.status(404).json({ result: 'error', token: '', error: 'invalid_access_tokens' });
+      }
+      req.challengeAttemptDoc = challengeAttempt; // eslint-disable-line no-param-reassign
+      return next();
+    })
+    .catch((e) => {
+      console.error(`loadChallengeAttempt (findOne) ${e}`); // eslint-disable-line no-console
       return res.status(500).json({ result: 'error', error: 'internal_error' });
-    }
-    if (!data) {
-      return res.status(404).json({ result: 'error', token: '', error: 'invalid_access_tokens' });
-    }
-    req.dbData = data; // eslint-disable-line no-param-reassign
-    return next();
-  });
+    });
 }
 
 export function validateAttemptStatus(req, res, next) {
-  const status = req.dbData.status;
+  const status = req.challengeAttemptDoc.status;
   if (status === 'completed') {
     return res.status(404).json({ result: 'error', token: '', error: 'challenge_completed' });
   }
@@ -36,19 +38,19 @@ export function validateAttemptStatus(req, res, next) {
 }
 
 export function generateToken(req, res, next) {
-  const payLoad = { challengeAttemptId: req.dbData._id };
+  const payLoad = { challengeAttemptId: req.challengeAttemptDoc._id };
   const options = {};
   const key = config.default.secretKey;
   jwt.sign(payLoad, key, options, (err, token) => {
     if (err) {
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     }
-    req.token = token; // eslint-disable-line no-param-reassign
+    req.tokenDoc = token; // eslint-disable-line no-param-reassign
     return next();
   });
 }
 
 export function showChallengeAttempt(req, res) {
-  const token = req.token;
+  const token = req.tokenDoc;
   res.status(200).json({ result: 'ok', token, error: '' });
 }
