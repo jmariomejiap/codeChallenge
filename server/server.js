@@ -34,7 +34,7 @@ import routes from '../client/routes';
 import { fetchComponentData } from './util/fetchData';
 import dummyData from './dummyData';
 import serverConfig from './config';
-import validateAccess from './modules/challengeAttempt/routes';
+import challengeAttempt from './modules/challengeAttempt/routes';
 
 // Set native promises as mongoose promise
 mongoose.Promise = global.Promise;
@@ -55,7 +55,7 @@ app.use(compression());
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist')));
-app.use('/validate', validateAccess);
+app.use('/challengeattempt', challengeAttempt);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {

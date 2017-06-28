@@ -1,4 +1,4 @@
-import ChallengeAttempt from './models/challenge_attempt';
+import ChallengeAttempt from './models/challengeAttempt';
 
 export default function () {
   ChallengeAttempt.count().exec((err, count) => {

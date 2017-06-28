@@ -5,9 +5,11 @@ const router = new Router();
 
 // step one, validateAccessCode
 router.post('/accesscode/',
-  Controller.verifyAccess,
-  Controller.verifyStatus,
+  Controller.validateParams,
+  Controller.loadChallengeAttempt,
+  Controller.validateAttemptStatus,
   Controller.generateToken,
+  Controller.showChallengeAttempt,
 );
 
 
