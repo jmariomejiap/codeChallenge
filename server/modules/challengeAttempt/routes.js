@@ -3,7 +3,7 @@ import * as Controller from './controllers';
 
 const router = new Router();
 
-router.post('/challengeattempt/',
+router.post('/',
   Controller.validateParams,
   Controller.loadChallengeAttempt,
   Controller.validateAttemptStatus,

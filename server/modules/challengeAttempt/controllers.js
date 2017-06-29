@@ -45,12 +45,12 @@ export function generateToken(req, res, next) {
     if (err) {
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     }
-    req.tokenDoc = token; // eslint-disable-line no-param-reassign
+    req.token = token; // eslint-disable-line no-param-reassign
     return next();
   });
 }
 
 export function showChallengeAttempt(req, res) {
-  const token = req.tokenDoc;
+  const token = req.token;
   res.status(200).json({ result: 'ok', token, error: '' });
 }
