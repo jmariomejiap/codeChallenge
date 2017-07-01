@@ -1,6 +1,6 @@
 import ChallengeAttempt from './models/challengeAttempt';
 import Challenge from './models/challenge';
-import ChallengeStep from './models/ChallengeStep';
+import ChallengeStep from './models/challengeStep';
 
 export default function () {
   ChallengeAttempt.count().exec((err, count) => {
@@ -32,6 +32,7 @@ export default function () {
       return;
     }
     const challengeDummy = new Challenge({
+      _id: '5944d5948b3db4d14ee2ef00',
       name: 'first',
       folderName: 'beginnerFunctions',
     });
@@ -47,19 +48,26 @@ export default function () {
 
 
   ChallengeStep.count().exec((err, count) => {
-    if (count > 0) {
+    if (count > 1) {
       return;
     }
-    const challengeStepDummy = new ChallengeStep({
-      id: 'variables',
-      challengeId: '5944d5948b3db4d14ee2ef00',
-      description: 'file with description',
-    });
-    ChallengeStep.create(challengeStepDummy, (error) => {
+    const challengeSteps = [
+      {
+        id: 'variables',
+        challengeId: '5944d5948b3db4d14ee2ef00',
+        description: 'first file with description',
+      },
+      {
+        id: 'variables2',
+        challengeId: '5944d5948b3db4d14ee2ef00',
+        description: 'second file with description',
+      },
+    ];
+    ChallengeStep.create(challengeSteps, (error) => {
       if (error) {
-        // console.log('error saving challengeStepDummy ', error);
+        // console.log('error saving challengeStepDummy 2 doc ', error);
       } else {
-        // console.log('challengeStep dummy is good to go');
+        // console.log('challengeStep dummies are good to go');
       }
     });
   });
