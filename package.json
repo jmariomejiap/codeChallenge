@@ -114,14 +114,14 @@
     "webpack-manifest-plugin": "1.0.1"
   },
   "engines": {
-    "node": ">=4"
+    "node": "7.5"
   },
   "ava": {
     "files": [
-      "test.js"
+      "server/**/tests*.js"
     ],
     "source": [
-      "test.js"
+      "server/**/*.js"
     ],
     "failFast": true,
     "babel": "inherit",
