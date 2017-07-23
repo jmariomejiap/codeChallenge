@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "A Code challenge platform",
   "scripts": {
-    "test": "cross-env LOG_LEVEL=error NODE_ENV=test PORT=8080 MONGO_URL=mongodb://localhost:27017/gg-test node node_modules/.bin/ava --serial -v",
+    "test": "cross-env LOG_LEVEL=error NODE_ENV=test PORT=8080 MONGO_URL=mongodb://localhost:27017/code-challenge-test node node_modules/.bin/ava --serial -v",
     "watch:test": "npm run test -- --watch",
     "cover": "nyc npm run test",
     "check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
