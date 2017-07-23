@@ -123,6 +123,7 @@
     "source": [
       "server/**/*.js"
     ],
+    "timeout": "10s",
     "failFast": true,
     "babel": "inherit",
     "require": [
