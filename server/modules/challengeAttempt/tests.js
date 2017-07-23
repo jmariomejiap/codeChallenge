@@ -14,13 +14,19 @@ test.cb.before('connecting to challenge', (t) => {
   });
 });
 
+test.cb.beforeEach('connecting to challenge', async (t) => {
+  const ch = await Challenge.save();
+  await ChallengeStep.save({....., chnaggendId: ch.id});
+});
+
+/**
 export async function wait(sec) {
   await new Promise((resolve) => {
     setTimeout(() => {
       resolve('continue');
     }, (sec * 1000));
   });
-};
+}; */
 
 test('Should always pass', t => {
   t.is(true, true);
