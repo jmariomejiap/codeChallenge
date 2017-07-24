@@ -14,12 +14,41 @@ test.cb.before('connecting to challenge', (t) => {
   });
 });
 
-test.cb.beforeEach('connecting to challenge', async (t) => {
-  const ch = await Challenge.save();
-  await ChallengeStep.save({....., chnaggendId: ch.id});
+
+const createChallenge = () => {
+  return new Promise((resolve, reject) => {
+    Challenge.create({
+      name: 'first-test',
+      folderName: 'beginnerFunctions-test',
+    }, (err, cha) => {
+      if (err) { 
+        return reject(err);
+      }
+      return resolve(cha);
+    });
+  });
+};
+
+/*
+
+test.beforeEach('connecting to challenge', async (t) => {
+  console.log('inside beforeEach');
+  //const challengeParams = { name: 'first-test', folderName: 'beginnerFunctions-test'};
+  //console.log('params are: ', challengeParams);
+  //const ch = await Challenge.create(challengeParams);
+  const chaHolder = await createChallenge();
+  
+  console.log('after ch await');
+
+   t.is(true, true);
+  console.log('end of tests' + chaHolder);
+  t.end();
+  t.pass();
+  //await ChallengeStep.save({....., chnaggendId: ch.id});
+  
 });
 
-/**
+
 export async function wait(sec) {
   await new Promise((resolve) => {
     setTimeout(() => {
@@ -50,3 +79,27 @@ test('Should wait for a promise', async (t) => {
   t.is(true, true);
   console.log('end of tests' + res);
 });
+
+
+// originally this is part of beforeEach.
+// option 1 is to elaborate promise inside the test(below)
+// option 2 is to call createChallenge function up in line 18.
+// I believe we have a connection error. to db.
+test('saves challenge', async (t) => {
+  console.log('before await')
+  const myChallenge = await new Promise((resolve,reject) => {
+    Challenge.create({
+      name: 'first-test',
+      folderName: 'beginnerFunctions-test',
+    }, (err, cha) => {
+      if (err) { 
+        return reject(err);
+      }
+      return resolve(cha);
+    });
+    
+  });
+  console.log('after await = ', myChallenge);
+  t.is(true, true);
+  t.end();
+})

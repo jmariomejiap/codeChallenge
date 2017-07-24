@@ -1,10 +1,10 @@
 import test from 'ava';
 import request from 'supertest';
 import app from '../../server';
-// import Post from '../post';
+import Post from '../post';
 import { connectDB, dropDB } from '../../util/test-helpers';
 
-/*
+
 // Initial posts added into test db
 const posts = [
   new Post({ name: 'Prashant', title: 'Hello Mern', slug: 'hello-mern', cuid: 'f34gb2bh24b24b2', content: "All cats meow 'mern!'" }),
@@ -77,4 +77,4 @@ test.serial('Should correctly delete a post', async t => {
   const queriedPost = await Post.findOne({ cuid: post.cuid }).exec();
   t.is(queriedPost, null);
 });
-*/
+
