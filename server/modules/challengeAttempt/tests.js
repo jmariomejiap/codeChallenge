@@ -1,75 +1,117 @@
 import test from 'ava';
 // import supertest from 'supertest-as-promised';
 import { connectDB } from '../../util/test-helpers';
-// import app from './server/server.js'
+import app from '../../server.js';
 import Challenge from '../../models/challenge.js';
 import ChallengeStep from '../../models/challengeStep.js';
+import ChallengeAttempt from '../../models/challengeAttempt.js';
 
+const internals = {};
 
-test.cb.before('connecting to challenge', (t) => {
+test.before('connecting to challenge', t => {
   connectDB(t, () => {
-    console.log('connected to the db');
-    t.end();
-    t.pass();
   });
+  // console.log('connected to the db');
+  // t.end();
+  // t.pass();
 });
 
 
-const createChallenge = () => {
-  return new Promise((resolve, reject) => {
+test('saves a challenge', async (t) => {
+  const challenge = await new Promise((resolve, reject) => {
     Challenge.create({
       name: 'first-test',
       folderName: 'beginnerFunctions-test',
-    }, (err, cha) => {
-      if (err) { 
+    }, (err, chaDoc) => {
+      if (err) {
+        console.log('error inside challenge creation!'); // eslint-disable-line no-console
         return reject(err);
       }
-      return resolve(cha);
+      return resolve(chaDoc);
     });
   });
-};
+  internals.challenge = challenge;
 
-/*
-
-test.beforeEach('connecting to challenge', async (t) => {
-  console.log('inside beforeEach');
-  //const challengeParams = { name: 'first-test', folderName: 'beginnerFunctions-test'};
-  //console.log('params are: ', challengeParams);
-  //const ch = await Challenge.create(challengeParams);
-  const chaHolder = await createChallenge();
-  
-  console.log('after ch await');
-
-   t.is(true, true);
-  console.log('end of tests' + chaHolder);
-  t.end();
-  t.pass();
-  //await ChallengeStep.save({....., chnaggendId: ch.id});
-  
+  t.is(challenge.name, 'first-test');
 });
 
 
-export async function wait(sec) {
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve('continue');
-    }, (sec * 1000));
+test('saves challengeSteps', async (t) => {
+  const challengeStepsArray = [
+    {
+      id: 'variables-test',
+      challengeId: internals.challenge._id,
+      description: 'first file with description-TEST',
+    },
+    {
+      id: 'variables2-test',
+      challengeId: internals.challenge._id,
+      description: 'second file with description-TEST',
+    };
+  ];
+  const challengeStep = await ChallengeStep.create(challengeStepsArray);
+  internals.challengeStepA = challengeStep[0];
+  internals.challengeStepB = challengeStep[1];
+  
+  t.is(challengeStep.length, 2);
+});
+
+
+test('saves challengeAttempt', async (t) => {
+  const createdChallAttempt = await ChallengeAttempt.create({
+    accessCode: 'myAccessCode-test',
+    passCode: 'myPassCode-test',
+    fullName: 'userName-test',
+    email: 'dummy-test@dummy.com',
+    score: 0,
+    currentStepId: internals.challengeStepA._id,
+    challengeId: internals.challengeStepA.challengeId,
+    status: 'not_started',
   });
-}; */
+  internals.challengeAttempt = createdChallAttempt;
 
-test('Should always pass', t => {
-  t.is(true, true);
+  t.is(createdChallAttempt.fullName, 'username-test');
 });
+
+
+test('find challenge', async (t) => {
+  const challengeSaved = await Challenge.findOne({ name: 'first-test' });
+
+  t.deepEqual(challengeSaved._id, internals.challenge._id);
+});
+
+
+test('delete challenge', async (t) => {
+  await Challenge.findOneAndRemove({ name: 'first-test' });
+  const noChallenge = await Challenge.findOne({ name: 'first-test' });
+  t.is(noChallenge, null);
+});
+
+
+test('delete challengeSteps', async (t) => {
+  await ChallengeStep.remove({ challengeId: internals.challengeStepA.challengeId });
+  const noChallengeSteps = await ChallengeStep.findOne({ id: 'variables-test' });
+  t.is(noChallengeSteps, null);
+});
+
+
+test('delete challengeAttempt', async (t) => {
+  await ChallengeAttempt.remove({ challengeId: internals.challengeStepA.challengeId });
+  const noChallengeAttempt = await ChallengeAttempt.findOne({ fullName: internals.challengeAttempt.fullName });
+  t.is(noChallengeAttempt, null);
+});
+
 
 test.cb('Should wait for a timeout', t => {
   setTimeout(() => {
-      t.is(true, true);
-      t.end();
+    t.is(true, true);
+    t.end();
   }, (200));
 });
 
+
 test('Should wait for a promise', async (t) => {
-  console.log('begining of tests');
+  // console.log('begining of tests'); // eslint-disable-line no-console
   const res = await new Promise((resolve) => {
     setTimeout(() => {
       resolve('*******');
@@ -77,29 +119,5 @@ test('Should wait for a promise', async (t) => {
   });
 
   t.is(true, true);
-  console.log('end of tests' + res);
+  // console.log('end of tests' + res); // eslint-disable-line no-console
 });
-
-
-// originally this is part of beforeEach.
-// option 1 is to elaborate promise inside the test(below)
-// option 2 is to call createChallenge function up in line 18.
-// I believe we have a connection error. to db.
-test('saves challenge', async (t) => {
-  console.log('before await')
-  const myChallenge = await new Promise((resolve,reject) => {
-    Challenge.create({
-      name: 'first-test',
-      folderName: 'beginnerFunctions-test',
-    }, (err, cha) => {
-      if (err) { 
-        return reject(err);
-      }
-      return resolve(cha);
-    });
-    
-  });
-  console.log('after await = ', myChallenge);
-  t.is(true, true);
-  t.end();
-})
