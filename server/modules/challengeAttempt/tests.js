@@ -47,12 +47,11 @@ test('saves challengeSteps', async (t) => {
       id: 'variables2-test',
       challengeId: internals.challenge._id,
       description: 'second file with description-TEST',
-    };
+    },
   ];
   const challengeStep = await ChallengeStep.create(challengeStepsArray);
   internals.challengeStepA = challengeStep[0];
   internals.challengeStepB = challengeStep[1];
-  
   t.is(challengeStep.length, 2);
 });
 
