@@ -1,5 +1,5 @@
 import test from 'ava';
-// import supertest from 'supertest-as-promised';
+import supertest from 'supertest-as-promised';
 import { connectDB } from '../../util/test-helpers';
 import app from '../../server.js';
 import Challenge from '../../models/challenge.js';
@@ -77,6 +77,33 @@ test('find challenge', async (t) => {
   const challengeSaved = await Challenge.findOne({ name: 'first-test' });
 
   t.deepEqual(challengeSaved._id, internals.challenge._id);
+});
+
+
+test('should fail if invalid accessCode or passCode', async (t) => {
+  const supert = await supertest(app)
+    .post('/api/v1/challengeAttempt')
+    .set('Accept', 'application/json')
+    .send({ accessCode: 'wrongAccessCode', passCode: 'wrongPassCode' });
+
+  const status = supert.status;
+  t.is(status, 404);
+});
+
+
+test('should succesfully retrive challengeAttempt', async (t) => {
+  const supert = await supertest(app)
+    .post('/api/v1/challengeAttempt')
+    .set('Accept', 'application/json')
+    .send({ accessCode: internals.challengeAttempt.accessCode, passCode: internals.challengeAttempt.passCode });
+
+  const status = supert.status;
+  const resOK = supert.body.result;
+  const token = supert.body.token;
+  internals.token = token;
+
+  t.is(resOK, 'ok');
+  t.is(status, 200);
 });
 
 
