@@ -56,7 +56,7 @@ export function loadChallengeAttempt(req, res, next) {
 export function loadChallengeStep(req, res, next) {
   const challengeId = req.challengeAttemptDoc.challengeId;
 
-  return ChallengeStep.find({ challengeId }) // SEVERAL FILES WILL HAVE CHALLENGE ID
+  return ChallengeStep.find({ challengeId })
     .then((challengeStep) => {
       if (challengeStep.length === 0) {
         return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
