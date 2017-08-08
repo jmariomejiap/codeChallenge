@@ -18,18 +18,7 @@ test.before('connecting to challenge', t => {
 
 
 test('saves a challenge', async (t) => {
-  const challenge = await new Promise((resolve, reject) => {
-    Challenge.create({
-      name: 'first-test',
-      folderName: 'beginnerFunctions-test',
-    }, (err, chaDoc) => {
-      if (err) {
-        console.log('error inside challenge creation!'); // eslint-disable-line no-console
-        return reject(err);
-      }
-      return resolve(chaDoc);
-    });
-  });
+  const challenge = await Challenge.create({ name: 'first-test', folderName: 'beginnerFunctions-test' });
   internals.challenge = challenge;
 
   t.is(challenge.name, 'first-test');
