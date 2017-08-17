@@ -8,7 +8,8 @@ import ChallengeAttempt from '../../models/challengeAttempt.js';
 const internals = {};
 
 test.before('connecting to challenge?', () => {
-  supertest(server);
+  // supertest(server);
+  // server();
 });
 
 test.beforeEach(async () => {
@@ -34,13 +35,6 @@ test.afterEach.always(async () => {
   await Challenge.remove({});
   await ChallengeStep.remove({});
   await ChallengeAttempt.remove({});
-});
-
-
-test('can find a challenge', async (t) => {
-  const challengeSaved = await Challenge.findOne({ name: 'first-test' });
-  const foundId = challengeSaved._id;
-  t.notDeepEqual(foundId.length, 0);
 });
 
 
