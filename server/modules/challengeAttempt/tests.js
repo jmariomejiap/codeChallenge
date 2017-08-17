@@ -44,8 +44,7 @@ test('should fail if invalid accessCode or passCode', async (t) => {
     .set('Accept', 'application/json')
     .send({ accessCode: 'wrongAccessCode', passCode: 'wrongPassCode' });
 
-  const status = supert.status;
-  t.is(status, 404);
+  t.is(supert.status, 404);
 });
 
 
@@ -55,13 +54,10 @@ test('should succesfully retrive challengeAttempt', async (t) => {
     .set('Accept', 'application/json')
     .send({ accessCode: 'myAccessCode-test', passCode: 'myPassCode-test' });
 
-  const status = supert.status;
-  const resOK = supert.body.result;
-  const token = supert.body.token;
-  internals.token = token;
+  internals.token = supert.body.token;
 
-  t.is(resOK, 'ok');
-  t.is(status, 200);
+  t.is(supert.body.result, 'ok');
+  t.is(supert.status, 200);
 });
 
 
