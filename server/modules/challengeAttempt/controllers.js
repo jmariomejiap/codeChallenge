@@ -24,7 +24,6 @@ export function loadChallengeAttempt(req, res, next) {
       return next();
     })
     .catch((e) => {
-      console.error(`challenge + loadChallengeAttempt (findOne) ${e}`); // eslint-disable-line no-console
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     });
 }
