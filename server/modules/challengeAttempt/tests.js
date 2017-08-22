@@ -70,5 +70,5 @@ test('Should wait for a promise', async (t) => {
   });
 
   t.is(true, true);
-  console.log('end of tests' + res); // eslint-disable-line no-console
+  console.log(`end of tests + ${res}`); // eslint-disable-line no-console
 });
