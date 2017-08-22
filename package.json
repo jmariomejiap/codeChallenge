@@ -118,10 +118,12 @@
   },
   "ava": {
     "files": [
-      "server/**/tests*.js"
+      "server/**/tests*.js",
+      "client/**/*.js"
     ],
     "source": [
-      "server/**/*.js"
+      "server/**/*.js",
+      "client/**/*.js"
     ],
     "timeout": "30s",
     "failFast": true,
