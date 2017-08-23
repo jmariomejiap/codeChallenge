@@ -7,13 +7,16 @@ image: node:7.5
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
 services:
-    - mongodb
+  - mongo
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 cache:
   paths:
   - node_modules/
+
+variables:
+  MONGO_URL: 'mongodb://mongo/app_name'
 
 test_backend:
   script:
