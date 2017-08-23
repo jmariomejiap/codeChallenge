@@ -8,11 +8,15 @@ import ChallengeAttempt from '../../models/challengeAttempt.js';
 const internals = {};
 
 test.before('connecting to challenge?', () => {
-  // supertest(server);
-  // server();
+  server();
+  internals.reqAgent = supertest('http://localhost:8080');
 });
 
 test.beforeEach(async () => {
+  await Challenge.remove({});
+  await ChallengeStep.remove({});
+  await ChallengeAttempt.remove({});
+
   const challengeDoc = await Challenge.create({ name: 'first-test', folderName: 'beginnerFunctions-test' });
   const challengeStepsDoc = await ChallengeStep.create([
     { id: 'variables-test', challengeId: challengeDoc._id, description: 'first file with description-test' },
@@ -31,25 +35,17 @@ test.beforeEach(async () => {
   });
 });
 
-test.afterEach.always(async () => {
-  await Challenge.remove({});
-  await ChallengeStep.remove({});
-  await ChallengeAttempt.remove({});
-});
-
-
 test('should fail if invalid accessCode or passCode', async (t) => {
-  const supert = await supertest(server)
+  const res = await internals.reqAgent
     .post('/api/v1/challengeAttempt')
     .set('Accept', 'application/json')
     .send({ accessCode: 'wrongAccessCode', passCode: 'wrongPassCode' });
 
-  t.is(supert.status, 404);
+  t.is(res.status, 404);
 });
 
-
 test('should succesfully retrive challengeAttempt', async (t) => {
-  const supert = await supertest(server)
+  const supert = await internals.reqAgent
     .post('/api/v1/challengeAttempt')
     .set('Accept', 'application/json')
     .send({ accessCode: 'myAccessCode-test', passCode: 'myPassCode-test' });
@@ -61,6 +57,7 @@ test('should succesfully retrive challengeAttempt', async (t) => {
 });
 
 
+/**
 test('Should wait for a promise', async (t) => {
   // console.log('begining of tests'); // eslint-disable-line no-console
   const res = await new Promise((resolve) => {
@@ -70,5 +67,11 @@ test('Should wait for a promise', async (t) => {
   });
 
   t.is(true, true);
-  console.log(`end of tests + ${res}`); // eslint-disable-line no-console
+  console.log('end of tests' + res); // eslint-disable-line no-console
 });
+
+test('Should always pass', (t) => {
+  console.log('test that should always pass'); // eslint-disable-line no-console
+  t.is(true, true);
+});
+ */
