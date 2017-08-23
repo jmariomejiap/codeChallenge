@@ -7,7 +7,6 @@ image: node:7.5
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
 services:
-  - mongo:latest
 
 
 # This folder is cached between builds
@@ -18,10 +17,11 @@ cache:
 
 test_backend:
   script:
-   - npm install -S
+   - npm install --silent
+   - mongod
    - npm test
 
 test_lint:
   script:
-   - npm install -S
+   - npm install --silent
    - npm run lint
