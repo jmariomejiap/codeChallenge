@@ -42,18 +42,69 @@ test('should fail if invalid accessCode or passCode', async (t) => {
     .send({ accessCode: 'wrongAccessCode', passCode: 'wrongPassCode' });
 
   t.is(res.status, 404);
+  t.is(res.body.result, 'error');
+  t.falsy(res.body.token, 'token is empty');
+  t.truthy(res.body.error, 'got error message');
 });
 
+
+test('should fail with lowercase or uppercase arguments, must be case sensitive', async (t) => {
+  const res = await internals.reqAgent
+    .post('/api/v1/challengeAttempt')
+    .set('Accept', 'application/json')
+    .send({ accessCode: 'MYACCESSCODE-test', passCode: 'MYPASSCODE-test' });
+
+  t.is(res.status, 404);
+  t.is(res.body.result, 'error');
+  t.falsy(res.body.token, 'token is empty');
+  t.truthy(res.body.error, 'got error message');
+});
+
+
+test('should fail if incomplete arguments, error missing params', async (t) => {
+  const res = await internals.reqAgent
+    .post('/api/v1/challengeAttempt')
+    .set('Accept', 'application/json')
+    .send({ accessCode: 'myAccessCode-test' });
+
+  t.is(res.status, 404);
+  t.is(res.body.result, 'error');
+  t.is(res.body.error, 'missing_parameters');
+});
+
+
+test('should work even if lowerCase endpoint', async (t) => {
+  const res = await internals.reqAgent
+    .post('/api/v1/challengeattempt')
+    .set('Accept', 'application/json')
+    .send({ accessCode: 'myAccessCode-test', passCode: 'myPassCode-test' });
+
+  t.is(res.status, 200);
+  t.is(res.body.result, 'ok');
+  t.truthy(res.body.token, 'got token');
+  t.falsy(res.body.error, 'error is empty');
+});
+
+
 test('should succesfully retrive challengeAttempt', async (t) => {
-  const supert = await internals.reqAgent
+  const res = await internals.reqAgent
     .post('/api/v1/challengeAttempt')
     .set('Accept', 'application/json')
     .send({ accessCode: 'myAccessCode-test', passCode: 'myPassCode-test' });
 
-  internals.token = supert.body.token;
+  t.is(res.status, 200);
+  t.is(res.body.result, 'ok');
+  t.truthy(res.body.token, 'token is On');
+  t.falsy(res.body.error, 'error is empty');
+});
 
-  t.is(supert.body.result, 'ok');
-  t.is(supert.status, 200);
+test('should not be able to delete challengeAttempt', async (t) => {
+  const res = await internals.reqAgent
+    .delete('/api/v1/challengeAttempt')
+    .set('Accept', 'application/json')
+    .send({ accessCode: 'myAccessCode-test', passCode: 'myPassCode-test' });
+
+  t.is(res.status, 404);
 });
 
 
