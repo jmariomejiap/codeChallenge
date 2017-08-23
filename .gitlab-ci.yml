@@ -17,11 +17,13 @@ cache:
 
 variables:
   MONGO_URL: 'mongodb://mongo/app_name'
+  NODE_ENV: 'test' 
+  PORT: 8080
 
 test_backend:
   script:
    - npm install --silent
-   - cross-env LOG_LEVEL=error NODE_ENV=test PORT=8080 node node_modules/.bin/ava --serial -v
+   - node node_modules/.bin/ava --serial -v
 
 test_lint:
   script:
