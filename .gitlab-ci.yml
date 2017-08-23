@@ -18,6 +18,7 @@ cache:
 test_backend:
   script:
    - npm install --silent
+   - npm install -g mongodb-prebuilt
    - mongod
    - npm test
 
