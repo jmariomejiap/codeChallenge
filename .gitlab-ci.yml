@@ -18,10 +18,10 @@ cache:
 
 test_backend:
   script:
-   - npm install
+   - npm install -S
    - npm test
 
 test_lint:
   script:
-   - npm install
+   - npm install -S
    - npm run lint
