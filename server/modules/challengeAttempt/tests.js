@@ -9,7 +9,7 @@ const internals = {};
 
 test.before('connecting to challenge?', () => {
   server();
-  internals.reqAgent = supertest(`http://localhost:8080`);
+  internals.reqAgent = supertest('http://localhost:8080');
 });
 
 test.beforeEach(async () => {

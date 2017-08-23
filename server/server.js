@@ -28,10 +28,9 @@ import challengeAttempt from './modules/challengeAttempt/routes';
 import getChallenge from './modules/getChallenge/routes';
 
 
-
-export default function(options) {
-  console.log('start server');
-  //console.log(options);
+export default function (options) {
+  console.log('start server'); // eslint-disable-line no-console
+  console.log(options); // eslint-disable-line no-console
   // Initialize the Express App
   const app = new Express();
 
