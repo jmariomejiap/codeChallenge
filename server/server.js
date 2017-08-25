@@ -25,7 +25,7 @@ import { fetchComponentData } from './util/fetchData';
 import dummyData from './dummyData';
 import serverConfig from './config';
 import challengeAttempt from './modules/challengeAttempt/routes';
-import getChallenge from './modules/getChallenge/routes';
+import challenge from './modules/challenge/routes';
 
 
 export default function (options) {
@@ -61,7 +61,7 @@ export default function (options) {
   app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
   app.use(Express.static(path.resolve(__dirname, '../dist')));
   app.use('/api/v1/challengeAttempt', challengeAttempt);
-  app.use('/api/v1/getChallenge', getChallenge);
+  app.use('/api/v1/challenge', challenge);
 
   // Render Initial HTML
   const renderFullPage = (html, initialState) => {
