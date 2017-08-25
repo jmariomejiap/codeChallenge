@@ -24,7 +24,6 @@ test.beforeEach(async () => {
   ]);
 
   await ChallengeAttempt.create({
-    _id: '50341373e894ad16347efe01',
     accessCode: 'myAccessCode-test',
     passCode: 'myPassCode-test',
     fullName: 'dummyusername-test',
@@ -35,6 +34,14 @@ test.beforeEach(async () => {
     status: 'not_started',
   });
 });
+
+const fetchToken = async () => {
+  const res = await internals.reqAgent
+    .post('/api/v1/challengeAttempt')
+    .set('Accept', 'application/json')
+    .send({ accessCode: 'myAccessCode-test', passCode: 'myPassCode-test' });
+  return res.body.token;
+};
 
 test('should fail if incomplete arguments, error missing params', async (t) => {
   const res = await internals.reqAgent
@@ -112,10 +119,11 @@ test('should not Delete even with right arguments', async (t) => {
 
 
 test('successful test, right arguments return challengeSteps+', async (t) => {
+  const token = await fetchToken();
   const res = await internals.reqAgent
     .post('/api/v1/challenge')
     .set('Accept', 'application/json')
-    .send({ accessCode: 'myAccessCode-test', token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA' }); // eslint-disable-line 
+    .send({ accessCode: 'myAccessCode-test', token });
 
   t.is(res.status, 200);
   t.is(res.body.result, 'ok');
