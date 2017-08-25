@@ -16,7 +16,6 @@ test.beforeEach(async () => {
   await Challenge.remove({});
   await ChallengeStep.remove({});
   await ChallengeAttempt.remove({});
-// id 599d19a1ce1126df3caa53e4
 
   const challengeDoc = await Challenge.create({ name: 'first-test', folderName: 'beginnerFunctions-test' });
   const challengeStepsDoc = await ChallengeStep.create([
