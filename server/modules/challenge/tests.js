@@ -92,6 +92,15 @@ test('should fail if payload _id and accessCode dont match, valid values without
   t.is(res.body.error, 'challenge_not_found');
 });
 
+test('should NOT accept GET with right arguments', async (t) => {
+  const res = await internals.reqAgent
+    .get('/api/v1/challenge')
+    .send({ accessCode: 'myAccessCode-test', token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA' }); // eslint-disable-line 
+
+  t.is(res.status, 404);
+  t.falsy(res.body.result, 'result is non existent');
+});
+
 test('successful test, right arguments work', async (t) => {
   const res = await internals.reqAgent
     .post('/api/v1/challenge')
