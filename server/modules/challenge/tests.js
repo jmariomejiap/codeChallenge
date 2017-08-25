@@ -70,6 +70,17 @@ test('internal error if token as been tampered', async (t) => {
   t.is(res.body.error, 'internal_error');
 });
 
+test('should fail if token payload is empty', async (t) => {
+  const res = await internals.reqAgent
+    .post('/api/v1/challenge')
+    .set('Accept', 'application/json')
+    .send({ accessCode: 'myAccessCode-test', token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.OatqkwDnaqBNtgHHYJFGMioVx_9ZZ_sePRYyENAx5to' });
+
+  t.is(res.status, 404);
+  t.is(res.body.result, 'error');
+  t.is(res.body.error, 'challenge_not_found');
+});
+
 test('successful test, right arguments work', async (t) => {
   const res = await internals.reqAgent
     .post('/api/v1/challenge')
