@@ -48,6 +48,18 @@ test('should fail if incomplete arguments, error missing params', async (t) => {
   t.is(res.body.error, 'missing_parameters');
 });
 
+test('should not have access to dummyData', async (t) => {
+  const res = await internals.reqAgent
+    .post('/api/v1/challenge')
+    .set('Accept', 'application/json')
+    .send({ accessCode: 'myAccessCode', token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OThhMTZlYTQ3OGY2MTFmNGE3Nzg1MTUiLCJpYXQiOjE1MDM2MTgwMjZ9.HipZhED2l7-mTPtCYYPEspmN9oEQYOTMcSqfwH-2yeo'}); // eslint-disable-line 
+
+  t.is(res.status, 404);
+  t.is(res.body.result, 'error');
+  t.is(res.body.error, 'challenge_not_found');
+});
+
+
 test('successful test, right arguments work', async (t) => {
   const res = await internals.reqAgent
     .post('/api/v1/challenge')
