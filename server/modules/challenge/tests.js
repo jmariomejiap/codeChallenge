@@ -59,6 +59,16 @@ test('should not have access to dummyData', async (t) => {
   t.is(res.body.error, 'challenge_not_found');
 });
 
+test('internal error if token as been tampered', async (t) => {
+  const res = await internals.reqAgent
+    .post('/api/v1/challenge')
+    .set('Accept', 'application/json')
+    .send({ accessCode: 'myAccessCode-test', token: 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA' }); // eslint-disable-line 
+
+  t.is(res.status, 500);
+  t.is(res.body.result, 'error');
+  t.is(res.body.error, 'internal_error');
+});
 
 test('successful test, right arguments work', async (t) => {
   const res = await internals.reqAgent
