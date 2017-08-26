@@ -133,7 +133,6 @@
   },
   "nyc": {
     "include": [
-      "client/**/*.js",
       "server/**/*.js"
     ],
     "exclude": [
