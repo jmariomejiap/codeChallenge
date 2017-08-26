@@ -106,23 +106,3 @@ test('should not be able to delete challengeAttempt', async (t) => {
 
   t.is(res.status, 404);
 });
-
-
-/**
-test('Should wait for a promise', async (t) => {
-  // console.log('begining of tests'); // eslint-disable-line no-console
-  const res = await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve('*******');
-    }, (200));
-  });
-
-  t.is(true, true);
-  console.log('end of tests' + res); // eslint-disable-line no-console
-});
-
-test('Should always pass', (t) => {
-  console.log('test that should always pass'); // eslint-disable-line no-console
-  t.is(true, true);
-});
- */
