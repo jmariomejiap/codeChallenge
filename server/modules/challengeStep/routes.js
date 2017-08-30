@@ -11,7 +11,10 @@ router.post('/',
   challengeController.verifyPayLoad,
   challengeController.loadChallengeAttempt,
   challengeStepController.verifyCurrentStepId,
-  challengeStepController.findChallengeStep
+  challengeStepController.findChallengeStep,
+  challengeStepController.findChallenge,
+  challengeStepController.buildPath,
+  challengeStepController.fileFetcher
 
 );
 
