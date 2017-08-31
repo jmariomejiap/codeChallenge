@@ -14,7 +14,8 @@ router.post('/',
   challengeStepController.findChallengeStep,
   challengeStepController.findChallenge,
   challengeStepController.buildPath,
-  challengeStepController.fileFetcher
+  challengeStepController.fileFetcher,
+  challengeStepController.sendResponse
 
 );
 
