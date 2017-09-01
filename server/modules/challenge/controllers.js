@@ -47,8 +47,7 @@ export function loadChallengeAttempt(req, res, next) {
       req.challengeAttemptDoc = challengeAttempt; // eslint-disable-line no-param-reassign
       return next();
     })
-    .catch((e) => {
-      console.error(`getChallenge + loadChallengeAttempt (findOne) ${e}`); // eslint-disable-line no-console
+    .catch(() => {
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     });
 }
@@ -64,8 +63,7 @@ export function loadChallengeStep(req, res, next) {
       req.challengeStepDoc = challengeStep; // eslint-disable-line no-param-reassign
       return next();
     })
-    .catch((e) => {
-      console.error(`getChallenge + loadChallengeStep (findById) ${e}`); // eslint-disable-line no-console
+    .catch(() => {
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     });
 }
