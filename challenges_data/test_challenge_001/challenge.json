@@ -1,9 +1,5 @@
-/* 
- * The content of this file is not yet defined.
- * For now only JS challenges will be supported but
- * it is possible that support for more languages is
- * added in the future.
-**/
 {
-    "language": "javascript"
+    "language": "javascript",
+    "name": "Math Challenge",
+    "description": "Welcome to the Math Challenge. This challenge will present you a series of quick and easy math related challenges. Have fun!"
 }
