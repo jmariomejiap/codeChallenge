@@ -8,7 +8,7 @@ router.post('/',
   Controller.loadChallengeAttempt,
   Controller.validateAttemptStatus,
   Controller.generateToken,
-  Controller.showChallengeAttempt,
+  Controller.sendToken,
 );
 
 

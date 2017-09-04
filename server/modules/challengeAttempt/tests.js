@@ -19,7 +19,7 @@ test.beforeEach(async () => {
 
   const challengeDoc = await Challenge.create({ name: 'first-test', folderName: 'beginnerFunctions-test' });
   const challengeStepsDoc = await ChallengeStep.create([
-    { id: 'variables-test', challengeId: challengeDoc._id, description: 'first file with description-test' },
+    { id: 'variables-test', challengeId: challengeDoc._id, score: 0 },
     { id: 'variables2-test', challengeId: challengeDoc._id, description: 'second file with description-test' },
   ]);
 

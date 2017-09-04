@@ -7,7 +7,7 @@ router.post('/',
   Controller.validateParams,
   Controller.decodeToken,
   Controller.verifyPayLoad,
-  Controller.loadChallengeAttempt,
+  // Controller.loadChallengeAttempt,
   Controller.loadChallengeStep,
   Controller.showChallenge,
 );

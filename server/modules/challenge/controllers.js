@@ -29,13 +29,18 @@ export function decodeToken(req, res, next) {
 
 export function verifyPayLoad(req, res, next) {
   const challengeAttemptId = req.payLoad.challengeAttemptId;
-  if (!challengeAttemptId) {
+  const challengeId = req.payLoad.challengeId;
+  const userFullName = req.payLoad.userFullName;
+  if (!challengeAttemptId || !challengeId || !userFullName) {
     return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
   }
   req.challengeAttemptId = challengeAttemptId; // eslint-disable-line no-param-reassign
+  req.challengeId = challengeId; // eslint-disable-line no-param-reassign
+  req.userFullName = userFullName; // eslint-disable-line no-param-reassign
   return next();
 }
 
+// No need to query challengeAttempt collection for challengeId. it is now inside the token payload
 export function loadChallengeAttempt(req, res, next) {
   const accessCode = req.validatedParams.accessCode;
   const challengeAttemptId = req.challengeAttemptId;
@@ -53,7 +58,7 @@ export function loadChallengeAttempt(req, res, next) {
 }
 
 export function loadChallengeStep(req, res, next) {
-  const challengeId = req.challengeAttemptDoc.challengeId;
+  const challengeId = req.challengeId;
 
   return ChallengeStep.find({ challengeId })
     .then((challengeStep) => {
@@ -69,7 +74,7 @@ export function loadChallengeStep(req, res, next) {
 }
 
 export function showChallenge(req, res) {
-  const userFullName = req.challengeAttemptDoc.fullName;
+  const userFullName = req.userFullName;
   const stepIdA = req.challengeStepDoc[0]._id;
   const stepNameA = req.challengeStepDoc[0].id;
   const stepIdB = req.challengeStepDoc[1]._id;
