@@ -1,4 +1,4 @@
-import ChallengeStep from '../../models/challengeStep';
+// import ChallengeStep from '../../models/challengeStep';
 import Challenge from '../../models/challenge';
 import fs from 'fs';
 
@@ -22,12 +22,14 @@ export function verifyCurrentStepId(req, res, next) {
 
 
 const findChallengeStep = async (req, res, next) => {
+/*
   const stepId = req.body.stepId;
   const challengeStepDoc = await ChallengeStep.findById(stepId);
   if (!challengeStepDoc) {
     return res.status(404).json({ result: 'error', error: 'challenge_step_not_found' });
   }
   req.challengeStepDoc = challengeStepDoc; // eslint-disable-line no-param-reassign
+  */
   return next();
 };
 

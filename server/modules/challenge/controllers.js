@@ -1,6 +1,5 @@
 // import Challenge from '../../models/challenge';
 import ChallengeAttempt from '../../models/challengeAttempt';
-import ChallengeStep from '../../models/challengeStep';
 
 import jwt from 'jsonwebtoken';
 import * as config from '../../config';
@@ -57,6 +56,7 @@ export function loadChallengeAttempt(req, res, next) {
     });
 }
 
+/*
 export function loadChallengeStep(req, res, next) {
   const challengeId = req.challengeId;
 
@@ -72,6 +72,7 @@ export function loadChallengeStep(req, res, next) {
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     });
 }
+*/
 
 export function showChallenge(req, res) {
   const userFullName = req.userFullName;

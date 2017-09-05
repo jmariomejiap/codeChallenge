@@ -2,7 +2,6 @@ import test from 'ava';
 import supertest from 'supertest-as-promised';
 import server from '../../server.js';
 import Challenge from '../../models/challenge.js';
-import ChallengeStep from '../../models/challengeStep.js';
 import ChallengeAttempt from '../../models/challengeAttempt.js';
 
 const internals = {};
@@ -14,23 +13,18 @@ test.before('connecting to challenge?', () => {
 
 test.beforeEach(async () => {
   await Challenge.remove({});
-  await ChallengeStep.remove({});
   await ChallengeAttempt.remove({});
 
-  const challengeDoc = await Challenge.create({ name: 'first-test', folderName: 'beginnerFunctions-test' });
-  const challengeStepsDoc = await ChallengeStep.create([
-    { id: 'variables-test', challengeId: challengeDoc._id, score: 0 },
-    { id: 'variables2-test', challengeId: challengeDoc._id, description: 'second file with description-test' },
-  ]);
+  const challengeDoc = await Challenge.create({ name: 'MathChallenge', folderName: 'testchallenge' });
 
   await ChallengeAttempt.create({
     accessCode: 'myAccessCode-test',
     passCode: 'myPassCode-test',
-    fullName: 'dummyusername-test',
-    email: 'dummy-test@dummy.com',
+    fullName: 'dummyusernametest',
+    email: 'dummytest@dummy.com',
     score: 0,
-    currentStepId: challengeStepsDoc[0]._id,
-    challengeId: challengeStepsDoc[0].challengeId,
+    currentStepId: 'burro',
+    challengeId: challengeDoc._id,
     status: 'not_started',
   });
 });
