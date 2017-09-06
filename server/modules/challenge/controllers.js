@@ -1,8 +1,9 @@
-// import Challenge from '../../models/challenge';
+import Challenge from '../../models/challenge';
 import ChallengeAttempt from '../../models/challengeAttempt';
 
 import jwt from 'jsonwebtoken';
 import * as config from '../../config';
+import fs from 'fs';
 
 export function validateParams(req, res, next) {
   const accessCode = req.body.accessCode;
@@ -56,21 +57,61 @@ export function loadChallengeAttempt(req, res, next) {
     });
 }
 
-/*
-export function loadChallengeStep(req, res, next) {
-  const challengeId = req.challengeId;
 
-  return ChallengeStep.find({ challengeId })
-    .then((challengeStep) => {
-      if (challengeStep.length === 0) {
-        return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
+const loadChallenge = async (req, res, next) => {
+  const challengeId = req.challengeId;
+  const challengeDoc = await Challenge.findById(challengeId);
+  if (!challengeDoc) {
+    return res.status(404).json({ result: 'error', error: 'challenge_NOT_found' });
+  }
+  // console.log('inside loadCh')
+  req.challengeDoc = challengeDoc; // eslint-disable-line no-param-reassign
+  return next();
+};
+
+const buildPath = (req, res, next) => {
+  // console.log('inside buildPath ', req.challengeDoc);
+  const challengeFolderName = req.challengeDoc.folderName;
+  const filePath = `/home/juan/oscar/codeChallenge/challenges_data/${challengeFolderName}/`;
+  req.filePath = filePath; // eslint-disable-line no-param-reassign
+  return next();
+};
+
+const fileReader = async (myPath, target, encoding) => {
+  return await new Promise((resolve, reject) => {
+    fs.readFile(myPath + target, encoding, (err, content) => {
+      if (err) {
+        reject(err);
       }
-      req.challengeStepDoc = challengeStep; // eslint-disable-line no-param-reassign
+      resolve(content);
+    });
+  });
+};
+
+/*
+const readChallengeFolder = async (req, res, next) => {
+  // to be continued.
+}
+*/
+const readChallengeJson = async (req, res, next) => {
+  await fileReader(req.filePath, 'challenge.json', 'utf8')
+    .then((f) => {
+      req.challengeName = f.name; // eslint-disable-line no-param-reassign
+      req.challengeDescription = f.description; // eslint-disable-line no-param-reassign
       return next();
+      // return res.status(200).json({ result: f});
     })
     .catch(() => {
-      return res.status(500).json({ result: 'error', error: 'internal_error' });
+      return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
     });
+};
+
+/*
+{
+  challengeId: '', // you will have this i the token
+  challengeName: '', // challenge.json file
+  challengeDescription: '', // challenge.json file
+  numberOfSteps: 0, // read the number of folders in the challenge folder, each subfolder is a step.
 }
 */
 
@@ -91,3 +132,4 @@ export function showChallenge(req, res) {
   });
 }
 
+export { loadChallenge, buildPath, readChallengeJson };

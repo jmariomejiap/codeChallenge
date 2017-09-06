@@ -7,9 +7,9 @@ router.post('/',
   Controller.validateParams,
   Controller.decodeToken,
   Controller.verifyPayLoad,
-  // Controller.loadChallengeAttempt,
-  // Controller.loadChallengeStep,
-  Controller.showChallenge,
+  Controller.loadChallenge,
+  Controller.buildPath,
+  Controller.readChallengeJson
 );
 
 export default router;
