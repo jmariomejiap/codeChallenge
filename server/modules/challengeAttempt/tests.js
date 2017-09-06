@@ -15,15 +15,15 @@ test.beforeEach(async () => {
   await Challenge.remove({});
   await ChallengeAttempt.remove({});
 
-  const challengeDoc = await Challenge.create({ name: 'MathChallenge', folderName: 'testchallenge' });
+  const challengeDoc = await Challenge.create({ name: 'Math Challenge', folderName: 'test_challenge_001' });
 
   await ChallengeAttempt.create({
-    accessCode: 'myAccessCode-test',
-    passCode: 'myPassCode-test',
-    fullName: 'dummyusernametest',
-    email: 'dummytest@dummy.com',
+    accessCode: 'myAccessCodeTest',
+    passCode: 'myPassCodeTest',
+    fullName: 'dummyUserNameTest',
+    email: 'dummyTest@dummy.com',
     score: 0,
-    currentStepId: 'burro',
+    currentStepId: '001',
     challengeId: challengeDoc._id,
     status: 'not_started',
   });
@@ -71,7 +71,7 @@ test('should work even if lowerCase endpoint', async (t) => {
   const res = await internals.reqAgent
     .post('/api/v1/challengeattempt')
     .set('Accept', 'application/json')
-    .send({ accessCode: 'myAccessCode-test', passCode: 'myPassCode-test' });
+    .send({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' });
 
   t.is(res.status, 200);
   t.is(res.body.result, 'ok');
@@ -84,7 +84,7 @@ test('should succesfully retrive challengeAttempt', async (t) => {
   const res = await internals.reqAgent
     .post('/api/v1/challengeAttempt')
     .set('Accept', 'application/json')
-    .send({ accessCode: 'myAccessCode-test', passCode: 'myPassCode-test' });
+    .send({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' });
 
   t.is(res.status, 200);
   t.is(res.body.result, 'ok');

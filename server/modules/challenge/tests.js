@@ -15,21 +15,15 @@ test.beforeEach(async () => {
   await Challenge.remove({});
   await ChallengeAttempt.remove({});
 
-  const challengeDoc = await Challenge.create({ name: 'first-test', folderName: 'beginnerFunctions-test' });
-  /*
-  const challengeStepsDoc = await ChallengeStep.create([
-    { id: 'variables-test', challengeId: challengeDoc._id, description: 'first file with description-test' },
-    { id: 'variables2-test', challengeId: challengeDoc._id, description: 'second file with description-test' },
-  ]);
-  */
+  const challengeDoc = await Challenge.create({ name: 'Math Challenge', folderName: 'test_challenge_001' });
 
   await ChallengeAttempt.create({
-    accessCode: 'myAccessCode-test',
-    passCode: 'myPassCode-test',
-    fullName: 'dummyusernametest',
-    email: 'dummytest@dummy.com',
+    accessCode: 'myAccessCodeTest',
+    passCode: 'myPassCodeTest',
+    fullName: 'dummyUserNameTest',
+    email: 'dummyTest@dummy.com',
     score: 0,
-    currentStepId: 'burros',
+    currentStepId: '001',
     challengeId: challengeDoc._id,
     status: 'not_started',
   });

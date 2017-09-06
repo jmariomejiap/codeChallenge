@@ -8,13 +8,8 @@ export default async function () {
   if (challengeCount > 0) {
     return;
   }
-  const challengeDoc = await Challenge.create({ name: 'first', folderName: 'beginnerFunctions' });
-  /*
-  const challengeStepsDoc = await ChallengeStep.create([
-    { id: 'variables', challengeId: challengeDoc._id, description: 'first file with description' },
-    { id: 'variables2', challengeId: challengeDoc._id, description: 'second file with description' },
-  ]);
-*/
+  const challengeDoc = await Challenge.create({ name: 'Math Challenge', folderName: 'test_challenge_001' });
+
   await ChallengeAttempt.create({
     accessCode: 'myAccessCode',
     passCode: 'myPassCode',
@@ -22,7 +17,7 @@ export default async function () {
     email: 'dummy@dummy.com',
     score: 0,
     currentStepId: '001',
-    challengeId: challengeDoc._Id,
+    challengeId: challengeDoc._id,
     status: 'not_started',
   });
 }
