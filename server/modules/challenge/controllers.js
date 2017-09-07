@@ -1,22 +1,21 @@
 import Challenge from '../../models/challenge';
-import ChallengeAttempt from '../../models/challengeAttempt';
+
 
 import jwt from 'jsonwebtoken';
 import * as config from '../../config';
 import fs from 'fs';
 
-export function validateParams(req, res, next) {
-  const accessCode = req.body.accessCode;
+export function verifyToken(req, res, next) {
   const token = req.body.token;
-  if (!accessCode || !token) {
-    return res.status(404).json({ result: 'error', error: 'missing_parameters' });
+  if (!token) {
+    return res.status(404).json({ result: 'error', error: 'missing_parameter' });
   }
-  req.validatedParams = { accessCode, token }; // eslint-disable-line no-param-reassign
+  req.token = token; // eslint-disable-line no-param-reassign
   return next();
 }
 
 export function decodeToken(req, res, next) {
-  const token = req.validatedParams.token;
+  const token = req.token;
   const key = config.default.secretKey;
   jwt.verify(token, key, (err, payLoad) => {
     if (err) {
@@ -40,96 +39,81 @@ export function verifyPayLoad(req, res, next) {
   return next();
 }
 
-// No need to query challengeAttempt collection for challengeId. it is now inside the token payload
-export function loadChallengeAttempt(req, res, next) {
-  const accessCode = req.validatedParams.accessCode;
-  const challengeAttemptId = req.challengeAttemptId;
-  return ChallengeAttempt.findOne({ accessCode, _id: challengeAttemptId })
-    .then((challengeAttempt) => {
-      if (!challengeAttempt) {
-        return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
-      }
-      req.challengeAttemptDoc = challengeAttempt; // eslint-disable-line no-param-reassign
-      return next();
-    })
-    .catch(() => {
-      return res.status(500).json({ result: 'error', error: 'internal_error' });
-    });
-}
-
-
 const loadChallenge = async (req, res, next) => {
-  const challengeId = req.challengeId;
-  const challengeDoc = await Challenge.findById(challengeId);
+  const challengeDoc = await Challenge.findById(req.challengeId);
   if (!challengeDoc) {
     return res.status(404).json({ result: 'error', error: 'challenge_NOT_found' });
   }
-  // console.log('inside loadCh')
   req.challengeDoc = challengeDoc; // eslint-disable-line no-param-reassign
   return next();
 };
 
 const buildPath = (req, res, next) => {
-  // console.log('inside buildPath ', req.challengeDoc);
   const challengeFolderName = req.challengeDoc.folderName;
   const filePath = `/home/juan/oscar/codeChallenge/challenges_data/${challengeFolderName}/`;
   req.filePath = filePath; // eslint-disable-line no-param-reassign
   return next();
 };
 
-const fileReader = async (myPath, target, encoding) => {
+const dirReaderHelper = async (location) => {
   return await new Promise((resolve, reject) => {
-    fs.readFile(myPath + target, encoding, (err, content) => {
+    fs.readdir(location, (err, result) => {
       if (err) {
         reject(err);
       }
-      resolve(content);
+      resolve(result);
     });
   });
 };
 
-/*
-const readChallengeFolder = async (req, res, next) => {
-  // to be continued.
-}
-*/
-const readChallengeJson = async (req, res, next) => {
-  await fileReader(req.filePath, 'challenge.json', 'utf8')
-    .then((f) => {
-      req.challengeName = f.name; // eslint-disable-line no-param-reassign
-      req.challengeDescription = f.description; // eslint-disable-line no-param-reassign
+
+const readChallengeDir = async (req, res, next) => {
+  await dirReaderHelper(req.filePath)
+    .then((d) => {
+      req.fileDir = d; // eslint-disable-line no-param-reassign
       return next();
-      // return res.status(200).json({ result: f});
     })
     .catch(() => {
       return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
     });
 };
 
-/*
-{
-  challengeId: '', // you will have this i the token
-  challengeName: '', // challenge.json file
-  challengeDescription: '', // challenge.json file
-  numberOfSteps: 0, // read the number of folders in the challenge folder, each subfolder is a step.
-}
-*/
+const fileReaderHelper = async (myPath, target, encoding) => {
+  const p = myPath + target;
+  return await new Promise((resolve, reject) => {
+    fs.readFile(p, encoding, (err, content) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(JSON.parse(content));
+    });
+  });
+};
 
-export function showChallenge(req, res) {
-  const userFullName = req.userFullName;
-  const stepIdA = req.challengeStepDoc[0]._id;
-  const stepNameA = req.challengeStepDoc[0].id;
-  const stepIdB = req.challengeStepDoc[1]._id;
-  const stepNameB = req.challengeStepDoc[1].id;
+const readChallengeJson = async (req, res, next) => {
+  await fileReaderHelper(req.filePath, 'challenge.json', 'utf8')
+    .then((f) => {
+      req.challengeName = f.name; // eslint-disable-line no-param-reassign
+      req.challengeDescription = f.description; // eslint-disable-line no-param-reassign
+      return next();
+    })
+    .catch(() => {
+      return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
+    });
+};
+
+export function sendChallengeResponse(req, res) {
+  const numberOfSteps = req.fileDir.filter((element) => {
+    return element !== 'challenge.json';
+  });
   res.status(200).json({
     result: 'ok',
     error: '',
-    userFullName,
-    challengeSteps: [
-      { stepId: stepIdA, stepName: stepNameA },
-      { stepId: stepIdB, stepName: stepNameB },
-    ],
+    challengeId: req.challengeId,
+    challengeName: req.challengeName,
+    challengeDescription: req.challengeDescription,
+    numberOfSteps: numberOfSteps.length,
   });
 }
 
-export { loadChallenge, buildPath, readChallengeJson };
+export { loadChallenge, buildPath, readChallengeDir, readChallengeJson };

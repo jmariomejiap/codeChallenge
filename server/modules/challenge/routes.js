@@ -4,12 +4,14 @@ import * as Controller from './controllers';
 const router = new Router();
 
 router.post('/',
-  Controller.validateParams,
+  Controller.verifyToken,
   Controller.decodeToken,
   Controller.verifyPayLoad,
   Controller.loadChallenge,
   Controller.buildPath,
-  Controller.readChallengeJson
+  Controller.readChallengeDir,
+  Controller.readChallengeJson,
+  Controller.sendChallengeResponse
 );
 
 export default router;

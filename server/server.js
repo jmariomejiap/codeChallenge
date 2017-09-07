@@ -26,7 +26,7 @@ import dummyData from './dummyData';
 import serverConfig from './config';
 import challengeAttempt from './modules/challengeAttempt/routes';
 import challenge from './modules/challenge/routes';
-import challengeStep from './modules/challengeStep/routes';
+// import challengeStep from './modules/challengeStep/routes';
 
 
 export default function (options) {
@@ -63,7 +63,7 @@ export default function (options) {
   app.use(Express.static(path.resolve(__dirname, '../dist')));
   app.use('/api/v1/challengeAttempt', challengeAttempt);
   app.use('/api/v1/challenge', challenge);
-  app.use('/api/v1/challengeStep', challengeStep);
+  // app.use('/api/v1/challengeStep', challengeStep);
 
   // Render Initial HTML
   const renderFullPage = (html, initialState) => {
