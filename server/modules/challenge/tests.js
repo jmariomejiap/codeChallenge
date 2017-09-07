@@ -112,6 +112,7 @@ test('successful test, right arguments return challenge information', async (t) 
   t.is(res.status, 200);
   t.is(res.body.result, 'ok');
   t.falsy(res.body.error, 'error is empty');
+  t.truthy(res.body.userFullName, ' name received');
   t.truthy(res.body.challengeId, ' challengeId received');
   t.truthy(res.body.challengeName, ' challengeName received');
   t.truthy(res.body.challengeDescription, ' challengeDescription received');
