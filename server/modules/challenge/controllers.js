@@ -59,10 +59,11 @@ const buildPath = (req, res, next) => {
 
 const readChallengeDir = async (req, res, next) => {
   const challengeFolderName = req.challengeDoc.folderName;
-  
-  console.log(`${__dirname}/../../${challengeFolderName}`);
+  console.log(`__dirname: ${__dirname}`);
+
   const dirContent = await new Promise((resolve, reject) => {
-    fs.readdir(`${__dirname}/../../${challengeFolderName}`, (err, result) => {
+    fs.readdir(`${__dirname}/../../../challenges_data/${challengeFolderName}`, (err, result) => {
+      console.log(err, result);
       if (err) {
         reject(err);
       }
