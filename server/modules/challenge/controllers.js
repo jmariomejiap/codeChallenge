@@ -1,10 +1,9 @@
-import Challenge from '../../models/challenge';
-
-
 import jwt from 'jsonwebtoken';
 import * as config from '../../config';
 import fs from 'fs';
-import path from 'path';
+
+
+import Challenge from '../../models/challenge';
 
 export function verifyToken(req, res, next) {
   const token = req.body.token;
@@ -49,21 +48,11 @@ const loadChallenge = async (req, res, next) => {
   return next();
 };
 
-const buildPath = (req, res, next) => {
-  const challengeFolderName = req.challengeDoc.folderName;
-  const filePath = `/home/juan/oscar/codeChallenge/challenges_data/${challengeFolderName}/`;
-  req.filePath = filePath; // eslint-disable-line no-param-reassign
-  return next();
-};
-
 
 const readChallengeDir = async (req, res, next) => {
   const challengeFolderName = req.challengeDoc.folderName;
-  console.log(`__dirname: ${__dirname}`);
-
-  const dirContent = await new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     fs.readdir(`${__dirname}/../../../challenges_data/${challengeFolderName}`, (err, result) => {
-      console.log(err, result);
       if (err) {
         reject(err);
       }
@@ -74,22 +63,20 @@ const readChallengeDir = async (req, res, next) => {
       req.fileDir = content; // eslint-disable-line no-param-reassign
       return next();
     })
-    .catch((e) => {
-      console.log(e)
+    .catch(() => {
       return res.status(404).json({ result: 'error', error: 'challenge_not_found_READING_DIR' });
     });
-
 };
 
 
 const readChallengeJson = async (req, res, next) => {
-  const challengeInfo = await new Promise((resolve, reject) => {
-    fs.readFile(`${__dirname}${req.challengeDoc.folderName}/challenge.json`, 'utf8', (err, content) => {
+  await new Promise((resolve, reject) => {
+    fs.readFile(`${__dirname}/../../../challenges_data/${req.challengeDoc.folderName}/challenge.json`, 'utf8', (err, content) => {
       if (err) {
         reject(err);
       }
       return resolve(JSON.parse(content));
-    })
+    });
   })
     .then((data) => {
       req.challengeName = data.name; // eslint-disable-line no-param-reassign
