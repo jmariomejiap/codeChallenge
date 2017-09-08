@@ -73,7 +73,8 @@ const readChallengeDir = async (req, res, next) => {
       req.fileDir = content; // eslint-disable-line no-param-reassign
       return next();
     })
-    .catch(() => {
+    .catch((e) => {
+      console.log(e)
       return res.status(404).json({ result: 'error', error: 'challenge_not_found_READING_DIR' });
     });
 
