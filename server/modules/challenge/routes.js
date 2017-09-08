@@ -8,7 +8,7 @@ router.post('/',
   Controller.decodeToken,
   Controller.verifyPayLoad,
   Controller.loadChallenge,
-  Controller.buildPath,
+  // Controller.buildPath,
   Controller.readChallengeDir,
   Controller.readChallengeJson,
   Controller.sendChallengeResponse
