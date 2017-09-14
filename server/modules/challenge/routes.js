@@ -3,7 +3,7 @@ import * as Controller from './controllers';
 
 const router = new Router();
 
-router.post('/',
+router.get('/',
   Controller.verifyToken,
   Controller.decodeToken,
   Controller.verifyPayLoad,

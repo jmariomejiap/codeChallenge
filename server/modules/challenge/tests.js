@@ -39,9 +39,7 @@ const fetchToken = async () => {
 
 test('should fail if incomplete arguments,  error missing token', async (t) => {
   const res = await internals.reqAgent
-    .post('/api/v1/challenge')
-    .set('Accept', 'application/json')
-    .send({ accessCode: 'wrongAccessCode' });
+    .get('/api/v1/challenge?token=');
 
   t.is(res.status, 404);
   t.is(res.body.result, 'error');
@@ -50,20 +48,16 @@ test('should fail if incomplete arguments,  error missing token', async (t) => {
 
 test('should not have access to dummyData', async (t) => {
   const res = await internals.reqAgent
-    .post('/api/v1/challenge')
-    .set('Accept', 'application/json')
-    .send({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OThhMTZlYTQ3OGY2MTFmNGE3Nzg1MTUiLCJpYXQiOjE1MDM2MTgwMjZ9.HipZhED2l7-mTPtCYYPEspmN9oEQYOTMcSqfwH-2yeo' }); // eslint-disable-line 
+    .get('/api/v1/challenge?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OWFmODEwZjkwYzQ4NjNmYWE5YTAyYjkiLCJjaGFsbGVuZ2VJZCI6IjU5YWY4MTBlOTBjNDg2M2ZhYTlhMDJiOCIsInVzZXJGdWxsTmFtZSI6ImR1bW15dXNlcm5hbWUiLCJpYXQiOjE1MDUzMjIxMTd9.JtD7alaWlI_aUF0FCF8dxekTm1DYR1Z5NKQkIA8GZ1I'); // eslint-disable-line
 
   t.is(res.status, 404);
   t.is(res.body.result, 'error');
-  t.is(res.body.error, 'challenge_not_found');
+  t.is(res.body.error, 'challenge_NOT_found');
 });
 
 test('internal error if token Has been tampered', async (t) => {
   const res = await internals.reqAgent
-    .post('/api/v1/challenge')
-    .set('Accept', 'application/json')
-    .send({ token: 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA' }); // eslint-disable-line 
+    .get('/api/v1/challenge?token=EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA'); // eslint-disable-line  
 
   t.is(res.status, 500);
   t.is(res.body.result, 'error');
@@ -72,9 +66,7 @@ test('internal error if token Has been tampered', async (t) => {
 
 test('should fail if token payload is empty', async (t) => {
   const res = await internals.reqAgent
-    .post('/api/v1/challenge')
-    .set('Accept', 'application/json')
-    .send({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.OatqkwDnaqBNtgHHYJFGMioVx_9ZZ_sePRYyENAx5to' });
+    .get('/api/v1/challenge?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.OatqkwDnaqBNtgHHYJFGMioVx_9ZZ_sePRYyENAx5to');
 
   t.is(res.status, 404);
   t.is(res.body.result, 'error');
@@ -82,9 +74,9 @@ test('should fail if token payload is empty', async (t) => {
 });
 
 
-test('should not accept GET with right arguments', async (t) => {
+test('should not accept post with right arguments', async (t) => {
   const res = await internals.reqAgent
-    .get('/api/v1/challenge')
+    .post('/api/v1/challenge')
     .send({ accessCode: 'myAccessCode-test', token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA' }); // eslint-disable-line 
 
   t.is(res.status, 404);
@@ -105,16 +97,15 @@ test('should not Delete even with right arguments', async (t) => {
 test('successful test, right arguments return challenge information', async (t) => {
   const token = await fetchToken();
   const res = await internals.reqAgent
-    .post('/api/v1/challenge')
-    .set('Accept', 'application/json')
-    .send({ token });
+    .get(`/api/v1/challenge?token=${token}`);
 
   t.is(res.status, 200);
   t.is(res.body.result, 'ok');
-  t.falsy(res.body.error, 'error is empty');
-  t.truthy(res.body.userFullName, ' name received');
+  t.is(res.body.numberOfSteps, 1);
+  t.is(res.body.userFullName, 'dummyusernametest');
+  t.is(res.body.challengeName, 'Math Challenge');
   t.truthy(res.body.challengeId, ' challengeId received');
-  t.truthy(res.body.challengeName, ' challengeName received');
+  t.falsy(res.body.error, 'error is empty');
+  t.truthy(res.body.challengeId, ' challengeId received');
   t.truthy(res.body.challengeDescription, ' challengeDescription received');
-  t.truthy(res.body.numberOfSteps, ' > 0');
 });

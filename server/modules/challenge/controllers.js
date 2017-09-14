@@ -6,7 +6,7 @@ import fs from 'fs';
 import Challenge from '../../models/challenge';
 
 export function verifyToken(req, res, next) {
-  const token = req.body.token;
+  const token = req.query.token;
   if (!token) {
     return res.status(404).json({ result: 'error', error: 'missing_parameter' });
   }
@@ -49,44 +49,33 @@ const loadChallenge = async (req, res, next) => {
 };
 
 
-const readChallengeDir = async (req, res, next) => {
+export function readChallengeDir(req, res, next) {
   const challengeFolderName = req.challengeDoc.folderName;
-  await new Promise((resolve, reject) => {
-    fs.readdir(`${__dirname}/../../../challenges_data/${challengeFolderName}`, (err, result) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(result);
-    });
-  })
-    .then((content) => {
-      req.fileDir = content; // eslint-disable-line no-param-reassign
-      return next();
-    })
-    .catch(() => {
+  fs.readdir(`${__dirname}/../../../challenges_data/${challengeFolderName}`, (err, result) => {
+    if (err) {
       return res.status(404).json({ result: 'error', error: 'challenge_not_found_READING_DIR' });
-    });
-};
+    }
+    req.fileDir = result; // eslint-disable-line no-param-reassign
+    return next();
+  });
+}
 
 
-const readChallengeJson = async (req, res, next) => {
-  await new Promise((resolve, reject) => {
-    fs.readFile(`${__dirname}/../../../challenges_data/${req.challengeDoc.folderName}/challenge.json`, 'utf8', (err, content) => {
-      if (err) {
-        reject(err);
-      }
-      return resolve(JSON.parse(content));
-    });
-  })
-    .then((data) => {
-      req.challengeName = data.name; // eslint-disable-line no-param-reassign
-      req.challengeDescription = data.description; // eslint-disable-line no-param-reassign
-      return next();
-    })
-    .catch(() => {
+export function readChallengeJson(req, res, next) {
+  const challengeFolderName = req.challengeDoc.folderName;
+  fs.readFile(`${__dirname}/../../../challenges_data/${challengeFolderName}/challenge.json`, 'utf8', (err, content) => {
+    if (err) {
       return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
-    });
-};
+    }
+    const challengeJson = JSON.parse(content);
+    if (!challengeJson.name || !challengeJson.description) {
+      return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
+    }
+    req.challengeName = challengeJson.name; // eslint-disable-line no-param-reassign
+    req.challengeDescription = challengeJson.description; // eslint-disable-line no-param-reassign
+    return next();
+  });
+}
 
 export function sendChallengeResponse(req, res) {
   const numberOfSteps = req.fileDir.filter((element) => {
@@ -103,4 +92,4 @@ export function sendChallengeResponse(req, res) {
   });
 }
 
-export { loadChallenge, readChallengeDir, readChallengeJson };
+export { loadChallenge };
