@@ -49,16 +49,43 @@ const loadChallenge = async (req, res, next) => {
 };
 
 
-export function readChallengeDir(req, res, next) {
-  const challengeFolderName = req.challengeDoc.folderName;
-  fs.readdir(`${__dirname}/../../../challenges_data/${challengeFolderName}`, (err, result) => {
-    if (err) {
-      return res.status(404).json({ result: 'error', error: 'challenge_not_found_READING_DIR' });
-    }
-    req.fileDir = result; // eslint-disable-line no-param-reassign
-    return next();
+const readChallengeDir = async (req, res, next) => {
+  const path = `${__dirname}/../../../challenges_data/${req.challengeDoc.folderName}`;
+
+  const dirContents = await new Promise((resolve, reject) => {
+    fs.readdir(path, (err, contents) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(contents);
+    });
+  }).catch(() => {
+    return res.status(404).json({ result: 'error', error: 'challenge_not_found_READING_DIR' });
   });
-}
+
+  const statPromises = dirContents.map((element) => {
+    return new Promise((resolve, reject) => {
+      fs.stat(`${path}/${element}`, (err, stat) => {
+        if (err) {
+          return reject(err);
+        }
+        if (stat.isDirectory()) {
+          return resolve(element);
+        }
+        return resolve(null);
+      });
+    });
+  });
+
+  const resolvedStat = await Promise.all(statPromises)
+    .catch(() => res.status(500).json({ result: 'error', error: 'internal_error' }));
+
+  const folders = resolvedStat.filter((item) => {
+    return item !== null;
+  });
+  req.challengeFolders = folders; // eslint-disable-line no-param-reassign
+  return next();
+};
 
 
 export function readChallengeJson(req, res, next) {
@@ -78,9 +105,6 @@ export function readChallengeJson(req, res, next) {
 }
 
 export function sendChallengeResponse(req, res) {
-  const numberOfSteps = req.fileDir.filter((element) => {
-    return element !== 'challenge.json';
-  });
   res.status(200).json({
     result: 'ok',
     error: '',
@@ -88,8 +112,8 @@ export function sendChallengeResponse(req, res) {
     challengeId: req.challengeId,
     challengeName: req.challengeName,
     challengeDescription: req.challengeDescription,
-    numberOfSteps: numberOfSteps.length,
+    numberOfSteps: req.challengeFolders.length,
   });
 }
 
-export { loadChallenge };
+export { loadChallenge, readChallengeDir };

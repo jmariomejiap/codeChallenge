@@ -3,6 +3,7 @@ import supertest from 'supertest-as-promised'; // eslint-disable-line
 import server from '../../server.js'; // eslint-disable-line 
 import Challenge from '../../models/challenge.js';
 import ChallengeAttempt from '../../models/challengeAttempt.js';
+// import fetchToken from '../../util/validateAccess.js';
 
 const internals = {};
 
@@ -29,6 +30,7 @@ test.beforeEach(async () => {
   });
 });
 
+
 const fetchToken = async () => {
   const res = await internals.reqAgent
     .post('/api/v1/challengeAttempt')
@@ -36,6 +38,7 @@ const fetchToken = async () => {
     .send({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' });
   return res.body.token;
 };
+
 
 test('should fail if incomplete arguments,  error missing token', async (t) => {
   const res = await internals.reqAgent
@@ -95,6 +98,7 @@ test('should not Delete even with right arguments', async (t) => {
 
 
 test('successful test, right arguments return challenge information', async (t) => {
+  // const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
   const token = await fetchToken();
   const res = await internals.reqAgent
     .get(`/api/v1/challenge?token=${token}`);
