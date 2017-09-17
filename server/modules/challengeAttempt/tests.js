@@ -31,9 +31,7 @@ test.beforeEach(async () => {
 
 test('should fail if invalid accessCode or passCode', async (t) => {
   const res = await internals.reqAgent
-    .post('/api/v1/challengeAttempt')
-    .set('Accept', 'application/json')
-    .send({ accessCode: 'wrongAccessCode', passCode: 'wrongPassCode' });
+    .get('/api/v1/challengeAttempt?accessCode=wrongAccessCode&passCode=wrongPassCode');
 
   t.is(res.status, 404);
   t.is(res.body.result, 'error');
@@ -44,9 +42,7 @@ test('should fail if invalid accessCode or passCode', async (t) => {
 
 test('should fail with lowercase or uppercase arguments, must be case sensitive', async (t) => {
   const res = await internals.reqAgent
-    .post('/api/v1/challengeAttempt')
-    .set('Accept', 'application/json')
-    .send({ accessCode: 'MYACCESSCODE-test', passCode: 'MYPASSCODE-test' });
+    .get('/api/v1/challengeAttempt?accessCode=MYACCESSCODE-test&passCode=MYPASSCODE-test');
 
   t.is(res.status, 404);
   t.is(res.body.result, 'error');
@@ -57,9 +53,7 @@ test('should fail with lowercase or uppercase arguments, must be case sensitive'
 
 test('should fail if incomplete arguments, error missing params', async (t) => {
   const res = await internals.reqAgent
-    .post('/api/v1/challengeAttempt')
-    .set('Accept', 'application/json')
-    .send({ accessCode: 'myAccessCode-test' });
+    .get('/api/v1/challengeAttempt?accessCode=myAccessCodeTest');
 
   t.is(res.status, 404);
   t.is(res.body.result, 'error');
@@ -69,9 +63,7 @@ test('should fail if incomplete arguments, error missing params', async (t) => {
 
 test('should work even if lowerCase endpoint', async (t) => {
   const res = await internals.reqAgent
-    .post('/api/v1/challengeattempt')
-    .set('Accept', 'application/json')
-    .send({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' });
+    .get('/api/v1/challengeattempt?accessCode=myAccessCodeTest&passCode=myPassCodeTest');
 
   t.is(res.status, 200);
   t.is(res.body.result, 'ok');
@@ -82,14 +74,21 @@ test('should work even if lowerCase endpoint', async (t) => {
 
 test('should succesfully retrive challengeAttempt', async (t) => {
   const res = await internals.reqAgent
-    .post('/api/v1/challengeAttempt')
-    .set('Accept', 'application/json')
-    .send({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' });
+    .get('/api/v1/challengeAttempt?accessCode=myAccessCodeTest&passCode=myPassCodeTest');
 
   t.is(res.status, 200);
   t.is(res.body.result, 'ok');
   t.truthy(res.body.token, 'token is On');
   t.falsy(res.body.error, 'error is empty');
+});
+
+test('should fail with post and right credentials', async (t) => {
+  const res = await internals.reqAgent
+    .post('/api/v1/challengeAttempt')
+    .set('Accept', 'application/json')
+    .send({ accessCode: 'myAccessCode-test', passCode: 'myPassCode-test' });
+
+  t.is(res.status, 404);
 });
 
 test('should not be able to delete challengeAttempt', async (t) => {

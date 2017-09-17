@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import * as config from '../../config';
 
 export function validateParams(req, res, next) {
-  const accessCode = req.body.accessCode;
-  const passCode = req.body.passCode;
+  const accessCode = req.query.accessCode;
+  const passCode = req.query.passCode;
   if (!accessCode || !passCode) {
     return res.status(404).json({ result: 'error', error: 'missing_parameters' });
   }

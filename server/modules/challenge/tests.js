@@ -33,9 +33,8 @@ test.beforeEach(async () => {
 
 const fetchToken = async () => {
   const res = await internals.reqAgent
-    .post('/api/v1/challengeAttempt')
-    .set('Accept', 'application/json')
-    .send({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' });
+    .get('/api/v1/challengeAttempt?accessCode=myAccessCodeTest&passCode=myPassCodeTest');
+
   return res.body.token;
 };
 
