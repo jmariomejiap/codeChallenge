@@ -12,6 +12,7 @@ test.before('establish connection ', () => {
   internals.reqAgent = supertest('http://localhost:8080');
 });
 
+
 test.beforeEach(async () => {
   await Challenge.remove({});
   await ChallengeAttempt.remove({});
@@ -30,14 +31,6 @@ test.beforeEach(async () => {
   });
 });
 
-/*
-const fetchToken = async () => {
-  const res = await internals.reqAgent
-    .get('/api/v1/challengeAttempt?accessCode=myAccessCodeTest&passCode=myPassCodeTest');
-
-  return res.body.token;
-};
-*/
 
 test('should fail if incomplete arguments,  error missing token', async (t) => {
   const res = await internals.reqAgent
@@ -48,6 +41,7 @@ test('should fail if incomplete arguments,  error missing token', async (t) => {
   t.is(res.body.error, 'missing_parameter');
 });
 
+
 test('should not have access to dummyData', async (t) => {
   const res = await internals.reqAgent
     .get('/api/v1/challenge?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OWFmODEwZjkwYzQ4NjNmYWE5YTAyYjkiLCJjaGFsbGVuZ2VJZCI6IjU5YWY4MTBlOTBjNDg2M2ZhYTlhMDJiOCIsInVzZXJGdWxsTmFtZSI6ImR1bW15dXNlcm5hbWUiLCJpYXQiOjE1MDUzMjIxMTd9.JtD7alaWlI_aUF0FCF8dxekTm1DYR1Z5NKQkIA8GZ1I'); // eslint-disable-line
@@ -57,6 +51,7 @@ test('should not have access to dummyData', async (t) => {
   t.is(res.body.error, 'challenge_NOT_found');
 });
 
+
 test('internal error if token Has been tampered', async (t) => {
   const res = await internals.reqAgent
     .get('/api/v1/challenge?token=EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA'); // eslint-disable-line  
@@ -65,6 +60,7 @@ test('internal error if token Has been tampered', async (t) => {
   t.is(res.body.result, 'error');
   t.is(res.body.error, 'internal_error');
 });
+
 
 test('should fail if token payload is empty', async (t) => {
   const res = await internals.reqAgent
@@ -85,6 +81,7 @@ test('should not accept post with right arguments', async (t) => {
   t.falsy(res.body.result, 'result is non existent');
 });
 
+
 test('should not Delete even with right arguments', async (t) => {
   const res = await internals.reqAgent
     .delete('/api/v1/challenge')
@@ -98,7 +95,6 @@ test('should not Delete even with right arguments', async (t) => {
 
 test('successful test, right arguments return challenge information', async (t) => {
   const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
-  // const token = await fetchToken();
   const res = await internals.reqAgent
     .get(`/api/v1/challenge?token=${token}`);
 
