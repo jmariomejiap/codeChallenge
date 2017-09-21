@@ -1,20 +1,21 @@
 import jwt from 'jsonwebtoken';
 import * as config from '../../config';
 import fs from 'fs';
+import _ from 'lodash';
 
 
 import Challenge from '../../models/challenge';
 
-export function verifyToken(req, res, next) {
+const verifyToken = (req, res, next) => {
   const token = req.query.token;
   if (!token) {
     return res.status(404).json({ result: 'error', error: 'missing_parameter' });
   }
   req.token = token; // eslint-disable-line no-param-reassign
   return next();
-}
+};
 
-export function decodeToken(req, res, next) {
+const decodeToken = (req, res, next) => {
   const token = req.token;
   const key = config.default.secretKey;
   jwt.verify(token, key, (err, payLoad) => {
@@ -24,9 +25,9 @@ export function decodeToken(req, res, next) {
     req.payLoad = payLoad; // eslint-disable-line no-param-reassign
     return next();
   });
-}
+};
 
-export function verifyPayLoad(req, res, next) {
+const verifyPayLoad = (req, res, next) => {
   const challengeAttemptId = req.payLoad.challengeAttemptId;
   const challengeId = req.payLoad.challengeId;
   if (!challengeAttemptId || !challengeId) {
@@ -35,7 +36,7 @@ export function verifyPayLoad(req, res, next) {
   req.challengeAttemptId = challengeAttemptId; // eslint-disable-line no-param-reassign
   req.challengeId = challengeId; // eslint-disable-line no-param-reassign
   return next();
-}
+};
 
 const loadChallenge = async (req, res, next) => {
   const challengeDoc = await Challenge.findById(req.challengeId);
@@ -81,12 +82,13 @@ const readChallengeDir = async (req, res, next) => {
   const folders = resolvedStat.filter((item) => {
     return item !== null;
   });
-  req.challengeFolders = folders; // eslint-disable-line no-param-reassign
+  const sortedFolders = _.sortBy(folders);
+  req.challengeStepFolders = sortedFolders; // eslint-disable-line no-param-reassign
   return next();
 };
 
 
-export function readChallengeJson(req, res, next) {
+const readChallengeJson = (req, res, next) => {
   const challengeFolderName = req.challengeDoc.folderName;
   fs.readFile(`${__dirname}/../../../challenges_data/${challengeFolderName}/challenge.json`, 'utf8', (err, content) => {
     if (err) {
@@ -100,9 +102,9 @@ export function readChallengeJson(req, res, next) {
     req.challengeDescription = challengeJson.description; // eslint-disable-line no-param-reassign
     return next();
   });
-}
+};
 
-export function sendChallengeResponse(req, res) {
+const sendChallengeResponse = (req, res) => {
   res.status(200).json({
     result: 'ok',
     error: '',
@@ -110,8 +112,8 @@ export function sendChallengeResponse(req, res) {
     challengeId: req.challengeId,
     challengeName: req.challengeName,
     challengeDescription: req.challengeDescription,
-    numberOfSteps: req.challengeFolders.length,
+    numberOfSteps: req.challengeStepFolders.length,
   });
-}
+};
 
-export { loadChallenge, readChallengeDir };
+export { verifyToken, decodeToken, verifyPayLoad, loadChallenge, readChallengeDir, readChallengeJson, sendChallengeResponse };

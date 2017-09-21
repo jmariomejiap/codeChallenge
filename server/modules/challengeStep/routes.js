@@ -4,19 +4,18 @@ import * as challengeStepController from './controllers.js';
 
 const router = new Router();
 
-router.post('/',
-  challengeController.validateParams,
-  challengeStepController.checkStepId,
+router.get('/',
+  challengeController.verifyToken,
   challengeController.decodeToken,
   challengeController.verifyPayLoad,
-  challengeController.loadChallengeAttempt,
-  challengeStepController.verifyCurrentStepId,
+  challengeController.loadChallenge,
+  challengeController.readChallengeDir,
+  challengeStepController.loadChallengeAttempt,
   challengeStepController.findChallengeStep,
-  challengeStepController.findChallenge,
   challengeStepController.buildPath,
+  // challengeStepController.readStepDir,
   challengeStepController.fileFetcher,
-  challengeStepController.sendResponse
-
+  challengeStepController.sendResponse,
 );
 
 export default router;
