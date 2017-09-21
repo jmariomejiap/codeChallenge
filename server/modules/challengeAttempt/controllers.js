@@ -40,7 +40,6 @@ export function generateToken(req, res, next) {
   const payLoad = {
     challengeAttemptId: req.challengeAttemptDoc._id,
     challengeId: req.challengeAttemptDoc.challengeId,
-    userFullName: req.challengeAttemptDoc.fullName
   };
   const options = {};
   const key = config.default.secretKey;
@@ -58,7 +57,7 @@ export function sendToken(req, res) {
     result: 'ok',
     token: req.token,
     error: '',
-    userFullName: req.challengeAttemptDoc.fullName
+    userFullName: req.challengeAttemptDoc.fullName,
   };
   res.status(200).json(output);
 }
