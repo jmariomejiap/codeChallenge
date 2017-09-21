@@ -93,3 +93,16 @@ test('should not Delete even with right arguments', async (t) => {
   t.falsy(res.body.result, 'result is non existent');
 });
 
+
+test('successful test, right arguments return challenge information', async (t) => {
+  const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
+  const res = await internals.reqAgent
+    .get(`/api/v1/challengeStep?token=${token}`);
+
+  t.is(res.status, 200);
+  t.is(res.body.result, 'ok');
+  t.falsy(res.body.error, 'error is empty');
+  t.truthy(res.body.description, 'got a description');
+  t.truthy(res.body.code, 'got a code');
+});
+
