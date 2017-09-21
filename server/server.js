@@ -46,6 +46,7 @@ export default function (options) {
 
   // MongoDB Connection
   mongoose.connect(serverConfig.mongoURL, (error) => {
+    /* istanbul ignore if */
     if (error) {
       console.error('Please make sure Mongodb is installed and running!'); // eslint-disable-line no-console
       throw error;

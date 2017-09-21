@@ -2,6 +2,8 @@
  * Throw an array to it and a function which can generate promises
  * and it will call them sequentially, one after another
  */
+
+/* istanbul ignore next */
 export function sequence(items, consumer) {
   const results = [];
   const runner = () => {
