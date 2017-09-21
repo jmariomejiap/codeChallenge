@@ -1,6 +1,6 @@
 import ChallengeAttempt from './models/challengeAttempt';
 import Challenge from './models/challenge';
-import ChallengeStep from './models/challengeStep';
+// import ChallengeStep from './models/challengeStep';
 
 
 export default async function () {
@@ -8,11 +8,7 @@ export default async function () {
   if (challengeCount > 0) {
     return;
   }
-  const challengeDoc = await Challenge.create({ name: 'first', folderName: 'beginnerFunctions' });
-  const challengeStepsDoc = await ChallengeStep.create([
-    { id: 'variables', challengeId: challengeDoc._id, description: 'first file with description' },
-    { id: 'variables2', challengeId: challengeDoc._id, description: 'second file with description' },
-  ]);
+  const challengeDoc = await Challenge.create({ name: 'Math Challenge', folderName: 'test_challenge_001' });
 
   await ChallengeAttempt.create({
     accessCode: 'myAccessCode',
@@ -20,8 +16,8 @@ export default async function () {
     fullName: 'dummyUserName',
     email: 'dummy@dummy.com',
     score: 0,
-    currentStepId: challengeStepsDoc[0]._id,
-    challengeId: challengeStepsDoc[0].challengeId,
+    currentStepId: '001',
+    challengeId: challengeDoc._id,
     status: 'not_started',
   });
 }

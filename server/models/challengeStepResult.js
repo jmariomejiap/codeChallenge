@@ -10,7 +10,7 @@ const mongoIdValidator = [
   }),
 ];
 
-const challengeStep = new Schema({
+const challengeStepResult = new Schema({
   id: { type: 'String', required: true },
   challengeId: { type: 'String', required: true, validate: mongoIdValidator },
   challengeStepId: { type: 'String', required: true, validate: mongoIdValidator },
@@ -19,4 +19,4 @@ const challengeStep = new Schema({
   dateFinished: { type: Date, default: Date.now },
 });
 
-export default mongoose.model('ChallengeStep', challengeStep);
+export default mongoose.model('ChallengeStepResult', challengeStepResult);

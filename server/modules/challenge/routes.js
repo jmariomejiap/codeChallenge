@@ -3,13 +3,14 @@ import * as Controller from './controllers';
 
 const router = new Router();
 
-router.post('/',
-  Controller.validateParams,
+router.get('/',
+  Controller.verifyToken,
   Controller.decodeToken,
   Controller.verifyPayLoad,
-  Controller.loadChallengeAttempt,
-  Controller.loadChallengeStep,
-  Controller.showChallenge,
+  Controller.loadChallenge,
+  Controller.readChallengeDir,
+  Controller.readChallengeJson,
+  Controller.sendChallengeResponse
 );
 
 export default router;

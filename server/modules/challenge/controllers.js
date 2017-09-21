@@ -1,22 +1,21 @@
-// import Challenge from '../../models/challenge';
-import ChallengeAttempt from '../../models/challengeAttempt';
-import ChallengeStep from '../../models/challengeStep';
-
 import jwt from 'jsonwebtoken';
 import * as config from '../../config';
+import fs from 'fs';
 
-export function validateParams(req, res, next) {
-  const accessCode = req.body.accessCode;
-  const token = req.body.token;
-  if (!accessCode || !token) {
-    return res.status(404).json({ result: 'error', error: 'missing_parameters' });
+
+import Challenge from '../../models/challenge';
+
+export function verifyToken(req, res, next) {
+  const token = req.query.token;
+  if (!token) {
+    return res.status(404).json({ result: 'error', error: 'missing_parameter' });
   }
-  req.validatedParams = { accessCode, token }; // eslint-disable-line no-param-reassign
+  req.token = token; // eslint-disable-line no-param-reassign
   return next();
 }
 
 export function decodeToken(req, res, next) {
-  const token = req.validatedParams.token;
+  const token = req.token;
   const key = config.default.secretKey;
   jwt.verify(token, key, (err, payLoad) => {
     if (err) {
@@ -29,59 +28,92 @@ export function decodeToken(req, res, next) {
 
 export function verifyPayLoad(req, res, next) {
   const challengeAttemptId = req.payLoad.challengeAttemptId;
-  if (!challengeAttemptId) {
+  const challengeId = req.payLoad.challengeId;
+  const userFullName = req.payLoad.userFullName;
+  if (!challengeAttemptId || !challengeId || !userFullName) {
     return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
   }
   req.challengeAttemptId = challengeAttemptId; // eslint-disable-line no-param-reassign
+  req.challengeId = challengeId; // eslint-disable-line no-param-reassign
+  req.userFullName = userFullName; // eslint-disable-line no-param-reassign
   return next();
 }
 
-export function loadChallengeAttempt(req, res, next) {
-  const accessCode = req.validatedParams.accessCode;
-  const challengeAttemptId = req.challengeAttemptId;
-  return ChallengeAttempt.findOne({ accessCode, _id: challengeAttemptId })
-    .then((challengeAttempt) => {
-      if (!challengeAttempt) {
-        return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
+const loadChallenge = async (req, res, next) => {
+  const challengeDoc = await Challenge.findById(req.challengeId);
+  if (!challengeDoc) {
+    return res.status(404).json({ result: 'error', error: 'challenge_NOT_found' });
+  }
+  req.challengeDoc = challengeDoc; // eslint-disable-line no-param-reassign
+  return next();
+};
+
+
+const readChallengeDir = async (req, res, next) => {
+  const path = `${__dirname}/../../../challenges_data/${req.challengeDoc.folderName}`;
+
+  const dirContents = await new Promise((resolve, reject) => {
+    fs.readdir(path, (err, contents) => {
+      if (err) {
+        return reject(err);
       }
-      req.challengeAttemptDoc = challengeAttempt; // eslint-disable-line no-param-reassign
-      return next();
-    })
-    .catch(() => {
-      return res.status(500).json({ result: 'error', error: 'internal_error' });
+      return resolve(contents);
     });
-}
+  }).catch(() => {
+    return res.status(404).json({ result: 'error', error: 'challenge_not_found_READING_DIR' });
+  });
 
-export function loadChallengeStep(req, res, next) {
-  const challengeId = req.challengeAttemptDoc.challengeId;
-
-  return ChallengeStep.find({ challengeId })
-    .then((challengeStep) => {
-      if (challengeStep.length === 0) {
-        return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
-      }
-      req.challengeStepDoc = challengeStep; // eslint-disable-line no-param-reassign
-      return next();
-    })
-    .catch(() => {
-      return res.status(500).json({ result: 'error', error: 'internal_error' });
+  const statPromises = dirContents.map((element) => {
+    return new Promise((resolve, reject) => {
+      fs.stat(`${path}/${element}`, (err, stat) => {
+        if (err) {
+          return reject(err);
+        }
+        if (stat.isDirectory()) {
+          return resolve(element);
+        }
+        return resolve(null);
+      });
     });
-}
+  });
 
-export function showChallenge(req, res) {
-  const userFullName = req.challengeAttemptDoc.fullName;
-  const stepIdA = req.challengeStepDoc[0]._id;
-  const stepNameA = req.challengeStepDoc[0].id;
-  const stepIdB = req.challengeStepDoc[1]._id;
-  const stepNameB = req.challengeStepDoc[1].id;
-  res.status(200).json({
-    result: 'ok',
-    error: '',
-    userFullName,
-    challengeSteps: [
-      { stepId: stepIdA, stepName: stepNameA },
-      { stepId: stepIdB, stepName: stepNameB },
-    ],
+  const resolvedStat = await Promise.all(statPromises)
+    .catch(() => res.status(500).json({ result: 'error', error: 'internal_error' }));
+
+  const folders = resolvedStat.filter((item) => {
+    return item !== null;
+  });
+  req.challengeFolders = folders; // eslint-disable-line no-param-reassign
+  return next();
+};
+
+
+export function readChallengeJson(req, res, next) {
+  const challengeFolderName = req.challengeDoc.folderName;
+  fs.readFile(`${__dirname}/../../../challenges_data/${challengeFolderName}/challenge.json`, 'utf8', (err, content) => {
+    if (err) {
+      return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
+    }
+    const challengeJson = JSON.parse(content);
+    if (!challengeJson.name || !challengeJson.description) {
+      return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
+    }
+    req.challengeName = challengeJson.name; // eslint-disable-line no-param-reassign
+    req.challengeDescription = challengeJson.description; // eslint-disable-line no-param-reassign
+    return next();
   });
 }
 
+export function sendChallengeResponse(req, res) {
+  res.status(200).json({
+    result: 'ok',
+    error: '',
+    userFullName: req.userFullName,
+    challengeId: req.challengeId,
+    challengeName: req.challengeName,
+    challengeDescription: req.challengeDescription,
+    numberOfSteps: req.challengeFolders.length,
+  });
+}
+
+export { loadChallenge, readChallengeDir };

@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import * as config from '../../config';
 
 export function validateParams(req, res, next) {
-  const accessCode = req.body.accessCode;
-  const passCode = req.body.passCode;
+  const accessCode = req.query.accessCode;
+  const passCode = req.query.passCode;
   if (!accessCode || !passCode) {
     return res.status(404).json({ result: 'error', error: 'missing_parameters' });
   }
@@ -37,7 +37,7 @@ export function validateAttemptStatus(req, res, next) {
 }
 
 export function generateToken(req, res, next) {
-  const payLoad = { challengeAttemptId: req.challengeAttemptDoc._id };
+  const payLoad = { challengeAttemptId: req.challengeAttemptDoc._id, challengeId: req.challengeAttemptDoc.challengeId, userFullName: req.challengeAttemptDoc.fullName };
   const options = {};
   const key = config.default.secretKey;
   jwt.sign(payLoad, key, options, (err, token) => {
@@ -49,7 +49,7 @@ export function generateToken(req, res, next) {
   });
 }
 
-export function showChallengeAttempt(req, res) {
+export function sendToken(req, res) {
   const token = req.token;
   res.status(200).json({ result: 'ok', token, error: '' });
 }
