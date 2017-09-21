@@ -29,13 +29,11 @@ export function decodeToken(req, res, next) {
 export function verifyPayLoad(req, res, next) {
   const challengeAttemptId = req.payLoad.challengeAttemptId;
   const challengeId = req.payLoad.challengeId;
-  const userFullName = req.payLoad.userFullName;
-  if (!challengeAttemptId || !challengeId || !userFullName) {
+  if (!challengeAttemptId || !challengeId) {
     return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
   }
   req.challengeAttemptId = challengeAttemptId; // eslint-disable-line no-param-reassign
   req.challengeId = challengeId; // eslint-disable-line no-param-reassign
-  req.userFullName = userFullName; // eslint-disable-line no-param-reassign
   return next();
 }
 

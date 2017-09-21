@@ -101,7 +101,6 @@ test('successful test, right arguments return challenge information', async (t) 
   t.is(res.status, 200);
   t.is(res.body.result, 'ok');
   t.is(res.body.numberOfSteps, 1);
-  t.is(res.body.userFullName, 'dummyusernametest');
   t.is(res.body.challengeName, 'Math Challenge');
   t.truthy(res.body.challengeId, ' challengeId received');
   t.falsy(res.body.error, 'error is empty');
