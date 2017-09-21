@@ -37,7 +37,11 @@ export function validateAttemptStatus(req, res, next) {
 }
 
 export function generateToken(req, res, next) {
-  const payLoad = { challengeAttemptId: req.challengeAttemptDoc._id, challengeId: req.challengeAttemptDoc.challengeId, userFullName: req.challengeAttemptDoc.fullName };
+  const payLoad = {
+    challengeAttemptId: req.challengeAttemptDoc._id,
+    challengeId: req.challengeAttemptDoc.challengeId,
+    userFullName: req.challengeAttemptDoc.fullName
+  };
   const options = {};
   const key = config.default.secretKey;
   jwt.sign(payLoad, key, options, (err, token) => {
@@ -50,6 +54,11 @@ export function generateToken(req, res, next) {
 }
 
 export function sendToken(req, res) {
-  const token = req.token;
-  res.status(200).json({ result: 'ok', token, error: '' });
+  const output = {
+    result: 'ok',
+    token: req.token,
+    error: '',
+    userFullName: req.challengeAttemptDoc.fullName
+  };
+  res.status(200).json(output);
 }
