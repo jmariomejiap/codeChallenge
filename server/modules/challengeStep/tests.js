@@ -6,7 +6,7 @@ import ChallengeAttempt from '../../models/challengeAttempt.js';
 import fetchToken from '../../util/validateAccess.js';
 
 const internals = {};
-internals.dummyDataToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OWFmODEwZjkwYzQ4NjNmYWE5YTAyYjkiLCJjaGFsbGVuZ2VJZCI6IjU5YWY4MTBlOTBjNDg2M2ZhYTlhMDJiOCIsInVzZXJGdWxsTmFtZSI6ImR1bW15dXNlcm5hbWUiLCJpYXQiOjE1MDUzMjIxMTd9.JtD7alaWlI_aUF0FCF8dxekTm1DYR1Z5NKQkIA8GZ1I';
+internals.dummyDataToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OWFmODEwZjkwYzQ4NjNmYWE5YTAyYjkiLCJjaGFsbGVuZ2VJZCI6IjU5YWY4MTBlOTBjNDg2M2ZhYTlhMDJiOCIsInVzZXJGdWxsTmFtZSI6ImR1bW15dXNlcm5hbWUiLCJpYXQiOjE1MDUzMjIxMTd9.JtD7alaWlI_aUF0FCF8dxekTm1DYR1Z5NKQkIA8GZ1I'; // eslint-disable-line  
 internals.emptyPayloadToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.OatqkwDnaqBNtgHHYJFGMioVx_9ZZ_sePRYyENAx5to';
 
 test.before('establish connection ', () => {
@@ -27,7 +27,6 @@ test.beforeEach(async () => {
     fullName: 'dummyUserNameTest',
     email: 'dummyTest@dummy.com',
     score: 0,
-    currentStepId: '001',
     challengeId: challengeDoc._id,
     status: 'not_started',
   });
@@ -99,6 +98,7 @@ test('successful test, right arguments return challenge information', async (t) 
   const res = await internals.reqAgent
     .get(`/api/v1/challengeStep?token=${token}`);
 
+  console.log(res.body);
   t.is(res.status, 200);
   t.is(res.body.result, 'ok');
   t.falsy(res.body.error, 'error is empty');

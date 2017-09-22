@@ -27,9 +27,13 @@ const loadChallengeAttempt = async (req, res, next) => {
 
 
 const findChallengeStep = async (req, res, next) => {
-  const currentStepId = req.challengeAttemptDoc.currentStepId; // is a string
+  const currentStepId = req.challengeAttemptDoc.currentStepId; 
+  console.log('step Id found = ', currentStepId);
+  console.log(currentStepId);
   if (!currentStepId) {
-    const step = req.challengeStepsFolders[0];
+    console.log('this is the challenge content ', req.challengeStepFolders);
+    const step = req.challengeStepFolders[0];
+    console.log('assinging this step = ', step);
     req.currentStepId = step;// eslint-disable-line no-param-reassign
     return next();
   }
@@ -43,24 +47,6 @@ const buildPath = (req, res, next) => {
   return next();
 };
 
-// not being used
-/*
-const readStepDir = async (req, res, next) => {
-  const stepContents = await new Promise((resolve, reject) => {
-    fs.readdir(req.stepPath, (err, contents) => {
-      if (err) {
-        return reject(err);
-      }
-      return resolve(contents);
-    });
-  }).catch(() => {
-    return res.status(404).json({ result: 'error', error: 'challenge_not_found_READING_DIR' });
-  });
-};
-*/
-// //
-
-
 const fileFetcher = async (req, res, next) => {
   const path = req.stepPath;
   const filesPromises = [
@@ -69,16 +55,21 @@ const fileFetcher = async (req, res, next) => {
   ];
 
   const resolvedFiles = await Promise.all(filesPromises)
-    .catch(() => res.status(500).json({ result: 'error', error: 'internal_error' }));
+    .catch(() => res.status(500).json({ result: 'error', error: 'internal_errorPROMISE' }));
 
   req.fileDescription = resolvedFiles[0]; // eslint-disable-line no-param-reassign
   req.fileCode = resolvedFiles[1]; // eslint-disable-line no-param-reassign
   return next();
 };
 
-
 const sendResponse = (req, res) => {
-  return res.status(200).json({ result: 'ok', error: '', description: req.fileDescription, code: req.fileCode });
+  const output = {
+    result: 'ok',
+    error: '',
+    description: new Buffer(req.fileDescription).toString('base64'),
+    code: new Buffer(req.fileCode).toString('base64'),
+  };
+  return res.status(200).json(output);
 };
 
 
