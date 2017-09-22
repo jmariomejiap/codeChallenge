@@ -17,7 +17,6 @@ const readFile = (path) => {
 const loadChallengeAttempt = async (req, res, next) => {
   const stepIdArg = req.challengeAttemptId;
   const challengeAttemptDoc = await ChallengeAttempt.findById(stepIdArg);
-
   if (!challengeAttemptDoc) {
     return res.status(404).json({ result: 'error', error: 'challenge_step_not_found' });
   }
@@ -27,13 +26,9 @@ const loadChallengeAttempt = async (req, res, next) => {
 
 
 const findChallengeStep = async (req, res, next) => {
-  const currentStepId = req.challengeAttemptDoc.currentStepId; 
-  console.log('step Id found = ', currentStepId);
-  console.log(currentStepId);
+  const currentStepId = req.challengeAttemptDoc.currentStepId;
   if (!currentStepId) {
-    console.log('this is the challenge content ', req.challengeStepFolders);
     const step = req.challengeStepFolders[0];
-    console.log('assinging this step = ', step);
     req.currentStepId = step;// eslint-disable-line no-param-reassign
     return next();
   }
@@ -55,7 +50,7 @@ const fileFetcher = async (req, res, next) => {
   ];
 
   const resolvedFiles = await Promise.all(filesPromises)
-    .catch(() => res.status(500).json({ result: 'error', error: 'internal_errorPROMISE' }));
+    .catch(() => res.status(500).json({ result: 'error', error: 'internal_error' }));
 
   req.fileDescription = resolvedFiles[0]; // eslint-disable-line no-param-reassign
   req.fileCode = resolvedFiles[1]; // eslint-disable-line no-param-reassign
