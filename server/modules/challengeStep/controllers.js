@@ -14,6 +14,7 @@ const readFile = (path) => {
 };
 
 
+/* istanbul ignore next */
 const loadChallengeAttempt = async (req, res, next) => {
   const stepIdArg = req.challengeAttemptId;
   const challengeAttemptDoc = await ChallengeAttempt.findById(stepIdArg);
@@ -26,6 +27,7 @@ const loadChallengeAttempt = async (req, res, next) => {
 };
 
 
+/* istanbul ignore next */
 const findChallengeStep = async (req, res, next) => {
   const currentStepId = req.challengeAttemptDoc.currentStepId;
   if (!currentStepId) {
@@ -37,12 +39,15 @@ const findChallengeStep = async (req, res, next) => {
   return next();
 };
 
+
 const buildPath = (req, res, next) => {
   const path = `${__dirname}/../../../challenges_data/${req.challengeDoc.folderName}/${req.currentStepId}/`;
   req.stepPath = path; // eslint-disable-line no-param-reassign
   return next();
 };
 
+
+/* istanbul ignore next */
 const fileFetcher = async (req, res, next) => {
   const path = req.stepPath;
   const filesPromises = [
