@@ -17,8 +17,8 @@ const readFile = (path) => {
 const loadChallengeAttempt = async (req, res, next) => {
   const stepIdArg = req.challengeAttemptId;
   const challengeAttemptDoc = await ChallengeAttempt.findById(stepIdArg);
+
   if (!challengeAttemptDoc) {
-    /* istanbul ignore next */
     return res.status(404).json({ result: 'error', error: 'challenge_step_not_found' });
   }
   req.challengeAttemptDoc = challengeAttemptDoc; // eslint-disable-line no-param-reassign

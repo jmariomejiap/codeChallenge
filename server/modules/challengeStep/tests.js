@@ -118,7 +118,7 @@ test('successful test, should return currentStep found in challengeAttempt colle
 });
 
 
-test('should fail if challengeStep contentS are incomplete', async (t) => {
+test('should fail if challengeStep contents are incomplete', async (t) => {
   await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { currentStepId: '004' });
 
   const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
