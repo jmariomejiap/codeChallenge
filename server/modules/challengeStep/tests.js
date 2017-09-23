@@ -105,10 +105,7 @@ test('successful test, should return the first challengeStep if new user', async
 });
 
 test('successful test, should return currentStep found in challengeAttempt collection', async (t) => {
-  await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { currentStepId: '003' })
-    .catch((e) => {
-      return e;
-    });
+  await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { currentStepId: '003' });
   const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
   const res = await internals.reqAgent
     .get(`/api/v1/challengeStep?token=${token}`);
