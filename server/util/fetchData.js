@@ -4,6 +4,7 @@ This was inspired from https://github.com/caljrimmer/isomorphic-redux-app/blob/7
 */
 import { sequence } from './promiseUtils';
 
+/* istanbul ignore next */
 export function fetchComponentData(store, components, params) {
   const needs = components.reduce((prev, current) => {
     return (current.need || [])
