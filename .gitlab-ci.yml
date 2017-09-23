@@ -20,17 +20,17 @@ variables:
   NODE_ENV: 'test'
   PORT: 8080
 
-# test_backend:
-#  script:
-#   - npm install --silent
-#   - node node_modules/.bin/ava --serial -v
+test_backend:
+  script:
+   - npm install --silent
+   - node node_modules/.bin/ava --serial -v
 
 test_lint:
   script:
    - npm install --silent
    - npm run lint
 
-test_backend:
-  script:
-   - npm install --silent
-   - npm run cover
+# test_backend:
+#  script:
+#   - npm install --silent
+#   - npm run cover
