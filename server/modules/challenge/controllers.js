@@ -27,6 +27,7 @@ const decodeToken = (req, res, next) => {
   });
 };
 
+
 const verifyPayLoad = (req, res, next) => {
   const challengeAttemptId = req.payLoad.challengeAttemptId;
   const challengeId = req.payLoad.challengeId;
@@ -38,6 +39,7 @@ const verifyPayLoad = (req, res, next) => {
   return next();
 };
 
+/* istanbul ignore next */
 const loadChallenge = async (req, res, next) => {
   const challengeDoc = await Challenge.findById(req.challengeId);
   if (!challengeDoc) {
@@ -48,6 +50,7 @@ const loadChallenge = async (req, res, next) => {
 };
 
 
+/* istanbul ignore next */
 const readChallengeDir = async (req, res, next) => {
   const path = `${__dirname}/../../../challenges_data/${req.challengeDoc.folderName}`;
 
@@ -99,6 +102,7 @@ const readChallengeDir = async (req, res, next) => {
 };
 
 
+/* istanbul ignore next */
 const readChallengeJson = (req, res, next) => {
   const challengeFolderName = req.challengeDoc.folderName;
   fs.readFile(`${__dirname}/../../../challenges_data/${challengeFolderName}/challenge.json`, 'utf8', (err, content) => {

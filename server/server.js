@@ -29,9 +29,7 @@ import challenge from './modules/challenge/routes';
 import challengeStep from './modules/challengeStep/routes';
 
 
-export default function (options) {
-  console.log('start server'); // eslint-disable-line no-console
-  console.log(options); // eslint-disable-line no-console
+export default function () {
   // Initialize the Express App
   const app = new Express();
 
@@ -154,7 +152,8 @@ export default function (options) {
 
   // start app
   app.listen(serverConfig.port, (error) => {
-    if (!error) {
+    /* istanbul ignore if */
+    if (!error && process.env.NODE_ENV !== 'test') {
       console.log(`Code Challenge is running on port: ${serverConfig.port}!`); // eslint-disable-line
     }
   });
