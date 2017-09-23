@@ -12,20 +12,25 @@ export function validateParams(req, res, next) {
   return next();
 }
 
+/* istanbul ignore next */
 export function loadChallengeAttempt(req, res, next) {
-  const accessCodeValue = req.validatedParams.accessCode;
-  const passCodeValue = req.validatedParams.passCode;
-  return ChallengeAttempt.findOne({ accessCode: accessCodeValue, passCode: passCodeValue })
-    .then((challengeAttempt) => {
-      if (!challengeAttempt) {
+  const query = {
+    accessCode: req.validatedParams.accessCode,
+    passCode: req.validatedParams.passCode,
+  };
+
+  return ChallengeAttempt.findOne(query)
+    .then((challengeAttemptDoc) => {
+      if (!challengeAttemptDoc) {
         return res.status(404).json({ result: 'error', token: '', error: 'invalid_access_tokens' });
       }
-      req.challengeAttemptDoc = challengeAttempt; // eslint-disable-line no-param-reassign
+
+      req.challengeAttemptDoc = challengeAttemptDoc; // eslint-disable-line no-param-reassign
       return next();
     })
-    .catch(/* istanbul ignore next */(e) => {
+    .catch(() => {
       /* istanbul ignore next */
-      const output = { result: 'error', error: 'internal_error', message: e.message };
+      const output = { result: 'error', error: 'internal_error' };
       /* istanbul ignore next */
       return res.status(500).json(output);
     });
@@ -47,8 +52,8 @@ export function generateToken(req, res, next) {
   const options = {};
   const key = config.default.secretKey;
   jwt.sign(payLoad, key, options, (err, token) => {
+    /* istanbul ignore if */
     if (err) {
-      /* istanbul ignore next */
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     }
     req.token = token; // eslint-disable-line no-param-reassign
@@ -65,3 +70,5 @@ export function sendToken(req, res) {
   };
   res.status(200).json(output);
 }
+
+// export default loadChallengeAttempt;
