@@ -23,9 +23,11 @@ export function loadChallengeAttempt(req, res, next) {
       req.challengeAttemptDoc = challengeAttempt; // eslint-disable-line no-param-reassign
       return next();
     })
-    .catch(() => {
+    .catch((e) => {
       /* istanbul ignore next */
-      return res.status(500).json({ result: 'error', error: 'internal_error' });
+      const output = { result: 'error', error: 'internal_error', message: e.message };
+      /* istanbul ignore next */
+      return res.status(500).json(output);
     });
 }
 
