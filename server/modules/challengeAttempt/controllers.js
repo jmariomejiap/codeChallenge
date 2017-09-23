@@ -24,6 +24,7 @@ export function loadChallengeAttempt(req, res, next) {
       return next();
     })
     .catch(() => {
+      /* istanbul ignore next */
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     });
 }
@@ -45,6 +46,7 @@ export function generateToken(req, res, next) {
   const key = config.default.secretKey;
   jwt.sign(payLoad, key, options, (err, token) => {
     if (err) {
+      /* istanbul ignore next */
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     }
     req.token = token; // eslint-disable-line no-param-reassign

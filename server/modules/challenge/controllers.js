@@ -53,31 +53,42 @@ const readChallengeDir = async (req, res, next) => {
 
   const dirContents = await new Promise((resolve, reject) => {
     fs.readdir(path, (err, contents) => {
+      /* istanbul ignore if */
       if (err) {
         return reject(err);
       }
+
       return resolve(contents);
     });
   }).catch(() => {
+    /* istanbul ignore next */
     return res.status(404).json({ result: 'error', error: 'challenge_not_found_READING_DIR' });
   });
 
   const statPromises = dirContents.map((element) => {
     return new Promise((resolve, reject) => {
       fs.stat(`${path}/${element}`, (err, stat) => {
+        /* istanbul ignore if */
         if (err) {
           return reject(err);
         }
+
         if (stat.isDirectory()) {
           return resolve(element);
         }
+
         return resolve(null);
       });
     });
   });
 
   const resolvedStat = await Promise.all(statPromises)
-    .catch(() => res.status(500).json({ result: 'error', error: 'internal_error' }));
+    .catch(() => {
+      /* istanbul ignore next */
+      const output = { result: 'error', error: 'internal_error' };
+      /* istanbul ignore next */
+      res.status(500).json(output);
+    });
 
   const folders = resolvedStat.filter((item) => {
     return item !== null;
@@ -94,10 +105,19 @@ const readChallengeJson = (req, res, next) => {
     if (err) {
       return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
     }
-    const challengeJson = JSON.parse(content);
+
+    let challengeJson;
+
+    try {
+      challengeJson = JSON.parse(content);
+    } catch (error) {
+      return res.status(500).json({ result: 'error', error: 'error_parsing_challenge' });
+    }
+
     if (!challengeJson.name || !challengeJson.description) {
       return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
     }
+
     req.challengeName = challengeJson.name; // eslint-disable-line no-param-reassign
     req.challengeDescription = challengeJson.description; // eslint-disable-line no-param-reassign
     return next();
