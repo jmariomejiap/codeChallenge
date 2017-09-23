@@ -17,7 +17,7 @@ cache:
 
 variables:
   MONGO_URL: 'mongodb://mongo/app_name'
-  NODE_ENV: 'test' 
+  NODE_ENV: 'test'
   PORT: 8080
 
 test_backend:
@@ -29,3 +29,8 @@ test_lint:
   script:
    - npm install --silent
    - npm run lint
+
+test_coverage:
+  script:
+   - npm install --silent
+   - npm run cover
