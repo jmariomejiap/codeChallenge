@@ -103,7 +103,7 @@ const readChallengeJson = (req, res, next) => {
   const challengeFolderName = req.challengeDoc.folderName;
   fs.readFile(`${__dirname}/../../../challenges_data/${challengeFolderName}/challenge.json`, 'utf8', (err, content) => {
     if (err) {
-      return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
+      return res.status(500).json({ result: 'error', error: 'challenge_does_not_have_descriptor' });
     }
 
     let challengeJson;
@@ -115,7 +115,7 @@ const readChallengeJson = (req, res, next) => {
     }
 
     if (!challengeJson.name || !challengeJson.description) {
-      return res.status(404).json({ result: 'error', error: 'challenge_not_found' });
+      return res.status(500).json({ result: 'error', error: 'challenge_is_invalid' });
     }
 
     req.challengeName = challengeJson.name; // eslint-disable-line no-param-reassign

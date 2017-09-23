@@ -1,0 +1,29 @@
+{
+    "step_name": "Simple Sum",
+    "function_name": "sum",
+    "test": [
+        {
+            "input": [1,2],
+            "expected_output": 3,
+            "run_during_development": true
+        },
+        {
+            "input": [10,2],
+            "expected_output": 12,
+            "run_during_development": true
+        },
+        {
+            "input": [2,2],
+            "expected_output": 4,
+            "run_during_development": true
+        },
+        {
+            "input": [-10, 10],
+            "expected_output": 0
+        },
+        {
+            "input": [100,100],
+            "expected_output": 200
+        }
+    ]
+}

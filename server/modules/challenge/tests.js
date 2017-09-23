@@ -1,6 +1,6 @@
-import test from 'ava'; // eslint-disable-line 
-import supertest from 'supertest-as-promised'; // eslint-disable-line 
-import server from '../../server.js'; // eslint-disable-line 
+import test from 'ava'; // eslint-disable-line
+import supertest from 'supertest-as-promised'; // eslint-disable-line
+import server from '../../server.js'; // eslint-disable-line
 import Challenge from '../../models/challenge.js';
 import ChallengeAttempt from '../../models/challengeAttempt.js';
 import fetchToken from '../../util/validateAccess.js';
@@ -54,7 +54,7 @@ test('should not have access to dummyData', async (t) => {
 
 test('internal error if token Has been tampered', async (t) => {
   const res = await internals.reqAgent
-    .get('/api/v1/challenge?token=EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA'); // eslint-disable-line  
+    .get('/api/v1/challenge?token=EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA'); // eslint-disable-line
 
   t.is(res.status, 500);
   t.is(res.body.result, 'error');
@@ -75,7 +75,7 @@ test('should fail if token payload is empty', async (t) => {
 test('should not accept post with right arguments', async (t) => {
   const res = await internals.reqAgent
     .post('/api/v1/challenge')
-    .send({ accessCode: 'myAccessCode-test', token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA' }); // eslint-disable-line 
+    .send({ accessCode: 'myAccessCode-test', token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA' }); // eslint-disable-line
 
   t.is(res.status, 404);
   t.falsy(res.body.result, 'result is non existent');
@@ -86,7 +86,7 @@ test('should not Delete even with right arguments', async (t) => {
   const res = await internals.reqAgent
     .delete('/api/v1/challenge')
     .set('Accept', 'application/json')
-    .send({ accessCode: 'myAccessCode-test', token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA' }); // eslint-disable-line 
+    .send({ accessCode: 'myAccessCode-test', token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1MDM0MTM3M2U4OTRhZDE2MzQ3ZWZlMDEiLCJpYXQiOjE1MDM2MTgwMjZ9.rTIVRlpDHLT6dKwzLww559Bo1sYVkg8Wr_w5et1RADA' }); // eslint-disable-line
 
   t.is(res.status, 404);
   t.falsy(res.body.result, 'result is non existent');
@@ -106,4 +106,79 @@ test('successful test, right arguments return challenge information', async (t) 
   t.falsy(res.body.error, 'error is empty');
   t.truthy(res.body.challengeId, ' challengeId received');
   t.truthy(res.body.challengeDescription, ' challengeDescription received');
+});
+
+
+test('should throw error is challenge.json does not have name', async (t) => {
+  await Challenge.remove({});
+  await ChallengeAttempt.remove({});
+
+  const challengeDoc = await Challenge.create({ name: 'Math Challenge', folderName: 'test_challenge_002' });
+
+  await ChallengeAttempt.create({
+    accessCode: 'myOtherAccessCode',
+    passCode: '123456',
+    fullName: 'Joe Doe',
+    email: 'joe@doe.com',
+    score: 0,
+    challengeId: challengeDoc._id,
+    status: 'not_started',
+  });
+
+  const token = await fetchToken('myOtherAccessCode', '123456');
+  const res = await internals.reqAgent
+    .get(`/api/v1/challenge?token=${token}`);
+  t.is(res.status, 500);
+  t.is(res.body.result, 'error');
+  t.is(res.body.error, 'challenge_is_invalid');
+});
+
+
+test('should throw error is challenge.json is not a valid json', async (t) => {
+  await Challenge.remove({});
+  await ChallengeAttempt.remove({});
+
+  const challengeDoc = await Challenge.create({ name: 'Math Challenge', folderName: 'test_challenge_003' });
+
+  await ChallengeAttempt.create({
+    accessCode: 'myOtherAccessCode',
+    passCode: '123456',
+    fullName: 'Joe Doe',
+    email: 'joe@doe.com',
+    score: 0,
+    challengeId: challengeDoc._id,
+    status: 'not_started',
+  });
+
+  const token = await fetchToken('myOtherAccessCode', '123456');
+  const res = await internals.reqAgent
+    .get(`/api/v1/challenge?token=${token}`);
+  t.is(res.status, 500);
+  t.is(res.body.result, 'error');
+  t.is(res.body.error, 'error_parsing_challenge');
+});
+
+
+test('should throw error is challenge.json is not present', async (t) => {
+  await Challenge.remove({});
+  await ChallengeAttempt.remove({});
+
+  const challengeDoc = await Challenge.create({ name: 'Math Challenge', folderName: 'test_challenge_004' });
+
+  await ChallengeAttempt.create({
+    accessCode: 'myOtherAccessCode',
+    passCode: '123456',
+    fullName: 'Joe Doe',
+    email: 'joe@doe.com',
+    score: 0,
+    challengeId: challengeDoc._id,
+    status: 'not_started',
+  });
+
+  const token = await fetchToken('myOtherAccessCode', '123456');
+  const res = await internals.reqAgent
+    .get(`/api/v1/challenge?token=${token}`);
+  t.is(res.status, 500);
+  t.is(res.body.result, 'error');
+  t.is(res.body.error, 'challenge_does_not_have_descriptor');
 });
