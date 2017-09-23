@@ -11,25 +11,27 @@ export function validateParams(req, res, next) {
   req.validatedParams = { accessCode, passCode }; // eslint-disable-line no-param-reassign
   return next();
 }
+/* istanbul ignore next */
+export async function loadChallengeAttempt (req, res, next) {
+  const query = {
+    accessCode: req.validatedParams.accessCode,
+    passCode: req.validatedParams.passCode,
+  };
 
-export function loadChallengeAttempt(req, res, next) {
-  const accessCodeValue = req.validatedParams.accessCode;
-  const passCodeValue = req.validatedParams.passCode;
-  return ChallengeAttempt.findOne({ accessCode: accessCodeValue, passCode: passCodeValue })
-    .then((challengeAttempt) => {
-      if (!challengeAttempt) {
-        return res.status(404).json({ result: 'error', token: '', error: 'invalid_access_tokens' });
-      }
-      req.challengeAttemptDoc = challengeAttempt; // eslint-disable-line no-param-reassign
-      return next();
-    })
+  const challengeAttemptDoc = await ChallengeAttempt.findOne(query)
     .catch((e) => {
-      /* istanbul ignore next */
+      
       const output = { result: 'error', error: 'internal_error', message: e.message };
       /* istanbul ignore next */
       return res.status(500).json(output);
     });
-}
+
+    if (!challengeAttemptDoc) {
+      return res.status(404).json({ result: 'error', token: '', error: 'invalid_access_tokens' });
+    }
+    req.challengeAttemptDoc = challengeAttempt; // eslint-disable-line no-param-reassign
+    return next();      
+};
 
 export function validateAttemptStatus(req, res, next) {
   const status = req.challengeAttemptDoc.status;
@@ -65,3 +67,5 @@ export function sendToken(req, res) {
   };
   res.status(200).json(output);
 }
+
+// export default loadChallengeAttempt;
