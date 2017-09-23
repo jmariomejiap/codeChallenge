@@ -17,7 +17,7 @@ const readFile = (path) => {
 const loadChallengeAttempt = async (req, res, next) => {
   const stepIdArg = req.challengeAttemptId;
   const challengeAttemptDoc = await ChallengeAttempt.findById(stepIdArg);
-
+  /* istanbul ignore if */
   if (!challengeAttemptDoc) {
     return res.status(404).json({ result: 'error', error: 'challenge_step_not_found' });
   }
