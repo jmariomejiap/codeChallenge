@@ -4,6 +4,7 @@ import server from '../../server.js'; // eslint-disable-line
 import Challenge from '../../models/challenge.js';
 import ChallengeAttempt from '../../models/challengeAttempt.js';
 import fetchToken from '../../util/validateAccess.js';
+import evaluator from '../../util/answerEval.js';
 
 const internals = {};
 internals.dummyDataToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OWFmODEwZjkwYzQ4NjNmYWE5YTAyYjkiLCJjaGFsbGVuZ2VJZCI6IjU5YWY4MTBlOTBjNDg2M2ZhYTlhMDJiOCIsInVzZXJGdWxsTmFtZSI6ImR1bW15dXNlcm5hbWUiLCJpYXQiOjE1MDUzMjIxMTd9.JtD7alaWlI_aUF0FCF8dxekTm1DYR1Z5NKQkIA8GZ1I'; // eslint-disable-line
@@ -129,3 +130,20 @@ test('should fail if challengeStep contents are incomplete', async (t) => {
   t.is(res.body.result, 'error');
   t.is(res.body.error, 'internal_error');
 });
+
+// Unit testing evaluator function.
+
+test('should add 1 + 1 equal 2', async (t) => {
+  const solutionExample = 'function sum(a, b) {return a + b;}';
+  const result = evaluator(solutionExample, [1, 1], 2);
+
+  t.is(result, true);
+});
+
+test('should substract 1 - 1 equal 0', async (t) => {
+  const solutionExample = 'function sum(a, b) {return a - b;}';
+  const result = evaluator(solutionExample, [1, 1], 0);
+
+  t.is(result, true);
+});
+
