@@ -16,6 +16,22 @@ const readFile = (path) => {
   });
 };
 
+const setScore = (tests) => {
+  let passed = 0;
+  for (let i = 0; i < tests.length; i++) {
+    if (tests[i].score) {
+      passed++;
+    }
+  }
+  return (passed * 100) / tests.length;
+};
+
+
+const setNextStep = (currentStep, arrSteps) => {
+  const current = arrSteps.indexOf(currentStep);
+  return arrSteps[current + 1];
+};
+
 
 /* istanbul ignore next */
 const loadChallengeAttempt = async (req, res, next) => {
@@ -80,11 +96,13 @@ const sendResponse = (req, res) => {
 // dynimic test functionalilty //
 
 const verifyArguments = (req, res, next) => {
-  if (!req.body.input || !req.body.token || !req.body.sample) {
+  if (!req.body.input || !req.body.token || !req.body.sample || !req.body.challengeStepId) {
     return res.status(404).json({ result: 'error', error: 'missing arguments' });
   }
   req.token = req.body.token; // eslint-disable-line no-param-reassign
   req.answer = req.body.input; // eslint-disable-line no-param-reassign
+  req.sample = req.body.sample; // eslint-disable-line no-param-reassign
+  req.challengeStepId = req.body.challengeStepId; // eslint-disable-line no-param-reassign
   return next();
 };
 
@@ -123,8 +141,8 @@ const testAnswer = (req, res, next) => {
   return next();
 };
 
-const sampleFilter = (req, res) => {
-  const sampleFlag = req.body.sample;
+const sampleFilter = (req, res, next) => {
+  const sampleFlag = req.sample;
   const results = req.results;
 
   if (sampleFlag === 'true') {
@@ -133,8 +151,29 @@ const sampleFilter = (req, res) => {
     });
     return res.status(200).json({ sample: 'true', result: filteredResults });
   }
-  return res.status(200).json({ sample: 'false', result: req.results });
+
+  return next();
 };
 
 
-export { loadChallengeAttempt, findChallengeStep, buildPath, fileFetcher, sendResponse, verifyArguments, readInfoJson, testAnswer, sampleFilter };
+const updateChallengeAttempt = async (req, res) => {
+  const score = setScore(req.results);
+
+  const currentChallengeAttemptId = req.challengeAttemptId;
+  const currentChallengeStep = req.challengeStepId;
+  const challengeStepFolders = req.challengeStepFolders;
+  const nextStep = setNextStep(currentChallengeStep, challengeStepFolders);
+
+  // find what is the next step. since it nees to be updated.
+
+
+  await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { currentStepId: nextStep, score })
+    .catch(() => {
+      return res.status(500).json({ result: 'error', error: 'internal_error_updating' });
+    });
+
+  return res.status(200).json({ result: req.results });
+};
+
+
+export { loadChallengeAttempt, findChallengeStep, buildPath, fileFetcher, sendResponse, verifyArguments, readInfoJson, testAnswer, sampleFilter, updateChallengeAttempt };

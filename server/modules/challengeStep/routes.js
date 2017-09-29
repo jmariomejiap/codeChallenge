@@ -25,11 +25,11 @@ router.post('/score',
   challengeController.loadChallenge,
   challengeController.readChallengeDir,
   challengeStepController.loadChallengeAttempt,
-  challengeStepController.loadChallengeAttempt,
   challengeStepController.findChallengeStep,
   challengeStepController.buildPath,
   challengeStepController.readInfoJson,
   challengeStepController.testAnswer,
   challengeStepController.sampleFilter,
+  challengeStepController.updateChallengeAttempt,
 );
 export default router;
