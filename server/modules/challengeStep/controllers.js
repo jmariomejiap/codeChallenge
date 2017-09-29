@@ -1,5 +1,6 @@
 import ChallengeAttempt from '../../models/challengeAttempt';
 import fs from 'fs';
+import _ from 'lodash';
 // import safeEval from 'safe-eval';
 import evaluator from '../../util/answerEval';
 
@@ -76,10 +77,10 @@ const sendResponse = (req, res) => {
   return res.status(200).json(output);
 };
 
-// dynimic test functionalilty // 
+// dynimic test functionalilty //
 
 const verifyArguments = (req, res, next) => {
-  if (!req.body.input || !req.body.token) {
+  if (!req.body.input || !req.body.token || !req.body.sample) {
     return res.status(404).json({ result: 'error', error: 'missing arguments' });
   }
   req.token = req.body.token; // eslint-disable-line no-param-reassign
@@ -104,26 +105,36 @@ const readInfoJson = async (req, res, next) => {
   return next();
 };
 
-const testAnswer = (req, res) => {
-  const tests = req.infoJson.test; // array of objects
-  console.log('tests length', tests.length);
-  
-  const result = tests.map((test) => {
-    console.log('this is one case', test);
-    const userAnswer = req.answer;
-    const input = test.input;
-    const expectedOutout = test.expected_output;
+const testAnswer = (req, res, next) => {
+  const tests = req.infoJson.test;
 
-    const score = evaluator(userAnswer, input, expectedOutout);
-
-    return score;
+  const results = _.map(tests, (test) => {
+    const summary = {
+      userAnswer: req.answer,
+      testInput: test.input,
+      expectedOutput: test.expected_output,
+      sample: test.sample,
+      score: evaluator(req.answer, test.input, test.expected_output),
+    };
+    return summary;
   });
-  
-  return res.status(200).json(result);
+
+  req.results = results; // eslint-disable-line no-param-reassign
+  return next();
+};
+
+const sampleFilter = (req, res) => {
+  const sampleFlag = req.body.sample;
+  const results = req.results;
+
+  if (sampleFlag === 'true') {
+    const filteredResults = _.filter(results, (o) => {
+      return o.sample;
+    });
+    return res.status(200).json({ sample: 'true', result: filteredResults });
+  }
+  return res.status(200).json({ sample: 'false', result: req.results });
 };
 
 
-
-
-
-export { loadChallengeAttempt, findChallengeStep, buildPath, fileFetcher, sendResponse, verifyArguments, readInfoJson, testAnswer };
+export { loadChallengeAttempt, findChallengeStep, buildPath, fileFetcher, sendResponse, verifyArguments, readInfoJson, testAnswer, sampleFilter };

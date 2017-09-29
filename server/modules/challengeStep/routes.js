@@ -30,5 +30,6 @@ router.post('/score',
   challengeStepController.buildPath,
   challengeStepController.readInfoJson,
   challengeStepController.testAnswer,
+  challengeStepController.sampleFilter,
 );
 export default router;
