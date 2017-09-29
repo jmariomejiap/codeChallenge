@@ -18,4 +18,17 @@ router.get('/',
   challengeStepController.sendResponse,
 );
 
+router.post('/score',
+  challengeStepController.verifyArguments,
+  challengeController.decodeToken,
+  challengeController.verifyPayLoad,
+  challengeController.loadChallenge,
+  challengeController.readChallengeDir,
+  challengeStepController.loadChallengeAttempt,
+  challengeStepController.loadChallengeAttempt,
+  challengeStepController.findChallengeStep,
+  challengeStepController.buildPath,
+  challengeStepController.readInfoJson,
+  challengeStepController.testAnswer,
+);
 export default router;

@@ -1,5 +1,7 @@
 import ChallengeAttempt from '../../models/challengeAttempt';
 import fs from 'fs';
+// import safeEval from 'safe-eval';
+import evaluator from '../../util/answerEval';
 
 // helper function
 const readFile = (path) => {
@@ -74,5 +76,54 @@ const sendResponse = (req, res) => {
   return res.status(200).json(output);
 };
 
+// dynimic test functionalilty // 
 
-export { loadChallengeAttempt, findChallengeStep, buildPath, fileFetcher, sendResponse };
+const verifyArguments = (req, res, next) => {
+  if (!req.body.input || !req.body.token) {
+    return res.status(404).json({ result: 'error', error: 'missing arguments' });
+  }
+  req.token = req.body.token; // eslint-disable-line no-param-reassign
+  req.answer = req.body.input; // eslint-disable-line no-param-reassign
+  return next();
+};
+
+const readInfoJson = async (req, res, next) => {
+  const path = req.stepPath;
+  const resultPromise = await new Promise((resolve, reject) => {
+    fs.readFile(`${path}info.json`, (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(data);
+    });
+  })
+    .catch(() => res.status(500).json({ result: 'error', error: 'internal_errorSILLY_RESPONSE' }));
+
+  const parsedResult = JSON.parse(resultPromise);
+  req.infoJson = parsedResult; // eslint-disable-line no-param-reassign
+  return next();
+};
+
+const testAnswer = (req, res) => {
+  const tests = req.infoJson.test; // array of objects
+  console.log('tests length', tests.length);
+  
+  const result = tests.map((test) => {
+    console.log('this is one case', test);
+    const userAnswer = req.answer;
+    const input = test.input;
+    const expectedOutout = test.expected_output;
+
+    const score = evaluator(userAnswer, input, expectedOutout);
+
+    return score;
+  });
+  
+  return res.status(200).json(result);
+};
+
+
+
+
+
+export { loadChallengeAttempt, findChallengeStep, buildPath, fileFetcher, sendResponse, verifyArguments, readInfoJson, testAnswer };
