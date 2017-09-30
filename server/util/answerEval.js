@@ -11,6 +11,7 @@ const evalutator = (userAnswer, input, expectedOutput) => {
     }
     return false;
   } catch (error) {
+    console.log(error);
     return false;
   }
 };
