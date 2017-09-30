@@ -6,12 +6,12 @@ const evalutator = (userAnswer, input, expectedOutput) => {
   const template = `(${userAnswer})(${input[0]},${input[1]})`;
   try {
     const result = safeEval(template);
+    console.log('this is the result', result);
     if (result === expectedOutput) {
       return true;
     }
     return false;
   } catch (error) {
-    console.log(error);
     return false;
   }
 };

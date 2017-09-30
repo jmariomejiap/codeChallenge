@@ -174,3 +174,24 @@ test('should not concatenate strings', async (t) => {
 
   t.is(result, false);
 });
+
+test('safe-eval transform strings to numbers', async (t) => {
+  const solutionExample = 'function sum(a, b) {return a + b;}';
+  const result = evaluator(solutionExample, ['1', '1'], 2);
+
+  t.is(result, true);
+});
+
+// testing '/score' endpoint
+
+test('/score enpoint fail missing arguments', async (t) => {
+  const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
+  const res = await internals.reqAgent
+    .post('/api/v1/challengeStep/score')
+    .send({ token }); // eslint-disable-line
+
+  t.is(res.status, 404);
+  t.is(res.body.result, 'error');
+  t.is(res.body.error, 'missing arguments');
+});
+
