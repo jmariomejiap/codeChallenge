@@ -147,3 +147,10 @@ test('should substract 1 - 1 equal 0', async (t) => {
   t.is(result, true);
 });
 
+test('should fail if argument give is not a number', async (t) => {
+  const solutionExample = 'function sum(a, b) {return a + b;}';
+  const result = evaluator(solutionExample, ['A', 1], 0);
+
+  t.is(result, false);
+});
+

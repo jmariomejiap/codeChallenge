@@ -1,4 +1,5 @@
 import ChallengeAttempt from '../../models/challengeAttempt';
+import ChallengeStepResult from '../../models/challengeStepResult';
 import fs from 'fs';
 import _ from 'lodash';
 // import safeEval from 'safe-eval';
@@ -156,24 +157,33 @@ const sampleFilter = (req, res, next) => {
 };
 
 
-const updateChallengeAttempt = async (req, res) => {
-  const score = setScore(req.results);
-
+const updateCollections = async (req, res) => {
   const currentChallengeAttemptId = req.challengeAttemptId;
   const currentChallengeStep = req.challengeStepId;
   const challengeStepFolders = req.challengeStepFolders;
   const nextStep = setNextStep(currentChallengeStep, challengeStepFolders);
 
+  const newStepResult = {
+    id: 'to be Determined',
+    challengeId: req.challengeId,
+    challengeStepId: currentChallengeStep,
+    answer: req.answer,
+    score: setScore(req.results),
+  };
   // find what is the next step. since it nees to be updated.
 
+  await ChallengeStepResult.create(newStepResult)
+    .catch(() => {
+      return res.status(500).json({ result: 'error', error: 'internal_error_creating' });
+    });
 
-  await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { currentStepId: nextStep, score })
+  await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { currentStepId: nextStep })
     .catch(() => {
       return res.status(500).json({ result: 'error', error: 'internal_error_updating' });
     });
 
-  return res.status(200).json({ result: req.results });
+  // return res.status(200).json({ result: req.results });
 };
 
 
-export { loadChallengeAttempt, findChallengeStep, buildPath, fileFetcher, sendResponse, verifyArguments, readInfoJson, testAnswer, sampleFilter, updateChallengeAttempt };
+export { loadChallengeAttempt, findChallengeStep, buildPath, fileFetcher, sendResponse, verifyArguments, readInfoJson, testAnswer, sampleFilter, updateCollections };
