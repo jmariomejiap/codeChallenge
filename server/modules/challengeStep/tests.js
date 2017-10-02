@@ -9,6 +9,7 @@ import evaluator from '../../util/answerEval.js';
 const internals = {};
 internals.dummyDataToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OWFmODEwZjkwYzQ4NjNmYWE5YTAyYjkiLCJjaGFsbGVuZ2VJZCI6IjU5YWY4MTBlOTBjNDg2M2ZhYTlhMDJiOCIsInVzZXJGdWxsTmFtZSI6ImR1bW15dXNlcm5hbWUiLCJpYXQiOjE1MDUzMjIxMTd9.JtD7alaWlI_aUF0FCF8dxekTm1DYR1Z5NKQkIA8GZ1I'; // eslint-disable-line
 internals.emptyPayloadToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.OatqkwDnaqBNtgHHYJFGMioVx_9ZZ_sePRYyENAx5to';
+internals.solutionExample = 'function sum(a, b) {return a + b;}';
 
 test.before('establish connection ', () => {
   server();
@@ -161,6 +162,13 @@ test('should return false if solution has typos (ex, retun) ', async (t) => {
   t.is(result, false);
 });
 
+test('should return false if result is not equal to expected output ', async (t) => {
+  const solutionExample = 'function sum(a, b) {return a + b;}';
+  const result = evaluator(solutionExample, [1, 1], 3);
+
+  t.is(result, false);
+});
+
 test('should work with arrow functions ES6', async (t) => {
   const solutionExample = '(a, b) => {return a + b;}';
   const result = evaluator(solutionExample, [1, 1], 2);
@@ -184,14 +192,38 @@ test('safe-eval transform strings to numbers', async (t) => {
 
 // testing '/score' endpoint
 
-test('/score enpoint fail missing arguments', async (t) => {
+test('/score endpoint fail missing arguments', async (t) => {
   const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
+  const args = {
+    input: internals.solutionExample,
+    token,
+    sample: false,
+  };
+
   const res = await internals.reqAgent
     .post('/api/v1/challengeStep/score')
-    .send({ token }); // eslint-disable-line
+    .send(args);
 
   t.is(res.status, 404);
   t.is(res.body.result, 'error');
   t.is(res.body.error, 'missing arguments');
+});
+
+test('/score endpoint fail', async (t) => {
+  const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
+  const args = {
+    input: internals.solutionExample,
+    token,
+    challengeStepId: '001',
+  };
+
+  const res = await internals.reqAgent
+    .post('/api/v1/challengeStep/score')
+    .send(args);
+
+  t.is(res.status, 404);
+  t.is(res.body.result, 'error');
+  console.log(res.body);
+  // t.is(res.body.error, 'missing arguments');
 });
 
