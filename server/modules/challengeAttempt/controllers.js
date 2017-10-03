@@ -52,7 +52,7 @@ export function generateToken(req, res, next) {
   const options = {};
   const key = config.default.secretKey;
   jwt.sign(payLoad, key, options, (err, token) => {
-    /* istanbul ignore if */
+    /* istanbul ignore next */
     if (err) {
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     }

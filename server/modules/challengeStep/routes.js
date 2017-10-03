@@ -13,7 +13,6 @@ router.get('/',
   challengeStepController.loadChallengeAttempt,
   challengeStepController.findChallengeStep,
   challengeStepController.buildPath,
-  // challengeStepController.readStepDir,
   challengeStepController.fileFetcher,
   challengeStepController.sendResponse,
 );

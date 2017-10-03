@@ -90,7 +90,7 @@ const readChallengeDir = async (req, res, next) => {
       /* istanbul ignore next */
       const output = { result: 'error', error: 'internal_error' };
       /* istanbul ignore next */
-      res.status(500).json(output);
+      return res.status(500).json(output);
     });
 
   const folders = resolvedStat.filter((item) => {

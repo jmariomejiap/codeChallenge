@@ -24,6 +24,7 @@ test.beforeEach(async () => {
   await ChallengeStepResult.remove({});
 
   const challengeDoc = await Challenge.create({ name: 'Math Challenge', folderName: 'test_challenge_001' });
+  const challengeDocTwo = await Challenge.create({ name: 'Fake Challenge', folderName: 'test_challenge_004' });
 
   await ChallengeAttempt.create({
     accessCode: 'myAccessCodeTest',
@@ -32,6 +33,16 @@ test.beforeEach(async () => {
     email: 'dummyTest@dummy.com',
     score: 0,
     challengeId: challengeDoc._id,
+    status: 'not_started',
+  });
+
+  await ChallengeAttempt.create({
+    accessCode: 'myAccessCodeFake',
+    passCode: 'myPassCodeFake',
+    fullName: 'dummyUserNameTest',
+    email: 'dummyTest@dummy.com',
+    score: 0,
+    challengeId: challengeDocTwo._id,
     status: 'not_started',
   });
 
@@ -254,3 +265,23 @@ test('/score endpoint succesfully returns tests and updates databases ', async (
   t.truthy(res.body.result, 'array of objects');
 });
 
+/*
+test('/score endpoint failing when reading a challengeStep without info.json', async (t) => {
+  const token = await fetchToken('myAccessCodeFake', 'myPassCodeFake');
+  const args = {
+    input: internals.solutionExample,
+    token,
+    challengeStepId: '001',
+    sample: 'true',
+  };
+
+  const res = await internals.reqAgent
+    .post('/api/v1/challengeStep/score')
+    .send(args);
+
+  console.log(res.body);
+  t.is(res.status, 500);
+  t.is(res.body.result, 'error');
+  t.is(res.body.error, 'internal_error');
+});
+*/

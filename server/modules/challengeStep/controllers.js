@@ -118,7 +118,9 @@ const readInfoJson = async (req, res, next) => {
       return resolve(data);
     });
   })
-    .catch(() => res.status(500).json({ result: 'error', error: 'internal_errorSILLY_RESPONSE' }));
+    .catch(() => {
+      return res.status(500).json({ result: 'error', error: 'internal_error' });
+    });
 
   const parsedResult = JSON.parse(resultPromise);
   req.infoJson = parsedResult; // eslint-disable-line no-param-reassign
