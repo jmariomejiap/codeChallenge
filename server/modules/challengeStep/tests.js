@@ -250,7 +250,6 @@ test('/score endpoint succesfully returns tests and updates databases ', async (
     .post('/api/v1/challengeStep/score')
     .send(args);
 
-  console.log(res.body);
   t.is(res.status, 200);
   t.truthy(res.body.result, 'array of objects');
 });
