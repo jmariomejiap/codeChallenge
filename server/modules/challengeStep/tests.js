@@ -251,8 +251,7 @@ test('/score endpoint succesfully returns tests and updates databases ', async (
     .send(args);
 
   console.log(res.body);
-  t.is(res.status, 404);
-  // t.is(res.body.sample, 'true');
-  // t.truthy(res.body.result, 'array of objects');
+  t.is(res.status, 200);
+  t.truthy(res.body.result, 'array of objects');
 });
 

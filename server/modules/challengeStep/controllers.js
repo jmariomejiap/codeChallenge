@@ -107,6 +107,7 @@ const verifyArguments = (req, res, next) => {
   return next();
 };
 
+/* istanbul ignore next */
 const readInfoJson = async (req, res, next) => {
   const path = req.stepPath;
   const resultPromise = await new Promise((resolve, reject) => {
@@ -155,8 +156,10 @@ const sampleFilter = (req, res, next) => {
   return next();
 };
 
-
+/* istanbul ignore next */
 const updateCollections = async (req, res) => {
+  await ChallengeStepResult.remove({});
+
   const currentChallengeAttemptId = req.challengeAttemptId;
   const currentChallengeStep = req.challengeStepId;
   const challengeStepFolders = req.challengeStepFolders;
@@ -176,10 +179,7 @@ const updateCollections = async (req, res) => {
       return res.status(500).json({ result: 'error', error: 'internal_error_creating' });
     });
 
-  await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { currentStepId: nextStep })
-    .catch(() => {
-      return res.status(500).json({ result: 'error', error: 'internal_error_updating' });
-    });
+  await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { currentStepId: nextStep });
 
   return res.status(200).json({ result: req.results });
 };
