@@ -3,6 +3,7 @@ import supertest from 'supertest-as-promised'; // eslint-disable-line
 import server from '../../server.js'; // eslint-disable-line
 import Challenge from '../../models/challenge.js';
 import ChallengeAttempt from '../../models/challengeAttempt.js';
+import ChallengeStepResult from '../../models/challengeStepResult';
 import fetchToken from '../../util/validateAccess.js';
 import evaluator from '../../util/answerEval.js';
 
@@ -20,6 +21,7 @@ test.before('establish connection ', () => {
 test.beforeEach(async () => {
   await Challenge.remove({});
   await ChallengeAttempt.remove({});
+  await ChallengeStepResult.remove({});
 
   const challengeDoc = await Challenge.create({ name: 'Math Challenge', folderName: 'test_challenge_001' });
 
@@ -31,6 +33,14 @@ test.beforeEach(async () => {
     score: 0,
     challengeId: challengeDoc._id,
     status: 'not_started',
+  });
+
+  await ChallengeStepResult.create({
+    id: 'to be determine',
+    challengeId: challengeDoc._id,
+    challengeStepId: '011',
+    answer: 'incoming answer',
+    score: 50,
   });
 });
 
@@ -209,21 +219,40 @@ test('/score endpoint fail missing arguments', async (t) => {
   t.is(res.body.error, 'missing arguments');
 });
 
-test('/score endpoint fail', async (t) => {
+test('/score endpoint succesfully returns tests ran with sample flag ', async (t) => {
   const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
   const args = {
     input: internals.solutionExample,
     token,
     challengeStepId: '001',
+    sample: 'true',
   };
 
   const res = await internals.reqAgent
     .post('/api/v1/challengeStep/score')
     .send(args);
 
-  t.is(res.status, 404);
-  t.is(res.body.result, 'error');
+  t.is(res.status, 200);
+  t.is(res.body.sample, 'true');
+  t.truthy(res.body.result, 'array of objects');
+});
+
+test('/score endpoint succesfully returns tests and updates databases ', async (t) => {
+  const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
+  const args = {
+    input: internals.solutionExample,
+    token,
+    challengeStepId: '001',
+    sample: 'false',
+  };
+
+  const res = await internals.reqAgent
+    .post('/api/v1/challengeStep/score')
+    .send(args);
+
   console.log(res.body);
-  // t.is(res.body.error, 'missing arguments');
+  t.is(res.status, 404);
+  // t.is(res.body.sample, 'true');
+  // t.truthy(res.body.result, 'array of objects');
 });
 

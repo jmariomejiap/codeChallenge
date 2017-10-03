@@ -145,7 +145,6 @@ const testAnswer = (req, res, next) => {
 const sampleFilter = (req, res, next) => {
   const sampleFlag = req.sample;
   const results = req.results;
-
   if (sampleFlag === 'true') {
     const filteredResults = _.filter(results, (o) => {
       return o.sample;
@@ -170,7 +169,7 @@ const updateCollections = async (req, res) => {
     answer: req.answer,
     score: setScore(req.results),
   };
-  // find what is the next step. since it nees to be updated.
+  // find what is the next step. since it must be updated.
 
   await ChallengeStepResult.create(newStepResult)
     .catch(() => {
@@ -182,7 +181,7 @@ const updateCollections = async (req, res) => {
       return res.status(500).json({ result: 'error', error: 'internal_error_updating' });
     });
 
-  // return res.status(200).json({ result: req.results });
+  return res.status(200).json({ result: req.results });
 };
 
 
