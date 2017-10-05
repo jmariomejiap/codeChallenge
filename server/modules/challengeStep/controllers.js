@@ -2,7 +2,6 @@ import ChallengeAttempt from '../../models/challengeAttempt';
 import ChallengeStepResult from '../../models/challengeStepResult';
 import fs from 'fs';
 import _ from 'lodash';
-// import safeEval from 'safe-eval';
 import evaluator from '../../util/answerEval';
 
 // helper function
@@ -174,7 +173,6 @@ const updateCollections = async (req, res) => {
     answer: req.answer,
     score: setScore(req.results),
   };
-  // find what is the next step. since it must be updated.
 
   await ChallengeStepResult.create(newStepResult)
     .catch(() => {
