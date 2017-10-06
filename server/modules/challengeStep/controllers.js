@@ -1,8 +1,8 @@
-import ChallengeAttempt from '../../models/challengeAttempt';
-import ChallengeStepResult from '../../models/challengeStepResult';
 import fs from 'fs';
 import _ from 'lodash';
 import evaluator from '../../util/answerEval';
+import ChallengeAttempt from '../../models/challengeAttempt';
+import ChallengeStepResult from '../../models/challengeStepResult';
 
 // helper function
 const readFile = (path) => {
@@ -17,13 +17,11 @@ const readFile = (path) => {
 };
 
 const setScore = (tests) => {
-  let passed = 0;
-  for (let i = 0; i < tests.length; i++) {
-    if (tests[i].score) {
-      passed++;
-    }
-  }
-  return (passed * 100) / tests.length;
+  const passed = tests.filter((test) => {
+    return test.score;
+  });
+
+  return (passed.length * 100) / tests.length;
 };
 
 
