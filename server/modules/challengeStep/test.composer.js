@@ -1,8 +1,8 @@
 import test from 'ava'; // eslint-disable-line
+
+/*
 import createTestString from '../../util/testComposer';
-
-
-test.skip('should fail if incomplete arguments,  error missing token', (t) => {
+test('should fail if incomplete arguments,  error missing token', (t) => {
   const input = `
   function sum(a, b) {
     return a - b;
@@ -32,3 +32,4 @@ test.skip('should fail if incomplete arguments,  error missing token', (t) => {
   });`;
   t.is(string.match(match2));
 });
+*/
