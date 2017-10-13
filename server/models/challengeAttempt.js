@@ -23,7 +23,7 @@ const challengeAttempt = new Schema({
   fullName: { type: String, lowercase: true, required: true },
   email: { type: String, lowercase: true, required: true, validate: emailValidator },
   score: { type: Number, min: 0, max: 100 },
-  currentStepId: { type: String, required: true },
+  currentStepId: { type: String },
   challengeId: { type: String, required: true, validate: mongoIdValidator },
   status: { type: String, required: true, enum: ['not_started', 'in_progress', 'completed'] },
 });

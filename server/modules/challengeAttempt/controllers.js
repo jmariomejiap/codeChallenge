@@ -12,19 +12,27 @@ export function validateParams(req, res, next) {
   return next();
 }
 
+/* istanbul ignore next */
 export function loadChallengeAttempt(req, res, next) {
-  const accessCodeValue = req.validatedParams.accessCode;
-  const passCodeValue = req.validatedParams.passCode;
-  return ChallengeAttempt.findOne({ accessCode: accessCodeValue, passCode: passCodeValue })
-    .then((challengeAttempt) => {
-      if (!challengeAttempt) {
+  const query = {
+    accessCode: req.validatedParams.accessCode,
+    passCode: req.validatedParams.passCode,
+  };
+
+  return ChallengeAttempt.findOne(query)
+    .then((challengeAttemptDoc) => {
+      if (!challengeAttemptDoc) {
         return res.status(404).json({ result: 'error', token: '', error: 'invalid_access_tokens' });
       }
-      req.challengeAttemptDoc = challengeAttempt; // eslint-disable-line no-param-reassign
+
+      req.challengeAttemptDoc = challengeAttemptDoc; // eslint-disable-line no-param-reassign
       return next();
     })
     .catch(() => {
-      return res.status(500).json({ result: 'error', error: 'internal_error' });
+      /* istanbul ignore next */
+      const output = { result: 'error', error: 'internal_error' };
+      /* istanbul ignore next */
+      return res.status(500).json(output);
     });
 }
 
@@ -37,10 +45,14 @@ export function validateAttemptStatus(req, res, next) {
 }
 
 export function generateToken(req, res, next) {
-  const payLoad = { challengeAttemptId: req.challengeAttemptDoc._id, challengeId: req.challengeAttemptDoc.challengeId, userFullName: req.challengeAttemptDoc.fullName };
+  const payLoad = {
+    challengeAttemptId: req.challengeAttemptDoc._id,
+    challengeId: req.challengeAttemptDoc.challengeId,
+  };
   const options = {};
   const key = config.default.secretKey;
   jwt.sign(payLoad, key, options, (err, token) => {
+    /* istanbul ignore next */
     if (err) {
       return res.status(500).json({ result: 'error', error: 'internal_error' });
     }
@@ -50,6 +62,13 @@ export function generateToken(req, res, next) {
 }
 
 export function sendToken(req, res) {
-  const token = req.token;
-  res.status(200).json({ result: 'ok', token, error: '' });
+  const output = {
+    result: 'ok',
+    token: req.token,
+    error: '',
+    userFullName: req.challengeAttemptDoc.fullName,
+  };
+  res.status(200).json(output);
 }
+
+// export default loadChallengeAttempt;

@@ -99,3 +99,14 @@ test('should not be able to delete challengeAttempt', async (t) => {
 
   t.is(res.status, 404);
 });
+
+test('should fail if challengeAttempt status is completed', async (t) => {
+  await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { status: 'completed' });
+  const res = await internals.reqAgent
+    .get('/api/v1/challengeAttempt?accessCode=myAccessCodeTest&passCode=myPassCodeTest');
+
+  t.is(res.status, 404);
+  t.is(res.body.result, 'error');
+  t.falsy(res.body.token, 'no token');
+  t.is(res.body.error, 'challenge_completed');
+});

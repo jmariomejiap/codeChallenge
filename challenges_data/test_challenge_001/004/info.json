@@ -1,15 +1,15 @@
 {
-    "step_name": "Simple Sum",
-    "function_name": "sum",
+    "step_name": "Simple multiplication",
+    "function_name": "mult",
     "test": [
         {
             "input": [1,2],
-            "expected_output": 3,
+            "expected_output": 2,
             "sample": true
         },
         {
             "input": [10,2],
-            "expected_output": 12,
+            "expected_output": 20,
             "sample": true
         },
         {
@@ -23,7 +23,7 @@
         },
         {
             "input": [100,100],
-            "expected_output": 200
+            "expected_output": 10000
         }
     ]
 }

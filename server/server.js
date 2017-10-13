@@ -3,7 +3,7 @@ import compression from 'compression';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import path from 'path';
-import IntlWrapper from '../client/modules/Intl/IntlWrapper';
+// import IntlWrapper from '../client/modules/Intl/IntlWrapper';
 
 // Webpack Requirements
 import webpack from 'webpack';
@@ -12,29 +12,29 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
 // React And Redux Setup
-import { configureStore } from '../client/store';
-import { Provider } from 'react-redux';
-import React from 'react';
-import { renderToString } from 'react-dom/server';
-import { match, RouterContext } from 'react-router';
-import Helmet from 'react-helmet';
+// import { configureStore } from '../client/store';
+// import { Provider } from 'react-redux';
+// import React from 'react';
+// import { renderToString } from 'react-dom/server';
+// import { match, RouterContext } from 'react-router';
+// import Helmet from 'react-helmet';
 
 // Import required modules
-import routes from '../client/routes';
-import { fetchComponentData } from './util/fetchData';
+// import routes from '../client/routes';
+// import { fetchComponentData } from './util/fetchData';
 import dummyData from './dummyData';
 import serverConfig from './config';
 import challengeAttempt from './modules/challengeAttempt/routes';
 import challenge from './modules/challenge/routes';
+import challengeStep from './modules/challengeStep/routes';
 
 
-export default function (options) {
-  console.log('start server'); // eslint-disable-line no-console
-  console.log(options); // eslint-disable-line no-console
+export default function () {
   // Initialize the Express App
   const app = new Express();
 
   // Run Webpack dev server in development mode
+  /* istanbul ignore if */
   if (process.env.NODE_ENV === 'development') {
     const compiler = webpack(config);
     app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
@@ -46,6 +46,7 @@ export default function (options) {
 
   // MongoDB Connection
   mongoose.connect(serverConfig.mongoURL, (error) => {
+    /* istanbul ignore if */
     if (error) {
       console.error('Please make sure Mongodb is installed and running!'); // eslint-disable-line no-console
       throw error;
@@ -62,7 +63,9 @@ export default function (options) {
   app.use(Express.static(path.resolve(__dirname, '../dist')));
   app.use('/api/v1/challengeAttempt', challengeAttempt);
   app.use('/api/v1/challenge', challenge);
+  app.use('/api/v1/challengeStep', challengeStep);
 
+  /**
   // Render Initial HTML
   const renderFullPage = (html, initialState) => {
     const head = Helmet.rewind();
@@ -109,6 +112,7 @@ export default function (options) {
   };
 
   // Server Side Rendering based on routes matched by React-router.
+
   app.use((req, res, next) => {
     match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
       if (err) {
@@ -144,10 +148,12 @@ export default function (options) {
         .catch((error) => next(error));
     });
   });
+  */
 
   // start app
   app.listen(serverConfig.port, (error) => {
-    if (!error) {
+    /* istanbul ignore if */
+    if (!error && process.env.NODE_ENV !== 'test') {
       console.log(`Code Challenge is running on port: ${serverConfig.port}!`); // eslint-disable-line
     }
   });
