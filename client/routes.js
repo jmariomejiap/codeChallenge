@@ -20,6 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('./modules/Post/pages/PostDetailPage/PostDetailPage');
 }
 
+/*
 // react-router setup with code-splitting
 // More info: http://blog.mxstbr.com/2016/01/react-apps-with-pages/
 export default (
@@ -40,4 +41,9 @@ export default (
       }}
     />
   </Route>
+);
+*/
+
+export default (
+  <Route path="/" component={App} />
 );
