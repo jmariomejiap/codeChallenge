@@ -3,7 +3,7 @@ import compression from 'compression';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import path from 'path';
-// import IntlWrapper from '../client/modules/Intl/IntlWrapper';
+import IntlWrapper from '../client/modules/Intl/IntlWrapper';
 
 // Webpack Requirements
 import webpack from 'webpack';
@@ -12,16 +12,16 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
 // React And Redux Setup
-// import { configureStore } from '../client/store';
-// import { Provider } from 'react-redux';
-// import React from 'react';
-// import { renderToString } from 'react-dom/server';
-// import { match, RouterContext } from 'react-router';
-// import Helmet from 'react-helmet';
+import { configureStore } from '../client/store';
+import { Provider } from 'react-redux';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { match, RouterContext } from 'react-router';
+import Helmet from 'react-helmet';
 
 // Import required modules
-// import routes from '../client/routes';
-// import { fetchComponentData } from './util/fetchData';
+import routes from '../client/routes';
+import { fetchComponentData } from './util/fetchData';
 import dummyData from './dummyData';
 import serverConfig from './config';
 import challengeAttempt from './modules/challengeAttempt/routes';
@@ -60,12 +60,12 @@ export default function () {
   app.use(compression());
   app.use(bodyParser.json({ limit: '20mb' }));
   app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
-  app.use(Express.static(path.resolve(__dirname, '../dist')));
+  app.use(Express.static(path.resolve(__dirname, '../dist/client')));
   app.use('/api/v1/challengeAttempt', challengeAttempt);
   app.use('/api/v1/challenge', challenge);
   app.use('/api/v1/challengeStep', challengeStep);
 
-  /**
+
   // Render Initial HTML
   const renderFullPage = (html, initialState) => {
     const head = Helmet.rewind();
@@ -148,7 +148,7 @@ export default function () {
         .catch((error) => next(error));
     });
   });
-  */
+
 
   // start app
   app.listen(serverConfig.port, (error) => {
