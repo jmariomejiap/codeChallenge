@@ -4,20 +4,22 @@ import Main from './NewMain';
 import Home from './newModules/Home/Home';
 import Login from './newModules/Login/Login';
 import SignUp from './newModules/SignUp/SignUp';
-import ErrorMessage from './newModules/NotFound/NotFound';
+// import ErrorMessage from './newModules/NotFound/NotFound';
 
 // this works.//
 
 const MyRoutes = (
   <Route component={Main}>
-    <Route path="/" component={Home} />
+    <Route path="/home" component={Home} />
     <Route path="/login" component={Login} />
     <Route path="/signup" component={SignUp} />
-    <Route path="*" component={ErrorMessage} />
   </Route>
 );
 
 export default MyRoutes;
+
+// catch all route has been removed since it was crashing tests.
+// <Route path="*" component={ErrorMessage} />
 
 
 /*

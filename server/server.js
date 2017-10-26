@@ -147,15 +147,13 @@ export default function () {
 
   // Server Side Rendering based on routes matched by React-router.
 
-  app.use((req, res) => {
+  app.use((req, res, next) => {
     match({ routes: MyRoutes, location: req.url }, (err, redirectLocation, renderProps) => {
       console.log(`req.url is ${req.url}`); // eslint-disable-line no-console
       if (err) {
-        console.log('catching error matching client routes.. ', err); // eslint-disable-line no-console
         return res.status(500).end(renderError(err));
       }
       if (redirectLocation) {
-        console.log('match + redirected ... ', redirectLocation); // eslint-disable-line no-console
         return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       }
 
@@ -167,12 +165,14 @@ export default function () {
           .set('Content-Type', 'text/html')
           .end(newRenderFullPage(ReactApp));
       }
-
       console.log('no render props'); // eslint-disable-line no-console
+      /*
       return res.status(404) // .send('my else error in the matching react routes');
         .set('Content-Type', 'text/html')
-        .end(newRenderFullPage());
-
+        // .end(newRenderFullPage());
+        .end('Error no render props');
+*/
+      return next();
 
      /*
       const store = configureStore();
@@ -196,6 +196,10 @@ export default function () {
         .catch((error) => next(error));
       */
     });
+  });
+
+  app.use((req, res) => {
+    return res.status(404).end('404');
   });
 
 
