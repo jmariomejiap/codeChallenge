@@ -8,10 +8,10 @@ module.exports = {
 
   entry: {
     app: [
-      // 'eventsource-polyfill',
-      // 'webpack-hot-middleware/client',
-      // 'webpack/hot/only-dev-server',
-      // 'react-hot-loader/patch',
+      'eventsource-polyfill',
+      'webpack-hot-middleware/client',
+      'webpack/hot/only-dev-server',
+      'react-hot-loader/patch',
       './client/NewIndex.js',
     ],
     vendor: [
@@ -72,7 +72,7 @@ module.exports = {
       }
     }),
   ],
-/*
+
   postcss: () => [
     postcssFocus(),
     cssnext({
@@ -82,5 +82,5 @@ module.exports = {
       clearMessages: true,
     }),
   ],
-  */
+
 };

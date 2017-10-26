@@ -22,7 +22,7 @@ import Helmet from 'react-helmet';
 // Import required modules
 // import routes from '../client/routes';
 import MyRoutes from '../client/NewRoutes';
-import ErrorMessage from '../client/newModules/NotFound/NotFound';
+// import ErrorMessage from '../client/newModules/NotFound/NotFound'; not being used.
 import { fetchComponentData } from './util/fetchData'; // eslint-disable-line no-unused-vars
 import dummyData from './dummyData';
 import serverConfig from './config';
@@ -78,13 +78,12 @@ export default function () {
       <!doctype html>
       <html>
         <head>
-          
+
           ${head.base.toString()}
           ${head.title.toString()}
           ${head.meta.toString()}
           ${head.link.toString()}
           ${head.script.toString()}
-          
           
           ${process.env.NODE_ENV === 'production' ? `<link rel='stylesheet' href='${assetsManifest['/app.css']}' />` : ''}
           <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'/>
@@ -93,7 +92,7 @@ export default function () {
         </head>
         <body>
           <div id="root">${html}</div>
-          </script>
+          
           <script src='${process.env.NODE_ENV === 'production' ? assetsManifest['/vendor.js'] : '/vendor.js'}'></script>
           <script src='${process.env.NODE_ENV === 'production' ? assetsManifest['/app.js'] : '/app.js'}'></script>
         </body>
@@ -102,7 +101,7 @@ export default function () {
   };
 
   // Render Initial HTML
-  const renderFullPage = (html, initialState) => {
+  const renderFullPage = (html, initialState) => { // eslint-disable-line no-unused-vars
     const head = Helmet.rewind();
 
     // Import Manifests
@@ -129,9 +128,8 @@ export default function () {
           <script>
             window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
             ${process.env.NODE_ENV === 'production' ?
-            `//<![CDATA[
-            window.webpackManifest = ${JSON.stringify(chunkManifest)};
-            //]]>` : ''}
+            `//<![CDATA[window.webpackManifest = ${JSON.stringify(chunkManifest)}
+            ;//]]>` : ''}
           </script>
           <script src='${process.env.NODE_ENV === 'production' ? assetsManifest['/vendor.js'] : '/vendor.js'}'></script>
           <script src='${process.env.NODE_ENV === 'production' ? assetsManifest['/app.js'] : '/app.js'}'></script>
@@ -143,34 +141,38 @@ export default function () {
   const renderError = err => {
     const softTab = '&#32;&#32;&#32;&#32;';
     const errTrace = process.env.NODE_ENV !== 'production' ?
-      `:<br><br><pre style="color:red">${softTab}${err.stack.replace(/\n/g, `<br>${softTab}`)}</pre>` : '';
-    return renderFullPage(`Server Error${errTrace}`, {});
+      `:<br><br><pre style="color:red">${softTab}${err.stack.replace(/\n/g, `<br>${softTab}`)}</pre>` : ''; // eslint-disable-line no-unused-vars
+    return newRenderFullPage(`Server Error${errTrace}`, {});
   };
 
   // Server Side Rendering based on routes matched by React-router.
 
   app.use((req, res) => {
-    match({ MyRoutes, location: req.url }, (err, redirectLocation, renderProps) => {
+    match({ routes: MyRoutes, location: req.url }, (err, redirectLocation, renderProps) => {
+      console.log(`req.url is ${req.url}`); // eslint-disable-line no-console
       if (err) {
+        console.log('catching error matching client routes.. ', err); // eslint-disable-line no-console
         return res.status(500).end(renderError(err));
       }
-
       if (redirectLocation) {
+        console.log('match + redirected ... ', redirectLocation); // eslint-disable-line no-console
         return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       }
 
-      let newContent; // eslint-disable-line no-unused-vars
-
       if (renderProps) {
-        newContent = renderToString(<RouterContext {...renderProps} />);
-        res.status(200);
-      } else {
-        newContent = renderToString(<ErrorMessage />);
-        res.status(404);
+        console.log('in renderProps '); // eslint-disable-line no-console
+        const ReactApp = renderToString(<RouterContext {...renderProps} />);
+        // const ReactApp = renderToString( React.createElement(RouterContext, renderProps));
+        return res.status(200)
+          .set('Content-Type', 'text/html')
+          .end(newRenderFullPage(ReactApp));
       }
-      return res
+
+      console.log('no render props'); // eslint-disable-line no-console
+      return res.status(404) // .send('my else error in the matching react routes');
         .set('Content-Type', 'text/html')
         .end(newRenderFullPage());
+
 
      /*
       const store = configureStore();
