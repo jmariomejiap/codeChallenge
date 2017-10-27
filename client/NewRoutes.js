@@ -1,9 +1,10 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, withRouter } from 'react-router';
 import Main from './NewMain';
 import Home from './newModules/Home/Home';
 import Login from './newModules/Login/Login';
 import SignUp from './newModules/SignUp/SignUp';
+import Dashboard from './newModules/Dasboard/index';
 // import ErrorMessage from './newModules/NotFound/NotFound';
 
 // this works.//
@@ -11,8 +12,9 @@ import SignUp from './newModules/SignUp/SignUp';
 const MyRoutes = (
   <Route component={Main}>
     <Route path="/home" component={Home} />
-    <Route path="/login" component={Login} />
+    <Route path="/login" component={withRouter(Login)} />
     <Route path="/signup" component={SignUp} />
+    <Route path="/dashboard" component={Dashboard} />
   </Route>
 );
 
