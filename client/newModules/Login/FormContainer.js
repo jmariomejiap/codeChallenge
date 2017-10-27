@@ -1,39 +1,54 @@
 import React from 'react';
 import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import sendParams from './fetchAPI';
 import './Login.css';
 
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: '',
+      accessCode: '',
       passCode: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
+  handleChange(e) {
     this.setState({
-      [event.target.id]: event.target.value,
+      [e.target.id]: e.target.value,
     });
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    alert(`params = username:${this.state.userName} and passCode:${this.state.passCode}`);
+
+    sendParams(this.state)
+      .then(result => {
+        if (result.error) {
+          alert('Invalid AccessCode and/or PassCode\n try again!');
+          this.setState({
+            accessCode: '',
+            passCode: '',
+          });
+          return;
+        }
+        console.log('I got it right!');
+        this.props.onSubmit();
+      })
+      .catch(err => console.log(err));
   }
 
   render() {
     return (
       <div className="loginContainer">
         <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="userName" >
-            <ControlLabel>UserName:</ControlLabel>
+          <FormGroup controlId="accessCode" >
+            <ControlLabel>AccessCode:</ControlLabel>
             <FormControl
               autoFocus
               type="text"
-              value={this.state.userName}
+              value={this.state.accessCode}
               onChange={this.handleChange}
             />
           </FormGroup>
@@ -65,5 +80,8 @@ LoginForm.propTypes = {
   FormControl: React.PropTypes.function
 }
 */
+LoginForm.propTypes = {
+  onSubmit: React.PropTypes.function,
+};
 
 export default LoginForm;

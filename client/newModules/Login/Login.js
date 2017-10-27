@@ -1,7 +1,11 @@
 
 import React from 'react';
-// import LoginForm from './FormContainer'; bootstrap errors
 import MyForm from './form';
+
+// bootstrap throws errors but loginForm is functional.
+// uncomment it and replace "MyForm" to be use.
+// import LoginForm from './FormContainer'; // bootstrap errors
+
 
 class Login extends React.Component {
   constructor(props) {
@@ -24,7 +28,7 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-  router: React.PropTypes.function,
+  router: React.PropTypes.object,
 };
 
 export default Login;
