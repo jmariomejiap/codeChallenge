@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import sendParams from './fetchAPI';
-import './Login.css';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -41,7 +40,7 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-      <div className="loginContainer">
+      <div >
         <form onSubmit={this.handleSubmit}>
           <FormGroup controlId="accessCode" >
             <ControlLabel>AccessCode:</ControlLabel>
@@ -74,12 +73,6 @@ class LoginForm extends React.Component {
   }
 }
 
-/*
-LoginForm.propTypes = {
-  FormGroup: React.PropTypes.function,
-  FormControl: React.PropTypes.function
-}
-*/
 LoginForm.propTypes = {
   onSubmit: React.PropTypes.func,
 };

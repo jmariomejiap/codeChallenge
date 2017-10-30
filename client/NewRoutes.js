@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, withRouter } from 'react-router';
 import Main from './NewMain';
-import Home from './newModules/Home/Home';
-import Login from './newModules/Login/Login';
-import SignUp from './newModules/SignUp/SignUp';
-import Dashboard from './newModules/Dasboard/index';
+import Home from './modules/Home/Home';
+import Login from './modules/Login/Login';
+import SignUp from './modules/SignUp/SignUp';
+import Dashboard from './modules/Dasboard/index';
 // import ErrorMessage from './newModules/NotFound/NotFound';
 
 // this works.//

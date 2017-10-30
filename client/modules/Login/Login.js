@@ -21,7 +21,8 @@ class Login extends React.Component {
   render() {
     return (
       <div className={styles.loginContainer} >
-        <h1>THIS IS THE LOGIN PAGE</h1>
+        <h1>Login</h1>
+        <p> sign in to your account</p>
         <LoginForm onSubmit={this.handleAuthorized} />
       </div>
     );

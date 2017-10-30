@@ -17,7 +17,7 @@ const Main = (props) => {
           </div>
         </div>
       </nav>
-      <div className="container">
+      <div className="container" >
         {props.children}
       </div>
     </div>
