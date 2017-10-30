@@ -15,7 +15,7 @@ class Login extends React.Component {
   }
 
   handleAuthorized() {
-    this.props.router.push('/dashboard');
+    this.props.router.push('/challenge');
   }
 
   render() {

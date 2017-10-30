@@ -5,6 +5,7 @@ import Home from './modules/Home/Home';
 import Login from './modules/Login/Login';
 import SignUp from './modules/SignUp/SignUp';
 import Dashboard from './modules/Dasboard/index';
+import Welcome from './modules/WelcomeChallenge/index';
 // import ErrorMessage from './newModules/NotFound/NotFound';
 
 // this works.//
@@ -15,6 +16,7 @@ const MyRoutes = (
     <Route path="/login" component={withRouter(Login)} />
     <Route path="/signup" component={SignUp} />
     <Route path="/dashboard" component={Dashboard} />
+    <Route path="/challenge" component={Welcome} />
   </Route>
 );
 
