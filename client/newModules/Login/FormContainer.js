@@ -81,7 +81,7 @@ LoginForm.propTypes = {
 }
 */
 LoginForm.propTypes = {
-  onSubmit: React.PropTypes.function,
+  onSubmit: React.PropTypes.func,
 };
 
 export default LoginForm;

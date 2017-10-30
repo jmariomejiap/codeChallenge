@@ -100,7 +100,43 @@ export default function () {
     `;
   };
 
+
+  const newRenderError = err => {
+    const softTab = '&#32;&#32;&#32;&#32;';
+    const errTrace = process.env.NODE_ENV !== 'production' ?
+      `:<br><br><pre style="color:red">${softTab}${err.stack.replace(/\n/g, `<br>${softTab}`)}</pre>` : ''; // eslint-disable-line no-unused-vars
+    return newRenderFullPage(`Server Error${errTrace}`);
+  };
+
+
+  // Server Side Rendering based on routes matched by React-router.
+
+  app.use((req, res, next) => {
+    match({ routes: MyRoutes, location: req.url }, (err, redirectLocation, renderProps) => {
+      console.log(`req.url is ${req.url}`); // eslint-disable-line no-console
+      if (err) {
+        return res.status(500).end(newRenderError(err));
+      }
+      if (redirectLocation) {
+        return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+      }
+      if (renderProps) {
+        console.log('in renderProps '); // eslint-disable-line no-console
+        const ReactApp = renderToString(<RouterContext {...renderProps} />);
+        // const ReactApp = renderToString( React.createElement(RouterContext, renderProps));
+        return res.status(200)
+          .set('Content-Type', 'text/html')
+          .end(newRenderFullPage(ReactApp));
+      }
+      console.log('no render props'); // eslint-disable-line no-console
+      return next();
+    });
+  });
+
+  // ORIGINAL MERN IMPLEMENTATION.
+  // renders using REDUX
   // Render Initial HTML
+/*
   const renderFullPage = (html, initialState) => { // eslint-disable-line no-unused-vars
     const head = Helmet.rewind();
 
@@ -137,18 +173,24 @@ export default function () {
       </html>
     `;
   };
+*/
 
+  // ORIGINAL MERN ERROR IMPLEMENTATION.
+  // it was change to to render newRenderFullPage with only one argument.
+/*
   const renderError = err => {
     const softTab = '&#32;&#32;&#32;&#32;';
     const errTrace = process.env.NODE_ENV !== 'production' ?
       `:<br><br><pre style="color:red">${softTab}${err.stack.replace(/\n/g, `<br>${softTab}`)}</pre>` : ''; // eslint-disable-line no-unused-vars
-    return newRenderFullPage(`Server Error${errTrace}`, {});
+    return renderFullPage(`Server Error${errTrace}`, {});
   };
+*/
 
+  // ORIGINAL MERN IMPLEMENTATION. USING REDUX.
   // Server Side Rendering based on routes matched by React-router.
-
+/*
   app.use((req, res, next) => {
-    match({ routes: MyRoutes, location: req.url }, (err, redirectLocation, renderProps) => {
+    match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
       console.log(`req.url is ${req.url}`); // eslint-disable-line no-console
       if (err) {
         return res.status(500).end(renderError(err));
@@ -157,24 +199,10 @@ export default function () {
         return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       }
 
-      if (renderProps) {
-        console.log('in renderProps '); // eslint-disable-line no-console
-        const ReactApp = renderToString(<RouterContext {...renderProps} />);
-        // const ReactApp = renderToString( React.createElement(RouterContext, renderProps));
-        return res.status(200)
-          .set('Content-Type', 'text/html')
-          .end(newRenderFullPage(ReactApp));
+      if (!renderProps) {
+        return next();
       }
-      console.log('no render props'); // eslint-disable-line no-console
-      /*
-      return res.status(404) // .send('my else error in the matching react routes');
-        .set('Content-Type', 'text/html')
-        // .end(newRenderFullPage());
-        .end('Error no render props');
-*/
-      return next();
 
-     /*
       const store = configureStore();
 
       return fetchComponentData(store, renderProps.components, renderProps.params)
@@ -194,9 +222,10 @@ export default function () {
             .end(renderFullPage(initialView, finalState));
         })
         .catch((error) => next(error));
-      */
     });
   });
+*/
+
 
   app.use((req, res) => {
     return res.status(404).end('404');

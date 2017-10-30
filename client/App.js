@@ -1,6 +1,6 @@
 /**
  * Root Component
-
+*/
 
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -28,4 +28,3 @@ export default function App(props) {
 App.propTypes = {
   store: React.PropTypes.object.isRequired,
 };
-*/

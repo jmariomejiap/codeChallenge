@@ -30,7 +30,7 @@ class MyForm extends React.Component {
           alert('Invalid AccessCode and/or PassCode\n try again!');
           this.setState({
             accessCode: '',
-            passCode: ''
+            passCode: '',
           });
           return;
         }
@@ -62,7 +62,7 @@ class MyForm extends React.Component {
 }
 
 MyForm.propTypes = {
-  onSubmit: React.PropTypes.func
+  onSubmit: React.PropTypes.func,
 };
 
 export default MyForm;
