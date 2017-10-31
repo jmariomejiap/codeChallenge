@@ -4,13 +4,11 @@ import NavHeader from './components/Header/NewHeaderNav';
 
 const App = (props) => {
   return (
-    <div>
+    <div >
       {(props.location.pathname !== '/challenge') ?
         <NavHeader /> : null
       }
-      <div className="container" >
-        {props.children}
-      </div>
+      {props.children}
     </div>
   );
 };

@@ -1,5 +1,34 @@
 import React from 'react';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import DisplaySteps from './displaySteps';
 
+const ChallengeBar = ({ numberOfSteps }) => {
+  return (
+    <Navbar fluid>
+      <Navbar.Header>
+        <Navbar.Brand>
+          <a href="/home">Code-Challenge</a>
+        </Navbar.Brand>
+      </Navbar.Header>
+      <Nav>
+        <DisplaySteps steps={numberOfSteps} />
+      </Nav>
+      <Nav pullRight>
+        <NavItem eventKey={1} href="profile">UserName</NavItem>
+      </Nav>
+    </Navbar>
+  );
+};
+
+ChallengeBar.propTypes = {
+  numberOfSteps: React.PropTypes.number,
+};
+
+export default ChallengeBar;
+
+
+// working without using bootstrap instances
+/*
 const ChallengeBar = ({ numberOfSteps }) => {
   return (
     <nav className="navBar navbar-default">
@@ -21,9 +50,4 @@ const ChallengeBar = ({ numberOfSteps }) => {
     </nav>
   );
 };
-
-ChallengeBar.propTypes = {
-  numberOfSteps: React.PropTypes.number,
-};
-
-export default ChallengeBar;
+*/

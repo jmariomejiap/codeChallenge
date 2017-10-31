@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import styles from './main.css';
@@ -5,7 +6,7 @@ import fetchChallengeInfo from './fetchChallenge';
 
 import ChallengeBar from './header';
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OWUwMThjMTRmNjNmMzY4NjU2NGI1NTMiLCJjaGFsbGVuZ2VJZCI6IjU5ZTAxOGMxNGY2M2YzNjg2NTY0YjU1MiIsImlhdCI6MTUwOTQyNzE2Nn0.1paJPRrTHRWw1SHrXNryUAyrJAP-XpreeL4iYxVKYMo";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OWFmODEwZjkwYzQ4NjNmYWE5YTAyYjkiLCJjaGFsbGVuZ2VJZCI6IjU5YWY4MTBlOTBjNDg2M2ZhYTlhMDJiOCIsImlhdCI6MTUwOTQ3MTE3NH0.q2MDrGoYK-5dK7Ft1g23cEVyezeOC-cqAXErzHbewI4";
 
 class Welcome extends React.Component {
   constructor(props) {
@@ -35,28 +36,12 @@ class Welcome extends React.Component {
           numberOfSteps: result.numberOfSteps
         });      
       });
-      
-
-
-    /*
-    fetch(`/api/v1/challenge?token=${token}`, {
-      method: 'GET',
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then(result => {
-        console.log('second then, result is = ', result);
-        
-      .catch((e) => e);
-    */  
-
   }
 
 
   render() {
     return (
-      <div>
+      <div >
         <ChallengeBar numberOfSteps={this.state.numberOfSteps} />
         <div className={styles.welcome}>
           <h1>Welcome to {this.state.challengeName}</h1>
