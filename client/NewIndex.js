@@ -7,7 +7,6 @@ import { render } from 'react-dom';
 
 import { Router, browserHistory } from 'react-router';
 import MyRoutes from './NewRoutes';
-// import './NewMain.css';
 
 const rootElement = document.getElementById('root');
 

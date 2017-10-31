@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, withRouter } from 'react-router';
-import Main from './NewMain';
+import App from './modules/App/NewApp';
 import Home from './modules/Home/Home';
 import Login from './modules/Login/Login';
 import SignUp from './modules/SignUp/SignUp';
@@ -11,7 +11,7 @@ import Welcome from './modules/WelcomeChallenge/index';
 // this works.//
 
 const MyRoutes = (
-  <Route component={Main}>
+  <Route component={App}>
     <Route path="/home" component={Home} />
     <Route path="/login" component={withRouter(Login)} />
     <Route path="/signup" component={SignUp} />
