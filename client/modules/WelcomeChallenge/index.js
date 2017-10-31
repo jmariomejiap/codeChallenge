@@ -5,7 +5,7 @@ import fetchChallengeInfo from './fetchChallenge';
 
 import ChallengeBar from './header';
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OWFmODEwZjkwYzQ4NjNmYWE5YTAyYjkiLCJjaGFsbGVuZ2VJZCI6IjU5YWY4MTBlOTBjNDg2M2ZhYTlhMDJiOCIsImlhdCI6MTUwOTM4OTI3OX0.yMW4uLH9sWefeV6igeqSzFdN2UxvGlHOBgdmekfxBto";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2VBdHRlbXB0SWQiOiI1OWUwMThjMTRmNjNmMzY4NjU2NGI1NTMiLCJjaGFsbGVuZ2VJZCI6IjU5ZTAxOGMxNGY2M2YzNjg2NTY0YjU1MiIsImlhdCI6MTUwOTQyNzE2Nn0.1paJPRrTHRWw1SHrXNryUAyrJAP-XpreeL4iYxVKYMo";
 
 class Welcome extends React.Component {
   constructor(props) {
@@ -20,17 +20,8 @@ class Welcome extends React.Component {
   }
   
   componentDidMount() {
-
-
-    /*
-    fetch(`/api/v1/challenge?token=${token}`, {
-      method: 'GET',
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then(result => {
-        console.log('second then, result is = ', result);
+    fetchChallengeInfo(token)
+      .then((result) => {
         if (result.error) {
           this.setState({
             errors: result.error
@@ -43,7 +34,20 @@ class Welcome extends React.Component {
           challengeDescription: result.challengeDescription,
           numberOfSteps: result.numberOfSteps
         });      
+      });
+      
+
+
+    /*
+    fetch(`/api/v1/challenge?token=${token}`, {
+      method: 'GET',
+    })
+      .then((res) => {
+        return res.json();
       })
+      .then(result => {
+        console.log('second then, result is = ', result);
+        
       .catch((e) => e);
     */  
 
