@@ -1,10 +1,12 @@
 import React from 'react';
-import Circle from 'react-icons/lib/fa/circle-o';
+// import Circle from 'react-icons/lib/fa/circle-thin';
+import Circle from 'react-icons/lib/fa/circle';
+import styles from './main.css';
 
 const createIcons = (n) => {
   const icons = [];
   for (let i = 0; i < n; i++) {
-    icons.push(<Circle size={50} key={i} />);
+    icons.push(<Circle size={45} key={i} className={styles.stepsIcon} />);
   }
   return icons;
 };

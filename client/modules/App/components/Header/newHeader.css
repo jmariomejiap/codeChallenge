@@ -1,0 +1,9 @@
+.navbar {
+  height: 80px;
+  padding: 10px 8px 8px 4px;
+}
+
+.brandName {
+  font-family: 'Russo One', sans-serif;
+  font-size: 31px;
+}

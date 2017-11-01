@@ -1,22 +1,23 @@
 import React from 'react';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import styles from './newHeader.css';
 
 const NavHeader = () => {
   return (
-    <div>
-      <nav className="navbar navbar-default">
-        <div className="container-fluid">
-          <div className="navbar-header">
-            <a className="navbar-brand" href="/home">Code Challenge</a>
-          </div>
-          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul className="nav navbar-nav">
-              <li className="active"><a href="login">Login <span className="sr-only">(current)</span></a></li>
-              <li><a href="signup">SignUp</a></li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </div>
+    <Navbar fluid className={styles.navbar}>
+      <Navbar.Header>
+        <Navbar.Brand>
+          <a className={styles.brandName} href="/home">Code-Challenge</a>
+        </Navbar.Brand>
+        <Navbar.Toggle />
+      </Navbar.Header>
+      <Navbar.Collapse>
+        <Nav pullRight>
+          <NavItem eventKey={1} href="login">Login</NavItem>
+          <NavItem eventKey={2} href="signup">SignUp</NavItem>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 

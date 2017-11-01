@@ -1,21 +1,25 @@
 import React from 'react';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import DisplaySteps from './displaySteps';
+import styles from './main.css';
 
 const ChallengeBar = ({ numberOfSteps }) => {
   return (
-    <Navbar fluid>
+    <Navbar fluid className={styles.navbar}>
       <Navbar.Header>
         <Navbar.Brand>
-          <a href="/home">Code-Challenge</a>
+          <a className={styles.brandName} href="/home">Code-Challenge</a>
         </Navbar.Brand>
+        <Navbar.Toggle />
       </Navbar.Header>
-      <Nav>
-        <DisplaySteps steps={numberOfSteps} />
-      </Nav>
-      <Nav pullRight>
-        <NavItem eventKey={1} href="profile">UserName</NavItem>
-      </Nav>
+      <Navbar.Collapse>
+        <Nav>
+          <DisplaySteps steps={numberOfSteps} />
+        </Nav>
+        <Nav pullRight>
+          <NavItem eventKey={1} href="profile">UserName</NavItem>
+        </Nav>
+      </Navbar.Collapse>
     </Navbar>
   );
 };
