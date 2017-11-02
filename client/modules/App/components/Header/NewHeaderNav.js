@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import styles from './newHeader.css';
 
@@ -7,7 +8,7 @@ const NavHeader = () => {
     <Navbar fluid className={styles.navbar}>
       <Navbar.Header>
         <Navbar.Brand>
-          <a className={styles.brandName} href="/home">Code-Challenge</a>
+          <Link className={styles.brandName} to="/home" >Code-Challenge</Link>
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import DisplaySteps from './displaySteps';
 import styles from './main.css';
@@ -8,7 +9,7 @@ const ChallengeBar = ({ numberOfSteps }) => {
     <Navbar fluid className={styles.navbar}>
       <Navbar.Header>
         <Navbar.Brand>
-          <a className={styles.brandName} href="/home">Code-Challenge</a>
+          <Link className={styles.brandName} to="/home" >Code-Challenge</Link>
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>
