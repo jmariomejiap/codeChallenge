@@ -11,6 +11,7 @@ class LoginForm extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    console.log(`inside LoginForm props = ${JSON.stringify(this.props)}`);
   }
 
   handleChange(e) {
@@ -33,7 +34,7 @@ class LoginForm extends React.Component {
           return;
         }
         console.log('I got it right!');
-        this.props.onSubmit();
+        this.props.onSubmit(result);
       })
       .catch(err => console.log(err));
   }
