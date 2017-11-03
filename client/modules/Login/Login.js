@@ -12,20 +12,16 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.handleAuthorized = this.handleAuthorized.bind(this);
-    console.log(`inside Login props = ${JSON.stringify(this.props)}`);
   }
 
-  handleAuthorized(p) {
-    console.log(`passing state from children to login ${JSON.stringify(p)}`);
-    console.log(JSON.stringify(this.props.routes));
-    console.log(this.props.routes[0].auth);
-    this.props.routes[0].auth.authorized = true;
-    this.props.routes[0].auth.userName = 'ajaName';
-    this.props.routes[0].auth.token = 'niceToken';
-    console.log(this.props.routes[0].auth);
+  handleAuthorized(data) {
+    const { auth } = this.props.routes[0];
 
+    auth.authorized = true;
+    auth.userName = data.userFullName;
+    auth.token = data.token;
 
-    // this.props.router.push('/challenge', p);
+    this.props.router.push('/challenge');
   }
 
   render() {

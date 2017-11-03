@@ -4,7 +4,7 @@ import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import DisplaySteps from './displaySteps';
 import styles from './main.css';
 
-const ChallengeBar = ({ numberOfSteps }) => {
+const ChallengeBar = ({ numberOfSteps, userName }) => {
   return (
     <Navbar fluid className={styles.navbar}>
       <Navbar.Header>
@@ -18,7 +18,7 @@ const ChallengeBar = ({ numberOfSteps }) => {
           <DisplaySteps steps={numberOfSteps} />
         </Nav>
         <Nav pullRight>
-          <NavItem eventKey={1} href="profile">UserName</NavItem>
+          <NavItem eventKey={1} href="profile">{userName}</NavItem>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
@@ -27,6 +27,7 @@ const ChallengeBar = ({ numberOfSteps }) => {
 
 ChallengeBar.propTypes = {
   numberOfSteps: React.PropTypes.number,
+  userName: React.PropTypes.string,
 };
 
 export default ChallengeBar;
