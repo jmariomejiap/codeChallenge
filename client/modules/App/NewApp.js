@@ -1,6 +1,6 @@
 import React from 'react';
-// import './NewMain.css';
 import NavHeader from './components/Header/NewHeaderNav';
+
 
 const App = (props) => {
   return (

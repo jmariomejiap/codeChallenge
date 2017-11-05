@@ -1,0 +1,34 @@
+body {
+  height: 100%;
+  background-color: rgb(48, 47, 47)
+}
+
+.box {
+  height: 85vh;
+}
+
+.leftDiv {
+  border-top: 2px solid black;
+  background-color: rgb(194, 192, 192);
+  height: 100%;
+  
+}
+.rightDiv {
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+  background-color: rgb(223, 219, 219);
+  height: 100%;
+  
+}
+
+.topRight {
+  background-color: rgb(238, 232, 232);
+  height: 100%
+}
+
+.bottomRight {
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+  background-color: rgb(110, 110, 111);
+  height: 100%;
+}
