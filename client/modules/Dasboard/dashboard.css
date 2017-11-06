@@ -25,10 +25,28 @@ body {
 }
 
 .topRight {
-  background-color: rgb(54, 60, 71);
-  color: lightseagreen;
   height: 100%
 }
+
+
+.workArea {
+  font-size: 22px;
+  height: 100%;
+}
+
+.inputArea {
+  display: block;
+  padding: 40px;
+  width: 100%;
+  height: 100%;
+  background-color:  rgb(54, 60, 71);
+  border-style: none;
+  border-color: Transparent; 
+  outline: none;
+  resize: none;
+  color: lightseagreen;
+}
+
 
 .bottomRight {
   border-top: 2px solid black;
@@ -43,7 +61,10 @@ body {
   font-size: 28px;
 }
 
-.workArea {
-  padding: 40px;
-  font-size: 22px;
+.buttonSection {
+  margin-top:40%;
+}
+
+.fixedButton {
+  width: 80px;
 }

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import styles from './dashboard.css';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col, Button} from 'react-bootstrap';
 import fetchChallengeStepInfo from '../../util/fetchChallengeStep';
 
 import ChallengeBar from '../App/components/Header/NewHeaderChallenge';
@@ -36,7 +36,9 @@ class Dashboard extends React.Component {
         }
       })
   }
-
+  handleChange() {
+    /// add changes to state as user types into textearea
+  }
 
   render() {
     return(
@@ -54,10 +56,37 @@ class Dashboard extends React.Component {
             </Col>
             <Col className={styles.rightDiv} sm={8} >
               <Row style={{height: "70%"}}>
-                <Col className={styles.topRight} >
+                <Col className={styles.topRight} sm={10}>
                   <div className={styles.workArea} >
-                    {this.state.workArea}
+                    <textarea className={styles.inputArea} name="workArea" id="wa" value={this.state.workArea} />
                   </div>
+                </Col>
+                <Col sm={2} className={styles.buttonSection}>
+                  <div>
+                    <Button 
+                      bsSize="large"
+                      bsStyle="primary"
+                      block
+                    >
+                    Run
+                    </Button>
+                    <Button 
+                      bsSize="large"
+                      bsStyle="primary"
+                      block
+                    >
+                    Submit
+                    </Button>
+                    <Button 
+                      className={styles.startButton}
+                      bsSize="large"
+                      bsStyle="primary"
+                      block
+                    >
+                    Skip
+                    </Button>
+                  </div>
+                  
                 </Col>
               </Row>
               <Row style={{height: "30%"}}>
