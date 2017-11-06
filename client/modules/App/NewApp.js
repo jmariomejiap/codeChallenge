@@ -5,7 +5,7 @@ import NavHeader from './components/Header/NewHeaderNav';
 const App = (props) => {
   return (
     <div >
-      {(props.location.pathname !== '/challenge') ?
+      {(['/', '/login'].includes(props.location.pathname)) ?
         <NavHeader /> : null
       }
       {props.children}

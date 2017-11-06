@@ -8,7 +8,7 @@ const NavHeader = () => {
     <Navbar fluid className={styles.navbar}>
       <Navbar.Header>
         <Navbar.Brand>
-          <Link className={styles.brandName} to="/home" >Code-Challenge</Link>
+          <Link className={styles.brandName} to="/" >Code-Challenge</Link>
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>

@@ -1,29 +1,33 @@
 import React from 'react';
+import { Link } from 'react-router';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import DisplaySteps from './displaySteps';
+import styles from './NewHeaderChallenge.css';
 
-const ChallengeHeader = ({ numberOfSteps }) => {
+const ChallengeBar = ({ numberOfSteps, userName }) => {
   return (
-    <nav className="navBar navbar-default">
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-sm-2">
-            <a href="/home">CC</a>
-          </div>
-          <div className="col-sm-6">
-            <h3>{numberOfSteps}</h3>
-          </div>
-          <div className="row">
-            <div className="col-sm-4">
-              <p>userName</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <Navbar fluid className={styles.navbar}>
+      <Navbar.Header>
+        <Navbar.Brand>
+          <Link className={styles.brandName} to="/" >Code-Challenge</Link>
+        </Navbar.Brand>
+        <Navbar.Toggle />
+      </Navbar.Header>
+      <Navbar.Collapse>
+        <Nav>
+          <DisplaySteps steps={numberOfSteps} />
+        </Nav>
+        <Nav pullRight>
+          <NavItem eventKey={1} href="profile">{userName}</NavItem>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 
-ChallengeHeader.propTypes = {
+ChallengeBar.propTypes = {
   numberOfSteps: React.PropTypes.number,
+  userName: React.PropTypes.string,
 };
 
-export default ChallengeHeader;
+export default ChallengeBar;

@@ -1,6 +1,5 @@
 
 import React from 'react';
-// import MyForm from './form';
 import styles from './Login.css';
 
 // bootstrap throws errors but loginForm is functional.

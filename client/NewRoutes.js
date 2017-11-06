@@ -13,7 +13,7 @@ import auth from './util/auth';
 
 const MyRoutes = (
   <Route component={App} auth={auth}>
-    <Route path="/home" component={Home} />
+    <Route path="/" component={Home} />
     <Route path="/login" component={withRouter(Login)} />
     <Route path="/signup" component={SignUp} />
     <Route path="/dashboard" component={Dashboard} />

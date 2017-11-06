@@ -1,7 +1,7 @@
 import React from 'react';
 // import Circle from 'react-icons/lib/fa/circle-thin';
 import Circle from 'react-icons/lib/fa/circle';
-import styles from './main.css';
+import styles from './NewHeaderChallenge.css';
 
 const createIcons = (n) => {
   const icons = [];
