@@ -114,7 +114,6 @@ export default function () {
 
   app.use((req, res, next) => {
     match({ routes: MyRoutes, location: req.url }, (err, redirectLocation, renderProps) => {
-      console.log(`req.url is ${req.url}`); // eslint-disable-line no-console
       if (err) {
         return res.status(500).end(newRenderError(err));
       }
@@ -122,7 +121,6 @@ export default function () {
         return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       }
       if (renderProps) {
-        console.log('in renderProps '); // eslint-disable-line no-console
         const ReactApp = renderToString(<RouterContext {...renderProps} />);
         // const ReactApp = renderToString( React.createElement(RouterContext, renderProps));
         return res.status(200)
