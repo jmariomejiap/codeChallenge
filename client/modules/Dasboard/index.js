@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './dashboard.css';
 import { Grid, Row, Col, Button} from 'react-bootstrap';
 import fetchChallengeStepInfo from '../../util/fetchChallengeStep';
+import apiDynamicTesting from '../../util/apiDynamicTest';
 
 import ChallengeBar from '../App/components/Header/NewHeaderChallenge';
 
@@ -16,8 +17,12 @@ class Dashboard extends React.Component {
       workArea: '',
       tests: '',
       numberOfSteps: 0,
+      challengeStepId: '',
+      token: '',
     }
-
+    
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmitions = this.handleSubmitions.bind(this);
   }
 
   componentDidMount() {
@@ -31,13 +36,32 @@ class Dashboard extends React.Component {
             userName,
             numberOfSteps,
             stepDescription: new Buffer(result.description, 'base64').toString(),
-            workArea: new Buffer(result.code, 'base64').toString()
+            workArea: new Buffer(result.code, 'base64').toString(),
+            token,
           })
         }
       })
   }
-  handleChange() {
-    /// add changes to state as user types into textearea
+
+  handleChange(e) {
+    this.setState({
+      workArea: e.target.value
+    })
+  }
+
+  handleSubmitions(e) {
+    e.preventDefault();
+    const body = {
+      token: this.state.token,
+      challengeStepId: this.state.challengeStepId,
+      input: this.state.workArea,
+      sample: e.target.value,
+    }
+
+    apiDynamicTesting(body)
+      .then(response => {
+        console.log(`this is the response after RUNNING tests ${JSON.stringify(response)}`)
+      })
   }
 
   render() {
@@ -58,7 +82,7 @@ class Dashboard extends React.Component {
               <Row style={{height: "70%"}}>
                 <Col className={styles.topRight} sm={10}>
                   <div className={styles.workArea} >
-                    <textarea className={styles.inputArea} name="workArea" id="wa" value={this.state.workArea} />
+                    <textarea className={styles.inputArea} value={this.state.workArea} onChange={this.handleChange} />
                   </div>
                 </Col>
                 <Col sm={2} className={styles.buttonSection}>
@@ -67,6 +91,8 @@ class Dashboard extends React.Component {
                       bsSize="large"
                       bsStyle="primary"
                       block
+                      value="true"
+                      onClick={this.handleSubmitions}
                     >
                     Run
                     </Button>
@@ -74,6 +100,8 @@ class Dashboard extends React.Component {
                       bsSize="large"
                       bsStyle="primary"
                       block
+                      value="true"
+                      onClick={this.handleSubmitions}
                     >
                     Submit
                     </Button>
@@ -82,16 +110,17 @@ class Dashboard extends React.Component {
                       bsSize="large"
                       bsStyle="primary"
                       block
+                      disabled
                     >
                     Skip
                     </Button>
-                  </div>
-                  
+                  </div>        
                 </Col>
               </Row>
               <Row style={{height: "30%"}}>
                 <Col className={styles.bottomRight} >
                   <h1>tests Area</h1>
+                  {this.state.tests}
                 </Col>          
               </Row>              
             </Col>

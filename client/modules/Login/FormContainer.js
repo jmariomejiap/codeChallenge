@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
-import sendParams from './fetchAPI';
+import sendParams from '../../util/apiValidateUser';
 
 class LoginForm extends React.Component {
   constructor(props) {

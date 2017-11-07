@@ -132,7 +132,6 @@ const sendChallengeResponse = (req, res) => {
   res.status(200).json({
     result: 'ok',
     error: '',
-    userFullName: req.userFullName,
     challengeId: req.challengeId,
     challengeName: req.challengeName,
     challengeDescription: req.challengeDescription,

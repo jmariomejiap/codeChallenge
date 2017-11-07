@@ -31,4 +31,5 @@ router.post('/score',
   challengeStepController.sampleFilter,
   challengeStepController.updateCollections,
 );
+
 export default router;
