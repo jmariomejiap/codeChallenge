@@ -38,6 +38,7 @@ class Dashboard extends React.Component {
             stepDescription: new Buffer(result.description, 'base64').toString(),
             workArea: new Buffer(result.code, 'base64').toString(),
             token,
+            challengeStepId: result.challengeStepId,
           })
         }
       })

@@ -87,6 +87,7 @@ const sendResponse = (req, res) => {
     error: '',
     description: new Buffer(req.fileDescription).toString('base64'),
     code: new Buffer(req.fileCode).toString('base64'),
+    challengeStepId: req.currentStepId,
   };
   return res.status(200).json(output);
 };
