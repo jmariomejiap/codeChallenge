@@ -34,7 +34,6 @@ class Dashboard extends React.Component {
     fetchChallengeStepInfo(token)
       .then((result) => {
         if(!result.error) {
-          console.log(result);
           this.setState({
             userName,
             numberOfSteps,
@@ -53,7 +52,6 @@ class Dashboard extends React.Component {
     return fetchChallengeStepInfo(token)
       .then((result) => {
         if(!result.error) {
-          console.log(result);
           this.setState({
             stepDescription: new Buffer(result.description, 'base64').toString(),
             workArea: new Buffer(result.code, 'base64').toString(),
@@ -69,8 +67,6 @@ class Dashboard extends React.Component {
     })
   }
 
-  
-
 
   handleSubmitions(e) {
     e.preventDefault();
@@ -84,7 +80,6 @@ class Dashboard extends React.Component {
 
     apiDynamicTesting(body)
       .then(response => {
-        console.log(`this is the response after RUNNING tests ${JSON.stringify(response)}`);
         if (response.sample) {
           this.setState({
             tests: response,
@@ -97,7 +92,6 @@ class Dashboard extends React.Component {
           this.getNextStep();
         }
         if (response.result === 'challenge_completed') {
-          console.log('going to push!')
           browserHistory.push('/finished');
         }
       });
@@ -170,15 +164,3 @@ class Dashboard extends React.Component {
 };
 
 export default Dashboard;
-
-
-/*
-// endpoint = /api/v1/challengeStep + token
-// example of API response 
-{
-    "result": "ok",
-    "error": "",
-    "description": "IyBBbGwgRGlnaXRzIFN1bSBDaGFsbGVuZ2UKCkdpdmVuIGFuIGludGVnZXIsIGZpbmQgdGhlIHN1bSBvZiBhbGwgaXRzIGRpZ2l0cy4KCkV4YW1wbGUKCkZvciBuID0gMTExLCB0aGUgb3V0cHV0IHNob3VsZCBiZQpkaWdpdFN1bShuKSA9IDMuCgoxICsgMSArIDEgPSAzLgoKSW5wdXQvT3V0cHV0CgpbdGltZSBsaW1pdF0gNDAwMG1zIChqcykKW2lucHV0XSBpbnRlZ2VyIG4KCkNvbnN0cmFpbnRzOgowIOKJpCBuIOKJpCAyIMK3IDEwOS4KCltvdXRwdXRdIGludGVnZXI=",
-    "code": "CmZ1bmN0aW9uIHN1bShhLCBiKSB7CiAgICByZXR1cm4gYSArIGI7Cn0K"
-}
-*/
