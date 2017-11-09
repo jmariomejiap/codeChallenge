@@ -180,7 +180,8 @@ const updateCollections = async (req, res) => {
 
   await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { currentStepId: nextStep });
 
-  return res.status(200).json({ result: req.results });
+  // return res.status(200).json({ result: req.results });
+  return res.status(200).json({ result: 'ok' });
 };
 
 

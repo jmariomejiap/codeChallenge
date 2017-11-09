@@ -54,6 +54,7 @@ body {
   background-color: rgb(36, 40, 48);
   color: lightgreen;
   height: 100%;
+  overflow: auto;
 }
 
 .description {
@@ -67,4 +68,11 @@ body {
 
 .fixedButton {
   width: 80px;
+}
+
+.testDiv {
+  background-color:  rgb(54, 60, 71);
+  padding: 8px;
+  margin: 7px;
+  overflow: auto;
 }

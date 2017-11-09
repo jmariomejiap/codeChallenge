@@ -1,0 +1,17 @@
+# All Digits substraction Challenge
+
+Given two integer, find the substraction of all its digits.
+
+Example
+TO BE DETERMINE
+
+
+Input/Output
+
+[time limit] 4000ms (js)
+[input] integer n
+
+Constraints:
+TO BE DETERMINE
+
+[output] integer

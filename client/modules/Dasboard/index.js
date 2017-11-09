@@ -6,6 +6,7 @@ import fetchChallengeStepInfo from '../../util/fetchChallengeStep';
 import apiDynamicTesting from '../../util/apiDynamicTest';
 
 import ChallengeBar from '../App/components/Header/NewHeaderChallenge';
+import TestsArea from './testsArea';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class Dashboard extends React.Component {
     
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmitions = this.handleSubmitions.bind(this);
+    this.getNextStep = this.getNextStep.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +45,22 @@ class Dashboard extends React.Component {
         }
       })
   }
+  
+  getNextStep() {
+    const token = this.state.token;
+
+    return fetchChallengeStepInfo(token)
+      .then((result) => {
+        if(!result.error) {
+          console.log(result);
+          this.setState({
+            stepDescription: new Buffer(result.description, 'base64').toString(),
+            workArea: new Buffer(result.code, 'base64').toString(),
+            challengeStepId: result.challengeStepId,
+          })
+        }
+      })
+  }
 
   handleChange(e) {
     this.setState({
@@ -50,8 +68,10 @@ class Dashboard extends React.Component {
     })
   }
 
+
   handleSubmitions(e) {
     e.preventDefault();
+    
     const body = {
       token: this.state.token,
       challengeStepId: this.state.challengeStepId,
@@ -61,8 +81,17 @@ class Dashboard extends React.Component {
 
     apiDynamicTesting(body)
       .then(response => {
-        console.log(`this is the response after RUNNING tests ${JSON.stringify(response)}`)
-      })
+        console.log(`this is the response after RUNNING tests ${JSON.stringify(response)}`);
+        if (response.sample) {
+          this.setState({
+            tests: response,
+          })
+        }
+        if (response.result === 'ok') {
+          console.log('going submit!')
+          this.getNextStep();
+        }        
+      });
   }
 
   render() {
@@ -101,7 +130,7 @@ class Dashboard extends React.Component {
                       bsSize="large"
                       bsStyle="primary"
                       block
-                      value="true"
+                      value="false"
                       onClick={this.handleSubmitions}
                     >
                     Submit
@@ -120,8 +149,7 @@ class Dashboard extends React.Component {
               </Row>
               <Row style={{height: "30%"}}>
                 <Col className={styles.bottomRight} >
-                  <h1>tests Area</h1>
-                  {this.state.tests}
+                  <TestsArea response={this.state.tests} />
                 </Col>          
               </Row>              
             </Col>
