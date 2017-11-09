@@ -53,6 +53,7 @@ const findChallengeStep = async (req, res, next) => {
     req.currentStepId = step;// eslint-disable-line no-param-reassign
     return next();
   }
+
   req.currentStepId = currentStepId; // eslint-disable-line no-param-reassign
   return next();
 };
@@ -178,10 +179,16 @@ const updateCollections = async (req, res) => {
       return res.status(500).json({ result: 'error', error: 'internal_error_creating' });
     });
 
-  await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { currentStepId: nextStep });
+  if (nextStep) {
+    await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { currentStepId: nextStep });
+    return res.status(200).json({ result: 'ok' });
+  }
+
+  // must update for next Challenge!
+  // await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { currentStepId: nextStep });
+  return res.status(200).json({ result: 'challenge_completed' });
 
   // return res.status(200).json({ result: req.results });
-  return res.status(200).json({ result: 'ok' });
 };
 
 

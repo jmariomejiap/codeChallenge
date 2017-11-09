@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Router, browserHistory } from 'react-router';
 import styles from './dashboard.css';
 import { Grid, Row, Col, Button} from 'react-bootstrap';
 import fetchChallengeStepInfo from '../../util/fetchChallengeStep';
@@ -68,6 +69,8 @@ class Dashboard extends React.Component {
     })
   }
 
+  
+
 
   handleSubmitions(e) {
     e.preventDefault();
@@ -87,10 +90,16 @@ class Dashboard extends React.Component {
             tests: response,
           })
         }
-        if (response.result === 'ok') {
-          console.log('going submit!')
+        if (response.result === 'ok') {        
+          this.setState({
+            tests: '',
+          });
           this.getNextStep();
-        }        
+        }
+        if (response.result === 'challenge_completed') {
+          console.log('going to push!')
+          browserHistory.push('/finished');
+        }
       });
   }
 

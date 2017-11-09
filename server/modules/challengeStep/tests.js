@@ -140,6 +140,8 @@ test('successful test, should return currentStep found in challengeAttempt colle
   t.truthy(res.body.code, 'got a code');
 });
 
+/*
+// this has been skip since we are testing front end step progression.
 
 test('should fail if challengeStep contents are incomplete', async (t) => {
   await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { currentStepId: '004' });
@@ -152,6 +154,7 @@ test('should fail if challengeStep contents are incomplete', async (t) => {
   t.is(res.body.result, 'error');
   t.is(res.body.error, 'internal_error');
 });
+*/
 
 // Unit testing evaluator function.
 
@@ -248,7 +251,7 @@ test('/score endpoint succesfully returns tests ran with sample flag ', async (t
   t.truthy(res.body.result, 'array of objects');
 });
 
-test('/score endpoint succesfully returns tests and updates databases ', async (t) => {
+test('/score returns OK when user submits answer', async (t) => {
   const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
   const args = {
     input: internals.solutionExample,
@@ -262,8 +265,27 @@ test('/score endpoint succesfully returns tests and updates databases ', async (
     .send(args);
 
   t.is(res.status, 200);
-  t.truthy(res.body.result, 'array of objects');
+  t.truthy(res.body.result, 'ok');
 });
+
+test('/score should return challenge_completed when the last step is done', async (t) => {
+  await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { currentStepId: '004' });
+  const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
+  const args = {
+    input: 'function subtract(a, b) {return a - b;}',
+    token,
+    challengeStepId: '004',
+    sample: 'false',
+  };
+
+  const res = await internals.reqAgent
+    .post('/api/v1/challengeStep/score')
+    .send(args);
+
+  t.is(res.status, 200);
+  t.truthy(res.body.result, 'challenge_completed');
+});
+
 
 /*
 test('/score endpoint failing when reading a challengeStep without info.json', async (t) => {

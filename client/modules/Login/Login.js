@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { browserHistory } from 'react-router';
 import styles from './Login.css';
 
 // bootstrap throws errors but loginForm is functional.
@@ -20,7 +21,7 @@ class Login extends React.Component {
     auth.userName = data.userFullName;
     auth.token = data.token;
 
-    this.props.router.push('/challenge');
+    browserHistory.push('/challenge');
   }
 
   render() {
@@ -35,7 +36,6 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-  router: React.PropTypes.object,
   routes: React.PropTypes.array,
 };
 

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Route, withRouter } from 'react-router';
+import { Route } from 'react-router';
 import App from './modules/App/NewApp';
 import Home from './modules/Home/Home';
 import Login from './modules/Login/Login';
 import SignUp from './modules/SignUp/SignUp';
 import Dashboard from './modules/Dasboard/index';
 import Welcome from './modules/WelcomeChallenge/index';
+import Finished from './modules/FinishedChallenge/index';
 import auth from './util/auth';
 // import ErrorMessage from './newModules/NotFound/NotFound';
 
@@ -14,10 +15,11 @@ import auth from './util/auth';
 const MyRoutes = (
   <Route component={App} auth={auth}>
     <Route path="/" component={Home} />
-    <Route path="/login" component={withRouter(Login)} />
+    <Route path="/login" component={Login} />
     <Route path="/signup" component={SignUp} />
     <Route path="/dashboard" component={Dashboard} />
     <Route path="/challenge" component={Welcome} />
+    <Route path="/finished" component={Finished} />
   </Route>
 );
 
