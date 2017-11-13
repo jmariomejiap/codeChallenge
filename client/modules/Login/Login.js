@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { browserHistory } from 'react-router';
+import Cookies from 'universal-cookie';
 import styles from './Login.css';
 
 // bootstrap throws errors but loginForm is functional.
 // uncomment it and replace "MyForm" to be use.
 import LoginForm from './FormContainer'; // bootstrap errors
-
 
 class Login extends React.Component {
   constructor(props) {
@@ -15,11 +15,10 @@ class Login extends React.Component {
   }
 
   handleAuthorized(data) {
-    const { auth } = this.props.routes[0];
-
-    auth.authorized = true;
-    auth.userName = data.userFullName;
-    auth.token = data.token;
+    const cookies = new Cookies();
+    cookies.set('authorized', 'true');
+    cookies.set('token', data.token);
+    cookies.set('userName', data.userFullName);
 
     browserHistory.push('/challenge');
   }
@@ -34,9 +33,5 @@ class Login extends React.Component {
     );
   }
 }
-
-Login.propTypes = {
-  routes: React.PropTypes.array,
-};
 
 export default Login;

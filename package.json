@@ -57,7 +57,8 @@
     "redux-thunk": "2.1.0",
     "safe-eval": "0.3.0",
     "sanitize-html": "1.11.4",
-    "supertest-as-promised": "4.0.2"
+    "supertest-as-promised": "4.0.2",
+    "universal-cookie": "^2.1.0"
   },
   "devDependencies": {
     "ava": "0.15.2",

@@ -1,46 +1,49 @@
 
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
+import Cookies from 'universal-cookie';
 import { Button } from 'react-bootstrap';
 import styles from './main.css';
 import fetchChallengeInfo from '../../util/fetchChallenge';
-
+import cookieValidator from '../../util/checkCookies';
 import ChallengeBar from '../App/components/Header/NewHeaderChallenge';
 
 class Welcome extends React.Component {
   constructor(props) {
     super(props);
+    const cookie = cookieValidator();
     this.state = {
-      userName: '',      
-      challengeName: '',
-      challengeDescription: '',
-      numberOfSteps: 0,
-      errors: [],
+      userName: cookie.userName,      
+      challengeName: cookie.challengeName,
+      challengeDescription: cookie.challengeDescription,
+      numberOfSteps: cookie.numberOfSteps,
     }
   }
   
   componentDidMount() {
-    const { userName, token } = this.props.routes[0].auth;
-
-    fetchChallengeInfo(token)
-      .then((result) => {
-        if (result.error) {
+    const cookie = cookieValidator();
+    
+    if (!cookie.authorized) {
+      browserHistory.push('/login');
+      return;
+    }
+    if (!this.state.challengeName) {
+      fetchChallengeInfo(cookie.token)
+        .then((result) => {
+          const cookies = new Cookies();
+          cookies.set('numberOfSteps', result.numberOfSteps);          
+          cookies.set('challengeName', result.challengeName);
+          cookies.set('challengeDescription', result.challengeDescription);
+          
+          console.log(`challenge data = ${JSON.stringify(result)}`);
+          
           this.setState({
-            errors: result.error
-          });
-          return;
-        }
-        // dashboard needs to display header with... name of challengeStep, number of steps, name, time.
-        this.props.routes[0] .auth.numberOfSteps = result.numberOfSteps;
-
-        console.log(`challenge data = ${JSON.stringify(result)}`);
-        this.setState({
-          userName: userName,
-          challengeName: result.challengeName,
-          challengeDescription: result.challengeDescription,
-          numberOfSteps: result.numberOfSteps
-        });      
-      });
+            challengeName: result.challengeName,
+            challengeDescription: result.challengeDescription,
+            numberOfSteps: result.numberOfSteps
+          });      
+        });
+    }    
   }
 
 

@@ -1,10 +1,13 @@
 
 import React from 'react';
 import { Router, browserHistory } from 'react-router';
+import Cookies from 'universal-cookie';
 import styles from './dashboard.css';
 import { Grid, Row, Col, Button} from 'react-bootstrap';
 import fetchChallengeStepInfo from '../../util/fetchChallengeStep';
 import apiDynamicTesting from '../../util/apiDynamicTest';
+import cookieValidator from '../../util/checkCookies';
+import removeCookies from '../../util/removeCookies';
 
 import ChallengeBar from '../App/components/Header/NewHeaderChallenge';
 import TestsArea from './testsArea';
@@ -12,53 +15,54 @@ import TestsArea from './testsArea';
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+    const cookie = cookieValidator();
     this.state = {
-      userName: '',
-      stepName: '',
-      stepDescription: '',
-      workArea: '',
-      tests: '',
-      numberOfSteps: 0,
-      challengeStepId: '',
-      token: '',
+      userName: cookie.userName,
+      stepName: cookie.stepName,
+      stepDescription: cookie.stepDescription,
+      workArea: cookie.workArea,
+      tests: {},
+      numberOfSteps: cookie.numberOfSteps,
+      challengeStepId: cookie.challengeStepId,
+      token: cookie.token,
     }
     
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmitions = this.handleSubmitions.bind(this);
     this.getNextStep = this.getNextStep.bind(this);
   }
+    
+  getNextStep() {
+    return fetchChallengeStepInfo(this.state.token)
+      .then((result) => {
+        if(!result.error) {
+          const workArea = new Buffer(result.code, 'base64').toString();
+          const stepDescription = new Buffer(result.description, 'base64').toString();
+
+          const cookies = new Cookies();
+          cookies.set('stepDescription', stepDescription);
+          cookies.set('workArea', workArea);
+          cookies.set('challengeStepId', result.challengeStepId);
+
+          this.setState({
+            stepDescription,
+            workArea,
+            challengeStepId: result.challengeStepId,
+          })
+        }
+      });
+  }
 
   componentDidMount() {
-    const { userName, token, numberOfSteps } = this.props.routes[0].auth;
+    const cookie = cookieValidator();
     
-    fetchChallengeStepInfo(token)
-      .then((result) => {
-        if(!result.error) {
-          this.setState({
-            userName,
-            numberOfSteps,
-            stepDescription: new Buffer(result.description, 'base64').toString(),
-            workArea: new Buffer(result.code, 'base64').toString(),
-            token,
-            challengeStepId: result.challengeStepId,
-          })
-        }
-      })
-  }
-  
-  getNextStep() {
-    const token = this.state.token;
-
-    return fetchChallengeStepInfo(token)
-      .then((result) => {
-        if(!result.error) {
-          this.setState({
-            stepDescription: new Buffer(result.description, 'base64').toString(),
-            workArea: new Buffer(result.code, 'base64').toString(),
-            challengeStepId: result.challengeStepId,
-          })
-        }
-      })
+    if (!cookie.authorized) {
+      browserHistory.push('/login');
+      return;
+    }
+    if (!this.state.challengeStepId) {
+      this.getNextStep();
+    }    
   }
 
   handleChange(e) {
@@ -66,7 +70,6 @@ class Dashboard extends React.Component {
       workArea: e.target.value
     })
   }
-
 
   handleSubmitions(e) {
     e.preventDefault();
@@ -92,6 +95,8 @@ class Dashboard extends React.Component {
           this.getNextStep();
         }
         if (response.result === 'challenge_completed') {
+          const cookies = new Cookies();          
+          removeCookies(cookies.getAll())
           browserHistory.push('/finished');
         }
       });
