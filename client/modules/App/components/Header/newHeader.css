@@ -7,3 +7,9 @@
   font-family: 'Russo One', sans-serif;
   font-size: 31px;
 }
+
+.stepsIcon {
+  color: darkgreen;
+  padding: 10px;
+  margin-top: 3px;
+}
