@@ -1,0 +1,27 @@
+.navbar {
+  height: 80px;
+  padding: 10px 8px 8px 4px;
+}
+
+.brandName {
+  font-family: 'Russo One', sans-serif;
+  font-size: 31px;
+}
+
+.welcome {
+  max-width: 600px;
+  padding: 15px 35px 45px;
+  margin: 15% auto 20% auto;
+  text-align: center;
+  color: white;
+}
+
+.startButton {
+  margin-top: 50px;
+}
+
+.stepsIcon {
+  color: darkgreen;
+  padding: 10px;
+  margin-top: 3px;
+}

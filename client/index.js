@@ -7,9 +7,13 @@ import { AppContainer } from 'react-hot-loader';
 import App from './App';
 import { configureStore } from './store';
 
+
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+
 // Initialize store
 const store = configureStore(window.__INITIAL_STATE__);
 const mountApp = document.getElementById('root');
+
 
 render(
   <AppContainer>
@@ -27,7 +31,7 @@ if (module.hot) {
     render(
       <AppContainer>
         <NextApp store={store} />
-      </AppContainer>,
+      </AppContainer>, 
       mountApp
     );
   });

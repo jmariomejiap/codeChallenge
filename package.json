@@ -46,8 +46,10 @@
     "mongoose": "4.4.20",
     "mongoose-validator": "1.2.5",
     "react": "15.1.0",
+    "react-bootstrap": "^0.31.5",
     "react-dom": "15.1.0",
     "react-helmet": "3.1.0",
+    "react-icons": "^2.2.7",
     "react-intl": "2.1.2",
     "react-redux": "4.4.5",
     "react-router": "2.4.1",
@@ -55,7 +57,8 @@
     "redux-thunk": "2.1.0",
     "safe-eval": "0.3.0",
     "sanitize-html": "1.11.4",
-    "supertest-as-promised": "4.0.2"
+    "supertest-as-promised": "4.0.2",
+    "universal-cookie": "^2.1.0"
   },
   "devDependencies": {
     "ava": "0.15.2",
