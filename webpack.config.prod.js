@@ -12,7 +12,7 @@ module.exports = {
 
   entry: {
     app: [
-      './client/index.js',
+      './client/NewIndex.js',
     ],
     vendor: [
       'react',
