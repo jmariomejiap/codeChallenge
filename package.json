@@ -127,6 +127,7 @@
       "server/**/tests*.js"
     ],
     "source": [
+      "client/**/*.js",
       "server/**/*.js"
     ],
     "timeout": "30s",
@@ -138,6 +139,7 @@
   },
   "nyc": {
     "include": [
+      "client/**/*.js",
       "server/**/*.js"
     ],
     "exclude": [

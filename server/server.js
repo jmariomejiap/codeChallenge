@@ -73,6 +73,7 @@ export default function () {
 
     // Import Manifests
     const assetsManifest = process.env.webpackAssets && JSON.parse(process.env.webpackAssets);
+    const chunkManifest = process.env.webpackChunkAssets && JSON.parse(process.env.webpackChunkAssets);
 
     return `
       <!doctype html>
@@ -93,6 +94,13 @@ export default function () {
         </head>
         <body>
           <div id="root">${html}</div>
+
+          <script>
+          ${process.env.NODE_ENV === 'production' ?
+          `//<![CDATA[
+          window.webpackManifest = ${JSON.stringify(chunkManifest)};
+          //]]>` : ''}
+        </script>
           
           <script src='${process.env.NODE_ENV === 'production' ? assetsManifest['/vendor.js'] : '/vendor.js'}'></script>
           <script src='${process.env.NODE_ENV === 'production' ? assetsManifest['/app.js'] : '/app.js'}'></script>
@@ -106,7 +114,7 @@ export default function () {
     const softTab = '&#32;&#32;&#32;&#32;';
     const errTrace = process.env.NODE_ENV !== 'production' ?
       `:<br><br><pre style="color:red">${softTab}${err.stack.replace(/\n/g, `<br>${softTab}`)}</pre>` : ''; // eslint-disable-line no-unused-vars
-    return newRenderFullPage(`Server Error${errTrace}`);
+    return newRenderFullPage(`Server Error${errTrace}`, {});
   };
 
 
