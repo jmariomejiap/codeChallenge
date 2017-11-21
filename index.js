@@ -22,6 +22,11 @@ if (process.env.NODE_ENV === 'production') {
   });
   require('babel-polyfill');
 
+  // Ignore css files
+  require.extensions['.css'] = () => {
+    return;
+  };
+
   var server = require('./server/server');
-  server.default();
+  // server.default();
 }

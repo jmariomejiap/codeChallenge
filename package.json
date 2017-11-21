@@ -120,7 +120,7 @@
     "webpack-manifest-plugin": "1.0.1"
   },
   "engines": {
-    "node": "8"
+    "node": "8.9"
   },
   "ava": {
     "files": [

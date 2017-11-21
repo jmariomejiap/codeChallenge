@@ -7,9 +7,10 @@ import fetchToken from '../../util/validateAccess.js';
 
 const internals = {};
 
-test.before('establish connection ', () => {
-  server();
-  internals.reqAgent = supertest('http://localhost:8080');
+test.before('establish connection ', async () => {
+  //internals.reqAgent = supertest('http://localhost:8080');
+  internals.reqAgent = await supertest(server);
+  // internals.reqAgent = supertest('http://localhost:8080');
 });
 
 
