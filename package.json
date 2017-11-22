@@ -1,6 +1,6 @@
 {
   "name": "code-challenge",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Code challenge platform",
   "scripts": {
     "test": "cross-env LOG_LEVEL=error NODE_ENV=test PORT=8080 MONGO_URL=mongodb://localhost:27017/code-challenge-test node node_modules/.bin/ava --serial -v",
