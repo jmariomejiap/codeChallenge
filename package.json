@@ -47,10 +47,10 @@
     "mongoose": "4.4.20",
     "mongoose-validator": "1.2.5",
     "react": "15.1.0",
-    "react-bootstrap": "^0.31.5",
+    "react-bootstrap": "0.31.5",
     "react-dom": "15.1.0",
     "react-helmet": "3.1.0",
-    "react-icons": "^2.2.7",
+    "react-icons": "2.2.7",
     "react-intl": "2.1.2",
     "react-redux": "4.4.5",
     "react-router": "2.4.1",
@@ -59,7 +59,7 @@
     "safe-eval": "0.3.0",
     "sanitize-html": "1.11.4",
     "supertest-as-promised": "4.0.2",
-    "universal-cookie": "^2.1.0"
+    "universal-cookie": "2.1.0"
   },
   "devDependencies": {
     "ava": "0.15.2",
@@ -96,7 +96,7 @@
     "nock": "8.0.0",
     "nodemon": "1.9.2",
     "null-loader": "0.1.1",
-    "nyc": "6.4.4",
+    "nyc": "11.3.0",
     "postcss-cssnext": "2.6.0",
     "postcss-focus": "1.0.0",
     "postcss-loader": "0.9.1",
@@ -134,6 +134,7 @@
     "timeout": "30s",
     "failFast": true,
     "babel": "inherit",
+    "concurrency": 1,
     "require": [
       "./server/util/setup-test-env.js"
     ]

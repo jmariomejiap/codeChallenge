@@ -29,7 +29,7 @@ test.beforeEach(async () => {
   });
 });
 
-test.only('should fail if invalid accessCode or passCode', async (t) => {
+test('should fail if invalid accessCode or passCode', async (t) => {
   const res = await internals.reqAgent
     .get('/api/v1/challengeAttempt?accessCode=wrongAccessCode&passCode=wrongPassCode');
 

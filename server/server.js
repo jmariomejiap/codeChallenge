@@ -129,7 +129,7 @@ app.use((req, res, next) => {
         .set('Content-Type', 'text/html')
         .end(newRenderFullPage(ReactApp));
     }
-    console.log('no render props'); // eslint-disable-line no-console
+    // console.log('no render props'); // eslint-disable-line no-console
     return next();
   });
 });
