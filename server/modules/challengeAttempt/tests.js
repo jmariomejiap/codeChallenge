@@ -6,9 +6,9 @@ import ChallengeAttempt from '../../models/challengeAttempt.js';
 
 const internals = {};
 
-test.before('connecting to challenge?', () => {
-  server();
-  internals.reqAgent = supertest('http://localhost:8080');
+test.before('connecting to challenge?', async () => {
+  internals.reqAgent = await supertest(server);
+  // internals.reqAgent = supertest('http://localhost:8080');
 });
 
 test.beforeEach(async () => {
@@ -29,7 +29,7 @@ test.beforeEach(async () => {
   });
 });
 
-test('should fail if invalid accessCode or passCode', async (t) => {
+test.only('should fail if invalid accessCode or passCode', async (t) => {
   const res = await internals.reqAgent
     .get('/api/v1/challengeAttempt?accessCode=wrongAccessCode&passCode=wrongPassCode');
 

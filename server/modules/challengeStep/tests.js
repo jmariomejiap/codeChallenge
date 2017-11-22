@@ -12,9 +12,9 @@ internals.dummyDataToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2V
 internals.emptyPayloadToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.OatqkwDnaqBNtgHHYJFGMioVx_9ZZ_sePRYyENAx5to';
 internals.solutionExample = 'function sum(a, b) {return a + b;}';
 
-test.before('establish connection ', () => {
-  server();
-  internals.reqAgent = supertest('http://localhost:8080');
+test.before('establish connection ', async () => {
+  internals.reqAgent = await supertest(server);
+  // internals.reqAgent = supertest('http://localhost:8080');
 });
 
 
