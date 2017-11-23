@@ -1,9 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router';
 import App from './modules/App/NewApp';
-import Home from './modules/Home/Home';
 import Login from './modules/Login/Login';
-import SignUp from './modules/SignUp/SignUp';
 import Dashboard from './modules/Dasboard/index';
 import Welcome from './modules/WelcomeChallenge/index';
 import Finished from './modules/FinishedChallenge/index';
@@ -13,9 +11,7 @@ import Finished from './modules/FinishedChallenge/index';
 
 const MyRoutes = (
   <Route component={App}>
-    <Route path="/" component={Home} />
-    <Route path="/login" component={Login} />
-    <Route path="/signup" component={SignUp} />
+    <Route path="/" component={Login} />
     <Route path="/dashboard" component={Dashboard} />
     <Route path="/challenge" component={Welcome} />
     <Route path="/finished" component={Finished} />

@@ -24,7 +24,7 @@ class Welcome extends React.Component {
     const cookie = cookieValidator();
     
     if (!cookie.authorized) {
-      browserHistory.push('/login');
+      browserHistory.push('/');
       return;
     }
     if (!this.state.challengeName) {

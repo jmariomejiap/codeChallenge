@@ -8,7 +8,7 @@ const Finished = (props) => {
   return (
     <div>
       <ChallengeBar userName={userName}/>      
-      <h1 style={{ color: 'white' }}>Challenge Completed!</h1>
+      <h1>Challenge Completed!</h1>
     </div>
   )
 };
