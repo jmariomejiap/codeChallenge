@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Router, browserHistory } from 'react-router';
+import ReactMarkdown from 'react-markdown';
 import Cookies from 'universal-cookie';
 import styles from './dashboard.css';
 import { Grid, Row, Col, Button} from 'react-bootstrap';
@@ -114,9 +115,7 @@ class Dashboard extends React.Component {
             
             <Col className={styles.leftDiv} sm={4}>
               <div className={styles.description}>
-                <p>
-                  {this.state.stepDescription}
-                </p>
+                <ReactMarkdown source={this.state.stepDescription} />
               </div>
             </Col>
             <Col className={styles.rightDiv} sm={8} >
@@ -172,3 +171,9 @@ class Dashboard extends React.Component {
 };
 
 export default Dashboard;
+
+/*
+<p>
+                  {this.state.stepDescription}
+                </p>
+*/
