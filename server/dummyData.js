@@ -20,4 +20,37 @@ export default async function () {
     challengeId: challengeDoc._id,
     status: 'not_started',
   });
+
+  await ChallengeAttempt.create({
+    accessCode: 'myAccessCode2',
+    passCode: 'myPassCode2',
+    fullName: 'dummyUserName2',
+    email: 'dummy2@dummy.com',
+    score: 0,
+    currentStepId: '001',
+    challengeId: challengeDoc._id,
+    status: 'not_started',
+  });
+
+  await ChallengeAttempt.create({
+    accessCode: 'myAccessCode3',
+    passCode: 'myPassCode3',
+    fullName: 'dummyUserName3',
+    email: 'dummy3@dummy.com',
+    score: 0,
+    currentStepId: '001',
+    challengeId: challengeDoc._id,
+    status: 'not_started',
+  });
+
+  await ChallengeAttempt.create({
+    accessCode: 'myAccessCode4',
+    passCode: 'myPassCode4',
+    fullName: 'dummyUserName4',
+    email: 'dummy4@dummy.com',
+    score: 0,
+    currentStepId: '001',
+    challengeId: challengeDoc._id,
+    status: 'not_started',
+  });
 }

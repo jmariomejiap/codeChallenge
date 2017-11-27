@@ -38,9 +38,7 @@ class Welcome extends React.Component {
           cookies.set('numberOfSteps', result.numberOfSteps);          
           cookies.set('challengeName', result.challengeName);
           cookies.set('challengeDescription', result.challengeDescription);
-          
-          console.log(`challenge data = ${JSON.stringify(result)}`);
-          
+
           this.setState({
             challengeName: result.challengeName,
             challengeDescription: result.challengeDescription,
@@ -68,7 +66,6 @@ class Welcome extends React.Component {
             Start!
             </Button>
           </Link>
-          
         </div>
       </div>     
     );

@@ -86,7 +86,6 @@ class Dashboard extends React.Component {
 
     apiDynamicTesting(body)
       .then(response => {
-        console.log('response = ', response);
         if (response.sample) {
           this.setState({
             tests: response,
@@ -100,7 +99,6 @@ class Dashboard extends React.Component {
         }
         if (response.result === 'challenge_completed') {
           const cookies = new Cookies();          
-          // removeCookies(cookies.getAll());
           cookies.set('challenge_completed', true);
           browserHistory.push('/finished');
         }
