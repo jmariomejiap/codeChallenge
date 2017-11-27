@@ -70,8 +70,6 @@ body {
 }
 
 .testDiv {
-  background-color:  rgb(54, 60, 71);
   padding: 8px;
   margin: 7px;
-  overflow: auto;
 }

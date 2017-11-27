@@ -162,14 +162,14 @@ test('should add 1 + 1 equal 2', async (t) => {
   const solutionExample = 'function sum(a, b) {return a + b;}';
   const result = evaluator(solutionExample, [1, 1], 2);
 
-  t.is(result, true);
+  t.is(result.passed, true);
 });
 
 test('should substract 1 - 1 equal 0', async (t) => {
   const solutionExample = 'function sum(a, b) {return a - b;}';
   const result = evaluator(solutionExample, [1, 1], 0);
 
-  t.is(result, true);
+  t.is(result.passed, true);
 });
 
 test('should return false if argument give is not a number', async (t) => {
@@ -190,14 +190,14 @@ test('should return false if result is not equal to expected output ', async (t)
   const solutionExample = 'function sum(a, b) {return a + b;}';
   const result = evaluator(solutionExample, [1, 1], 3);
 
-  t.is(result, false);
+  t.is(result.passed, false);
 });
 
 test('should work with arrow functions ES6', async (t) => {
   const solutionExample = '(a, b) => {return a + b;}';
   const result = evaluator(solutionExample, [1, 1], 2);
 
-  t.is(result, true);
+  t.is(result.passed, true);
 });
 
 test('should not concatenate strings', async (t) => {
@@ -211,7 +211,7 @@ test('safe-eval transform strings to numbers', async (t) => {
   const solutionExample = 'function sum(a, b) {return a + b;}';
   const result = evaluator(solutionExample, ['1', '1'], 2);
 
-  t.is(result, true);
+  t.is(result.passed, true);
 });
 
 // testing '/score' endpoint

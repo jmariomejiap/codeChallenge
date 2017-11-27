@@ -7,9 +7,9 @@ const evalutator = (userAnswer, input, expectedOutput) => {
   try {
     const result = safeEval(template);
     if (result === expectedOutput) {
-      return true;
+      return { passed: true, result };
     }
-    return false;
+    return { passed: false, result };
   } catch (error) {
     return false;
   }

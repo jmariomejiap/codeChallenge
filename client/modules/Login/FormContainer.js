@@ -8,6 +8,7 @@ class LoginForm extends React.Component {
     this.state = {
       accessCode: '',
       passCode: '',
+      invalid: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,10 +26,10 @@ class LoginForm extends React.Component {
     sendParams(this.state)
       .then(result => {
         if (result.error) {
-          alert('Invalid AccessCode and/or PassCode\n try again!');
           this.setState({
             accessCode: '',
             passCode: '',
+            invalid: true
           });
           return;
         }
@@ -37,26 +38,45 @@ class LoginForm extends React.Component {
       .catch(err => console.log(err));
   }
 
+  validateCredential() {
+    if (this.state.accessCode.length > 0 || this.state.passCode.length > 0) {
+      return null;
+    }
+    if (this.state.invalid) {
+      return 'error';
+    }
+    return null;
+  }
+
   render() {
     return (
       <div >
         <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="accessCode" >
-            <ControlLabel>AccessCode:</ControlLabel>
+          <FormGroup
+            controlId="accessCode"
+            validationState={this.validateCredential()}
+          >
+            <ControlLabel>Access Code:</ControlLabel>
             <FormControl
-              autoFocus
+              bsSize="large"
               type="text"
               value={this.state.accessCode}
               onChange={this.handleChange}
             />
+            <FormControl.Feedback />
           </FormGroup>
-          <FormGroup controlId="passCode" >
-            <ControlLabel>PassCode:</ControlLabel>
+          <FormGroup
+            controlId="passCode"
+            validationState={this.validateCredential()}
+          >
+            <ControlLabel>Pass Code:</ControlLabel>
             <FormControl
-              type="text"
+              bsSize="large"
+              type="password"
               value={this.state.passCode}
               onChange={this.handleChange}
             />
+            <FormControl.Feedback />
           </FormGroup>
           <Button
             block
@@ -64,7 +84,7 @@ class LoginForm extends React.Component {
             bsStyle="primary"
             type="submit"
           >
-          Login
+          Start
           </Button>
         </form>
       </div>

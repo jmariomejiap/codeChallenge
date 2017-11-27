@@ -27,7 +27,6 @@ class Login extends React.Component {
     return (
       <div className={styles.loginContainer} >
         <h1>Login</h1>
-        <p> sign in to your account</p>
         <LoginForm onSubmit={this.handleAuthorized} />
       </div>
     );
@@ -35,3 +34,18 @@ class Login extends React.Component {
 }
 
 export default Login;
+
+
+/*
+1. fix font size challenge page
+2. add tabs to tests.
+const tabsInstance = (
+  <Tabs defaultActiveKey={2} id="uncontrolled-tab-example">
+    <Tab eventKey={1} title="Tab 1">Tab 1 content</Tab>
+    <Tab eventKey={2} title="Tab 2">Tab 2 content</Tab>
+    <Tab eventKey={3} title="Tab 3" disabled>Tab 3 content</Tab>
+  </Tabs>
+);
+
+ReactDOM.render(tabsInstance, mountNode);
+*/

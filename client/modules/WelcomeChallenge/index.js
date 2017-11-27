@@ -53,8 +53,8 @@ class Welcome extends React.Component {
         <ChallengeBar numberOfSteps={this.state.numberOfSteps} userName={this.state.userName} />
         <div className={styles.welcome}>
           <h1>Welcome to {this.state.challengeName}</h1>
-          <h4>{this.state.challengeDescription}</h4>
-          <p>This challenge is broken up into <br /> small steps</p>
+          <h3>{this.state.challengeDescription}</h3>
+          <h3>This challenge is broken up into <br /> small steps</h3>
           <Link to='/dashboard'>
             <Button
               className={styles.startButton}
