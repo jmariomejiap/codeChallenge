@@ -1,10 +1,13 @@
 import Cookies from 'universal-cookie';
 
-const removeCookies = (allCookies) => {
+const removeCookies = () => {
   const cookies = new Cookies();
-  const arrayCookies = Object.keys(allCookies);
+  const content = cookies.getAll();
+  const arrayCookies = Object.keys(content);
+
   arrayCookies.map((cookie) => {
-    return cookies.remove(cookie);
+    cookies.remove(cookie);
+    return cookie;
   });
 };
 

@@ -2,6 +2,7 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import Cookies from 'universal-cookie';
+import cookieValidator from '../../util/checkCookies';
 import styles from './Login.css';
 
 // bootstrap throws errors but loginForm is functional.
@@ -12,6 +13,13 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.handleAuthorized = this.handleAuthorized.bind(this);
+  }
+
+  componentDidMount() {
+    const cookie = cookieValidator();
+    if (cookie.authorized) {
+      browserHistory.push('/challenge');
+    }
   }
 
   handleAuthorized(data) {
@@ -34,18 +42,3 @@ class Login extends React.Component {
 }
 
 export default Login;
-
-
-/*
-1. fix font size challenge page
-2. add tabs to tests.
-const tabsInstance = (
-  <Tabs defaultActiveKey={2} id="uncontrolled-tab-example">
-    <Tab eventKey={1} title="Tab 1">Tab 1 content</Tab>
-    <Tab eventKey={2} title="Tab 2">Tab 2 content</Tab>
-    <Tab eventKey={3} title="Tab 3" disabled>Tab 3 content</Tab>
-  </Tabs>
-);
-
-ReactDOM.render(tabsInstance, mountNode);
-*/
