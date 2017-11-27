@@ -27,6 +27,10 @@ class Welcome extends React.Component {
       browserHistory.push('/');
       return;
     }
+    if (cookie.challenge_completed) {
+      browserHistory.push('/finished');
+      return;
+    }
     if (!this.state.challengeName) {
       fetchChallengeInfo(cookie.token)
         .then((result) => {

@@ -1,20 +1,24 @@
 
 import React from 'react';
 import ChallengeBar from '../App/components/Header/NewHeaderChallenge';
+import Cookies from 'universal-cookie';
+import cookieValidator from '../../util/checkCookies';
+import removeCookies from '../../util/removeCookies';
+import styles from '../WelcomeChallenge/main.css';
 
-const Finished = (props) => {
-  const { userName } = props.routes[0].auth;
+const Finished = () => {
+  const cookie = cookieValidator();
+  console.log('this is the cookie load', cookie);
+
 
   return (
     <div>
-      <ChallengeBar userName={userName}/>      
-      <h1>Challenge Completed!</h1>
+      <ChallengeBar userName={cookie.userName}/>  
+      <div className={styles.welcome}>
+        <h1>Challenge Completed!</h1>
+      </div>
     </div>
   )
-};
-
-Finished.propTypes = {
-  auth: React.PropTypes.object,
 };
 
 export default Finished;

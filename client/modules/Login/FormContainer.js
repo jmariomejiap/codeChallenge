@@ -8,7 +8,7 @@ class LoginForm extends React.Component {
     this.state = {
       accessCode: '',
       passCode: '',
-      invalid: false
+      invalid: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,7 +29,7 @@ class LoginForm extends React.Component {
           this.setState({
             accessCode: '',
             passCode: '',
-            invalid: true
+            invalid: true,
           });
           return;
         }
