@@ -1,29 +1,29 @@
 {
-    "step_name": "Simple multiplication",
-    "function_name": "mult",
+    "step_name": "Simple substraction",
+    "function_name": "substraction",
     "test": [
         {
-            "input": [1,2],
-            "expected_output": 2,
+            "input": [1,1],
+            "expected_output": 0,
             "sample": true
         },
         {
             "input": [10,2],
-            "expected_output": 20,
+            "expected_output": 8,
             "sample": true
         },
         {
             "input": [2,2],
-            "expected_output": 4,
+            "expected_output": 0,
             "sample": true
         },
         {
             "input": [-10, 10],
-            "expected_output": 0
+            "expected_output": 20
         },
         {
             "input": [100,100],
-            "expected_output": 10000
+            "expected_output": 0
         }
     ]
 }

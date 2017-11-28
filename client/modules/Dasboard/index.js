@@ -24,9 +24,10 @@ class Dashboard extends React.Component {
       workArea: cookie.workArea,
       tests: {},
       numberOfSteps: cookie.numberOfSteps,
-      challengeStepId: cookie.challengeStepId,
+      challengeStepId: cookie.challengeStepId, // 001
       token: cookie.token,
       loading: false,
+      currentStep: parseInt(cookie.challengeStepId, 10),
     }
     
     this.handleChange = this.handleChange.bind(this);
@@ -45,10 +46,12 @@ class Dashboard extends React.Component {
           cookies.set('stepDescription', stepDescription);
           cookies.set('workArea', workArea);
           cookies.set('challengeStepId', result.challengeStepId);
+          cookies.set('currentStep', parseInt(result.challengeStepId, 10));
 
           this.setState({
             stepDescription,
             workArea,
+            currentStep: parseInt(result.challengeStepId, 10),
             challengeStepId: result.challengeStepId,
           })
         }
@@ -116,7 +119,7 @@ class Dashboard extends React.Component {
   render() {
     return(
       <div>
-        <ChallengeBar numberOfSteps={this.state.numberOfSteps} userName={this.state.userName}/>
+        <ChallengeBar numberOfSteps={this.state.numberOfSteps} current={this.state.currentStep} userName={this.state.userName}/>
         <Grid fluid={true} className={styles.myGrid} >
           <Row className={styles.box}>            
             <Col className={styles.leftDiv} sm={4}>

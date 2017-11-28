@@ -269,12 +269,12 @@ test('/score returns OK when user submits answer', async (t) => {
 });
 
 test('/score should return challenge_completed when the last step is done', async (t) => {
-  await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { currentStepId: '004' });
+  await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { currentStepId: '003' });
   const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
   const args = {
     input: 'function subtract(a, b) {return a - b;}',
     token,
-    challengeStepId: '004',
+    challengeStepId: '003',
     sample: 'false',
   };
 

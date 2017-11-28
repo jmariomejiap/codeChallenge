@@ -17,6 +17,7 @@ class Welcome extends React.Component {
       challengeName: cookie.challengeName,
       challengeDescription: cookie.challengeDescription,
       numberOfSteps: cookie.numberOfSteps,
+      currentStep: cookie.currentStep,
     }
   }
   
@@ -35,14 +36,19 @@ class Welcome extends React.Component {
       fetchChallengeInfo(cookie.token)
         .then((result) => {
           const cookies = new Cookies();
+          const currentStep = (!parseInt(this.state.currentStep)) ? 1 : this.state.currentStep;
+          console.log('after weird ......', currentStep);
+          console.log(result);
           cookies.set('numberOfSteps', result.numberOfSteps);          
           cookies.set('challengeName', result.challengeName);
           cookies.set('challengeDescription', result.challengeDescription);
+          cookies.set('currentStep', currentStep);
 
           this.setState({
             challengeName: result.challengeName,
             challengeDescription: result.challengeDescription,
-            numberOfSteps: result.numberOfSteps
+            numberOfSteps: result.numberOfSteps,
+            currentStep: currentStep,
           });      
         });
     }    
@@ -52,7 +58,7 @@ class Welcome extends React.Component {
   render() {
     return (
       <div >
-        <ChallengeBar numberOfSteps={this.state.numberOfSteps} userName={this.state.userName} />
+        <ChallengeBar numberOfSteps={this.state.numberOfSteps} current={this.state.currentStep} userName={this.state.userName} />
         <div className={styles.welcome}>
           <h1>Welcome to {this.state.challengeName}</h1>
           <h3>{this.state.challengeDescription}</h3>
