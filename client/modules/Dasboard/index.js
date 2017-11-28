@@ -4,7 +4,7 @@ import { Router, browserHistory } from 'react-router';
 import ReactMarkdown from 'react-markdown';
 import Cookies from 'universal-cookie';
 import styles from './dashboard.css';
-import { Grid, Row, Col, Button} from 'react-bootstrap';
+import { Grid, Row, Col, Button, Modal } from 'react-bootstrap';
 import fetchChallengeStepInfo from '../../util/fetchChallengeStep';
 import apiDynamicTesting from '../../util/apiDynamicTest';
 import cookieValidator from '../../util/checkCookies';
@@ -26,6 +26,7 @@ class Dashboard extends React.Component {
       numberOfSteps: cookie.numberOfSteps,
       challengeStepId: cookie.challengeStepId,
       token: cookie.token,
+      loading: false,
     }
     
     this.handleChange = this.handleChange.bind(this);
@@ -78,25 +79,31 @@ class Dashboard extends React.Component {
   handleSubmitions(e) {
     e.preventDefault();
     
+    this.setState({ loading: true });
+
     const body = {
       token: this.state.token,
       challengeStepId: this.state.challengeStepId,
       input: this.state.workArea,
       sample: e.target.value,
     }
-
+    
     apiDynamicTesting(body)
       .then(response => {
         if (response.sample) {
           this.setState({
+            loading: false,
             tests: response,
-          })
+          });
+          return;
         }
         if (response.result === 'ok') {        
           this.setState({
+            loading: false,
             tests: '',
           });
           this.getNextStep();
+          return;
         }
         if (response.result === 'challenge_completed') {
           const cookies = new Cookies();          
@@ -111,8 +118,7 @@ class Dashboard extends React.Component {
       <div>
         <ChallengeBar numberOfSteps={this.state.numberOfSteps} userName={this.state.userName}/>
         <Grid fluid={true} className={styles.myGrid} >
-          <Row className={styles.box}>
-            
+          <Row className={styles.box}>            
             <Col className={styles.leftDiv} sm={4}>
               <div className={styles.description}>
                 <ReactMarkdown source={this.state.stepDescription} />
@@ -127,11 +133,27 @@ class Dashboard extends React.Component {
                 </Col>
                 <Col sm={2} className={styles.buttonSection}>
                   <div>
+                    <Modal
+                      animation
+                      enforceFocus
+                      bsSize="small"
+                      show={this.state.loading}
+                      onHide={this.state.loading}
+                      className={styles.loadingModal}
+                      >
+                      <Modal.Body
+                        bsClass={styles.loading}
+                      >
+                        <h3>Loading...</h3>
+                      </Modal.Body>
+                    </Modal>
                     <Button 
                       bsSize="large"
                       bsStyle="primary"
                       block
                       value="true"
+                      name="run"
+                      disabled={this.state.loading}
                       onClick={this.handleSubmitions}
                     >
                     Run
@@ -141,6 +163,8 @@ class Dashboard extends React.Component {
                       bsStyle="primary"
                       block
                       value="false"
+                      name="submit"                      
+                      disabled={this.state.loading}
                       onClick={this.handleSubmitions}
                     >
                     Submit
@@ -171,9 +195,3 @@ class Dashboard extends React.Component {
 };
 
 export default Dashboard;
-
-/*
-<p>
-                  {this.state.stepDescription}
-                </p>
-*/

@@ -73,3 +73,13 @@ body {
   padding: 8px;
   margin: 7px;
 }
+
+.loadingModal {
+  margin-top: 15%;
+  
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+}
