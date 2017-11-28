@@ -83,3 +83,12 @@ body {
   text-align: center;
   padding: 50px;
 }
+
+.successIcon {
+  color:rgb(4, 134, 4);
+  margin-left: 10px;
+}
+
+.errorIcon {
+  color: red
+}
