@@ -37,8 +37,6 @@ class Welcome extends React.Component {
         .then((result) => {
           const cookies = new Cookies();
           const currentStep = (!parseInt(this.state.currentStep)) ? 1 : this.state.currentStep;
-          console.log('after weird ......', currentStep);
-          console.log(result);
           cookies.set('numberOfSteps', result.numberOfSteps);          
           cookies.set('challengeName', result.challengeName);
           cookies.set('challengeDescription', result.challengeDescription);
