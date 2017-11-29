@@ -92,3 +92,9 @@ body {
 .errorIcon {
   color: red
 }
+
+.testDivError {
+  padding: 8px;
+  margin: 7px;
+  color:red;
+}

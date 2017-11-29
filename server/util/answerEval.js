@@ -11,7 +11,7 @@ const evalutator = (userAnswer, input, expectedOutput) => {
     }
     return { passed: false, result };
   } catch (error) {
-    return false;
+    return { passed: false, errorName: error.name, errorMessage: error.message };
   }
 };
 
