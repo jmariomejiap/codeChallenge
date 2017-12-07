@@ -1,10 +1,10 @@
 import React from 'react';
 import NavHeader from './components/Header/NewHeaderNav';
-
+import styles from './components/Header/newHeader.css';
 
 const App = (props) => {
   return (
-    <div >
+    <div className={styles.container}>
       {(props.location.pathname === '/') ?
         <NavHeader /> : null
       }

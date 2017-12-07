@@ -13,6 +13,17 @@ import removeCookies from '../../util/removeCookies';
 import ChallengeBar from '../App/components/Header/NewHeaderChallenge';
 import TestsArea from './testsArea';
 
+const Editor = (props) => {
+  if (typeof window !== 'undefined') {
+    const Ace = require('react-ace').default;
+    require('brace/mode/javascript');
+    require('brace/theme/monokai');
+    return <Ace {...props} />;
+  }
+  return null;
+};
+
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -59,8 +70,7 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    const cookie = cookieValidator();
-    
+    const cookie = cookieValidator();    
     if (!cookie.authorized) {
       browserHistory.push('/');
       return;
@@ -75,7 +85,7 @@ class Dashboard extends React.Component {
 
   handleChange(e) {
     this.setState({
-      workArea: e.target.value
+      workArea: e
     })
   }
 
@@ -118,24 +128,43 @@ class Dashboard extends React.Component {
 
   render() {
     return(
-      <div>
-        <ChallengeBar numberOfSteps={this.state.numberOfSteps} current={this.state.currentStep} userName={this.state.userName}/>
-        <Grid fluid={true} className={styles.myGrid} >
-          <Row className={styles.box}>            
-            <Col className={styles.leftDiv} sm={4}>
+      <div className={styles.dashboard}>
+        <ChallengeBar numberOfSteps={this.state.numberOfSteps} current={this.state.currentStep} userName={this.state.userName} />
+        <Grid  className={styles.myGrid} >
+          <Row className={styles.row}>            
+            <Col className={styles.leftDiv} lg={4}>
               <div className={styles.description}>
                 <ReactMarkdown source={this.state.stepDescription} />
               </div>
             </Col>
-            <Col className={styles.rightDiv} sm={8} >
-              <Row style={{height: "70%"}}>
-                <Col className={styles.topRight} sm={10}>
-                  <div className={styles.workArea} >
-                    <textarea className={styles.inputArea} value={this.state.workArea} onChange={this.handleChange} />
-                  </div>
-                </Col>
-                <Col sm={2} className={styles.buttonSection}>
-                  <div>
+            <Col className={styles.rightDiv} lg={8}>
+              <Row style={{height: "100%"}}>
+                <Col lg={12} bsClass={{padding: 0}}>
+                  <div className={styles.topRight}>                    
+                    <div className={styles.buttonSection}>
+                      <Button 
+                        bsSize="large"
+                        bsStyle="primary"
+                        block
+                        value="true"
+                        name="run"
+                        disabled={this.state.loading}
+                        onClick={this.handleSubmitions}
+                      >
+                      Run
+                      </Button>
+                      <Button
+                        bsSize="large"
+                        bsStyle="primary"
+                        block
+                        value="false"
+                        name="submit"
+                        disabled={this.state.loading}
+                        onClick={this.handleSubmitions}
+                      >
+                      Submit
+                      </Button>
+                    </div>                    
                     <Modal
                       animation
                       enforceFocus
@@ -150,42 +179,14 @@ class Dashboard extends React.Component {
                         <h3>Loading...</h3>
                       </Modal.Body>
                     </Modal>
-                    <Button 
-                      bsSize="large"
-                      bsStyle="primary"
-                      block
-                      value="true"
-                      name="run"
-                      disabled={this.state.loading}
-                      onClick={this.handleSubmitions}
-                    >
-                    Run
-                    </Button>
-                    <Button 
-                      bsSize="large"
-                      bsStyle="primary"
-                      block
-                      value="false"
-                      name="submit"                      
-                      disabled={this.state.loading}
-                      onClick={this.handleSubmitions}
-                    >
-                    Submit
-                    </Button>
-                    <Button 
-                      className={styles.startButton}
-                      bsSize="large"
-                      bsStyle="primary"
-                      block
-                      disabled
-                    >
-                    Skip
-                    </Button>
-                  </div>        
+                    <div  className={styles.editorDiv} >
+                      <Editor className={styles.aceEditor} width={"100%"} mode="javascript" fontSize="22px" theme="monokai" value={this.state.workArea} onChange={this.handleChange} showPrintMargin={false}/>                    
+                    </div>
+                  </div>
                 </Col>
               </Row>
-              <Row style={{height: "30%"}}>
-                <Col className={styles.bottomRight} >
+              <Row>
+                <Col className={styles.bottomRight} lg={12} >
                   <TestsArea response={this.state.tests} />
                 </Col>          
               </Row>              
@@ -198,3 +199,4 @@ class Dashboard extends React.Component {
 };
 
 export default Dashboard;
+
