@@ -52,8 +52,8 @@
 
 
 .bottomRight {
-  font-size: 22px;
-  background-color: rgb(221, 227, 230);
+  font-size: 16px;
+  background-color: rgb(224, 230, 224);
   min-height: 280px;
 
 }
@@ -61,7 +61,7 @@
 
 .description {
   padding: 30px;
-  font-size: 28px;
+  font-size: 20px;
 }
 
 
@@ -98,4 +98,8 @@
   padding: 8px;
   margin: 7px;
   color:red;
+}
+
+.tabs {
+  color: rgb(71, 65, 65)
 }

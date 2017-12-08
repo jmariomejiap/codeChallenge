@@ -8,9 +8,9 @@ const createIcons = (n, c) => {
   const icons = [];
   for (let i = 1; i <= n; i++) {
     if (i === currentStep) {
-      icons.push(<Circle size={40} key={i} className={styles.stepsIcon} />);
+      icons.push(<Circle size={35} key={i} className={styles.stepsIcon} />);
     }
-    icons.push(<CircleO size={40} key={i} className={styles.stepsIcon} />);
+    icons.push(<CircleO size={35} key={i} className={styles.stepsIcon} />);
   }
   return icons;
 };

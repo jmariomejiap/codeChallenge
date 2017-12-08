@@ -22,7 +22,7 @@ const ShowError = (props) => {
 const CreateTabs = (props) => {
   const result = props.result;
   return (
-    <Tabs>
+    <Tabs className={styles.tabs} >
       {result.map((o, i) => {
         const output = o.score.result;
         const expectedOutput = o.expectedOutput;
