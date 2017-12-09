@@ -10,7 +10,6 @@ const ShowError = (props) => {
     <Tabs>
       <Tab title={title} >
         <div className={styles.testDivError}>
-          <h4>answer: {props.answer}</h4>
           <p>Error: {props.err.errorName}</p>
           <p>Message: {props.err.errorMessage}</p>
         </div>
@@ -45,12 +44,14 @@ const TestsArea = (props) => {
   if (!props.response.result) {
     return null;
   }
-  const result = props.response.result;
-  const verifyError = result[0].score.errorName;
 
+  const response = props.response;
   return (
     <div>
-      {(verifyError) ? <ShowError err={result[0].score} answer={result[0].userAnswer} /> : <CreateTabs result={result} />}
+      {(response.result[0].score.errorName) ?
+        <ShowError err={response.result[0].score} /> :
+        <CreateTabs result={response.result} />
+      }
     </div>
   );
 };

@@ -17,7 +17,7 @@ const createIcons = (n, c) => {
 
 const DisplaySteps = ({ steps, current }) => {
   return (
-    <ul>
+    <ul className={styles.progressIndicatorContainer}>
       {createIcons(steps, current)}
     </ul>
   );

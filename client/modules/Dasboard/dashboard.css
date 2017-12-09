@@ -33,28 +33,26 @@
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  height: 100px;
 }
 
 .aceEditor {
   padding: 0;
-  height: 100%;
+  height: 100px;
 }
 
 .buttonSection {
   position: absolute;
   z-index: 1;
-  width: 15%;
-  height: 20%;
-  top: 50%;
-  left: 82%;
+  width: 100px;
+  bottom: 198px;
+  right: 15px;
 }
-
 
 .bottomRight {
   font-size: 16px;
   background-color: rgb(224, 230, 224);
-  min-height: 280px;
+  min-height: 180px !important;
 
 }
 

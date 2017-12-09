@@ -28,6 +28,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     const cookie = cookieValidator();
+    const h = typeof window !== 'undefined' ? window.innerHeight : 400;
     this.state = {
       userName: cookie.userName,
       stepName: cookie.stepName,
@@ -35,17 +36,34 @@ class Dashboard extends React.Component {
       workArea: cookie.workArea,
       tests: {},
       numberOfSteps: cookie.numberOfSteps,
-      challengeStepId: cookie.challengeStepId, // 001
+      challengeStepId: cookie.challengeStepId,
       token: cookie.token,
       loading: false,
       currentStep: parseInt(cookie.challengeStepId, 10),
+      editorHeight: this.getEditorHeight(h),
     }
     
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmitions = this.handleSubmitions.bind(this);
     this.getNextStep = this.getNextStep.bind(this);
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.getEditorHeight = this.getEditorHeight.bind(this);
   }
-    
+
+  getEditorHeight(h) {
+    return h - 65 -180;
+  }
+  
+  updateWindowDimensions() {
+    this.setState({
+      editorHeight: this.getEditorHeight(window.innerHeight),
+    })
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
   getNextStep() {
     return fetchChallengeStepInfo(this.state.token)
       .then((result) => {
@@ -70,7 +88,11 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+
     const cookie = cookieValidator();    
+
     if (!cookie.authorized) {
       browserHistory.push('/');
       return;
@@ -103,7 +125,7 @@ class Dashboard extends React.Component {
     
     apiDynamicTesting(body)
       .then(response => {
-        if (response.sample) {
+        if (response.sample || response.errorName) {
           this.setState({
             loading: false,
             tests: response,
@@ -127,10 +149,11 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    console.log('render');
     return(
       <div className={styles.dashboard}>
         <ChallengeBar numberOfSteps={this.state.numberOfSteps} current={this.state.currentStep} userName={this.state.userName} />
-        <Grid  className={styles.myGrid} >
+        <Grid  fluid={true} className={styles.myGrid} >
           <Row className={styles.row}>            
             <Col className={styles.leftDiv} lg={4}>
               <div className={styles.description}>
@@ -179,8 +202,21 @@ class Dashboard extends React.Component {
                         <h3>Loading...</h3>
                       </Modal.Body>
                     </Modal>
-                    <div  className={styles.editorDiv} >
-                      <Editor className={styles.aceEditor} width={"100%"} mode="javascript" fontSize="22px" theme="monokai" value={this.state.workArea} onChange={this.handleChange} showPrintMargin={false}/>                    
+                    <div  
+                      style={{height: this.state.editorHeight}} 
+                      className={styles.editorDiv} 
+                      >
+                      <Editor 
+                        style={{height: this.state.editorHeight}} 
+                        className={styles.aceEditor}
+                        width={"100%"}
+                        mode="javascript" 
+                        fontSize="22px" 
+                        theme="monokai" 
+                        value={this.state.workArea} 
+                        onChange={this.handleChange} 
+                        showPrintMargin={false}
+                        />                    
                     </div>
                   </div>
                 </Col>

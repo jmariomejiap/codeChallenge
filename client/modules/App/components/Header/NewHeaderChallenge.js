@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 import DisplaySteps from './displaySteps';
 import styles from './newHeader.css';
 
@@ -18,7 +18,9 @@ const ChallengeBar = ({ numberOfSteps, current, userName }) => {
           <DisplaySteps steps={numberOfSteps} current={current} />
         </Nav>
         <Nav pullRight>
-          <NavItem eventKey={1} href="/profile" disabled>{userName}</NavItem>
+          <div className={styles.userNameContainer}>
+            {userName}
+          </div>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

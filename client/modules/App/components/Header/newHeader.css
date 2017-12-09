@@ -2,14 +2,14 @@ html,body {
   height: 100%;
   width: 100%;
   position: absolute;
-
+  overflow: hidden;
 }
 
 .navbar {
-  height: 85px;
+  height: 65px;
   padding: 10px 8px 8px 4px;
-  margin: 0;
-  background-color: rgb(214, 219, 214)
+  margin-bottom: 0px !important;
+  background-color: rgb(219, 215, 214)
 }
 
 .container {
@@ -25,10 +25,13 @@ html,body {
 .stepsIcon {
   color: darkgreen;
   padding: 3px;
-  margin-top: 9px;
+  margin-top: 7px;
 }
 
-.timer {
-  font-size: 35px;
-  margin-left: 20%
+.progressIndicatorContainer {
+  padding-left: 20px;
+}
+
+.userNameContainer {
+  margin-top: 12px;
 }

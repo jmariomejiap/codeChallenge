@@ -96,9 +96,10 @@ const sendResponse = (req, res) => {
 // dynimic test functionalilty //
 
 const verifyArguments = (req, res, next) => {
-  if (!req.body.input || !req.body.token || !req.body.sample || !req.body.challengeStepId) {
+  if (!req.body.token || !req.body.sample || !req.body.challengeStepId) {
     return res.status(404).json({ result: 'error', error: 'missing arguments' });
   }
+
   req.token = req.body.token; // eslint-disable-line no-param-reassign
   req.answer = req.body.input; // eslint-disable-line no-param-reassign
   req.sample = req.body.sample; // eslint-disable-line no-param-reassign
