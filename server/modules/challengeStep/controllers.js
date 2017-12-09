@@ -160,7 +160,7 @@ const sampleFilter = (req, res, next) => {
 
 /* istanbul ignore next */
 const updateCollections = async (req, res) => {
-  await ChallengeStepResult.remove({});
+  // await ChallengeStepResult.remove({});
 
   const currentChallengeAttemptId = req.challengeAttemptId;
   const currentChallengeStep = req.challengeStepId;
