@@ -18,7 +18,7 @@ const readFile = (path) => {
 
 const setScore = (tests) => {
   const passed = tests.filter((test) => {
-    return test.score;
+    return test.score.passed;
   });
 
   return (passed.length * 100) / tests.length;
@@ -39,6 +39,10 @@ const loadChallengeAttempt = async (req, res, next) => {
   if (!challengeAttemptDoc) {
     /* istanbul ignore next */
     return res.status(404).json({ result: 'error', error: 'challenge_step_not_found' });
+  }
+
+  if (challengeAttemptDoc.status === 'not_started') {
+    await ChallengeAttempt.update({ _id: stepIdArg }, { status: 'in_progress', startDate: new Date() });
   }
   req.challengeAttemptDoc = challengeAttemptDoc; // eslint-disable-line no-param-reassign
   return next();
@@ -160,15 +164,12 @@ const sampleFilter = (req, res, next) => {
 
 /* istanbul ignore next */
 const updateCollections = async (req, res) => {
-  // await ChallengeStepResult.remove({});
-
   const currentChallengeAttemptId = req.challengeAttemptId;
   const currentChallengeStep = req.challengeStepId;
   const challengeStepFolders = req.challengeStepFolders;
   const nextStep = setNextStep(currentChallengeStep, challengeStepFolders);
 
   const newStepResult = {
-    id: 'to be Determined',
     challengeId: req.challengeId,
     challengeStepId: currentChallengeStep,
     answer: req.answer,
@@ -185,11 +186,8 @@ const updateCollections = async (req, res) => {
     return res.status(200).json({ result: 'ok' });
   }
 
-  // must update for next Challenge!
-  // await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { currentStepId: nextStep });
+  await ChallengeAttempt.update({ _id: currentChallengeAttemptId }, { status: 'completed', finishedDate: new Date() });
   return res.status(200).json({ result: 'challenge_completed' });
-
-  // return res.status(200).json({ result: req.results });
 };
 
 
