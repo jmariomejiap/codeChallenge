@@ -103,7 +103,7 @@ const newRenderFullPage = (html) => {
   `;
 };
 
-
+/* istanbul ignore next */
 const newRenderError = err => {
   const softTab = '&#32;&#32;&#32;&#32;';
   const errTrace = process.env.NODE_ENV !== 'production' ?
