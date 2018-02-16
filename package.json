@@ -16,7 +16,7 @@
     "clean": "rimraf dist",
     "slate": "rimraf node_modules && npm install",
     "lint": "eslint client server",
-    "coverage": "nyc node node_modules/.bin/ava --serial -v",
+    "coverage": "nyc --reporter=html --reporter=text --reporter=json-summary node node_modules/.bin/ava --serial -v",
     "report-coverage": "cd ./node_modules/code-quality-cli && npm install && npm run start:dev"
   },
   "pre-commit": [
