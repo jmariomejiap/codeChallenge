@@ -23,7 +23,8 @@ variables:
 test_backend:
   script:
    - npm install --silent
-   - node node_modules/.bin/ava --serial -v
+   # - node node_modules/.bin/ava --serial -v
+   - npm run cover
 
 test_lint:
   script:
