@@ -25,6 +25,7 @@ test_backend:
    - npm install --silent
    # - node node_modules/.bin/ava --serial -v
    - npm run coverage
+   - npm run report-coverage
 
 test_lint:
   script:
