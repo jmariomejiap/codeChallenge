@@ -24,10 +24,7 @@ import challengeAttempt from './modules/challengeAttempt/routes';
 import challenge from './modules/challenge/routes';
 import challengeStep from './modules/challengeStep/routes';
 
-import uselessFunction from './uselessFunction';
 
-
-const useless = uselessFunction; // eslint-disable-line
 
 // Initialize the Express App
 const app = new Express();
