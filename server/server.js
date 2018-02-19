@@ -30,7 +30,6 @@ import challengeStep from './modules/challengeStep/routes';
 const app = new Express();
 
 // Run Webpack dev server in development mode
-/* istanbul ignore if */
 if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(config);
   app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
@@ -42,7 +41,6 @@ mongoose.Promise = global.Promise;
 
 // MongoDB Connection
 mongoose.connect(serverConfig.mongoURL, (error) => {
-  /* istanbul ignore if */
   if (error) {
     console.error('Please make sure Mongodb is installed and running!'); // eslint-disable-line no-console
     throw error;
@@ -103,7 +101,6 @@ const newRenderFullPage = (html) => {
   `;
 };
 
-/* istanbul ignore next */
 const newRenderError = err => {
   const softTab = '&#32;&#32;&#32;&#32;';
   const errTrace = process.env.NODE_ENV !== 'production' ?
@@ -143,7 +140,6 @@ app.use((req, res) => {
 
 // start app
 app.listen(serverConfig.port, (error) => {
-  /* istanbul ignore if */
   if (!error && process.env.NODE_ENV !== 'test') {
     console.log(`Code Challenge is running on port: ${serverConfig.port}!`); // eslint-disable-line
   }
