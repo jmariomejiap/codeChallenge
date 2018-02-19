@@ -23,7 +23,7 @@ variables:
 test_backend:
   script:
    - npm install --silent
-   # - node node_m
+   # - node 
    - npm run coverage
    - npm run report-coverage
 
