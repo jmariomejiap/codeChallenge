@@ -55,7 +55,7 @@ const findChallengeStep = async (req, res, next) => {
   const currentStepId = req.challengeAttemptDoc.currentStepId;
   if (!currentStepId) {
     const step = req.challengeStepFolders[0];
-    req.currentStepId = step;// eslint-disable-line no-param-reassign
+    req.currentStepId = step; // eslint-disable-line no-param-reassign
     return next();
   }
 

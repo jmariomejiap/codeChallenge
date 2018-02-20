@@ -24,6 +24,17 @@ import challengeAttempt from './modules/challengeAttempt/routes';
 import challenge from './modules/challenge/routes';
 import challengeStep from './modules/challengeStep/routes';
 
+const boooo = (a) => { // eslint-disable-line
+  if (a) {
+    return 'boooo +';
+  }
+  if (a === 'aaaaa') {
+    return 'aaaaaaa';
+  }
+
+  return 'BINGO';
+};
+
 
 
 // Initialize the Express App
