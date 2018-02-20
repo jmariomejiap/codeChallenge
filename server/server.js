@@ -32,7 +32,7 @@ const boooo = (a) => { // eslint-disable-line
     return 'aaaaaaa';
   }
 
-  return 'BINGOoo';
+  return 'BINGOooXXXXXX';
 };
 //
 
