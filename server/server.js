@@ -32,9 +32,9 @@ const boooo = (a) => { // eslint-disable-line
     return 'aaaaaaa';
   }
 
-  return 'BINGO';
+  return 'BINGOoo';
 };
-
+//
 
 
 // Initialize the Express App
