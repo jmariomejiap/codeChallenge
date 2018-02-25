@@ -24,16 +24,6 @@ import challengeAttempt from './modules/challengeAttempt/routes';
 import challenge from './modules/challenge/routes';
 import challengeStep from './modules/challengeStep/routes';
 
-const boooo = (a) => { // eslint-disable-line
-  if (a) {
-    return 'boooo +';
-  }
-  if (a === 'aaaaa') {
-    return 'aaaaaaa';
-  }
-
-  return 'BINGOooXXXXXX';
-};
 
 
 // Initialize the Express App
@@ -51,6 +41,7 @@ mongoose.Promise = global.Promise;
 
 // MongoDB Connection
 mongoose.connect(serverConfig.mongoURL, (error) => {
+  /* istanbul ignore if */
   if (error) {
     console.error('Please make sure Mongodb is installed and running!'); // eslint-disable-line no-console
     throw error;
