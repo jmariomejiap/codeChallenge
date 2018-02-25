@@ -30,6 +30,7 @@ import challengeStep from './modules/challengeStep/routes';
 const app = new Express();
 
 // Run Webpack dev server in development mode
+/* istanbul ignore if */
 if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(config);
   app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
@@ -61,6 +62,7 @@ app.use('/api/v1/challenge', challenge);
 app.use('/api/v1/challengeStep', challengeStep);
 
 // my new HTML
+/* istanbul ignore next */
 const newRenderFullPage = (html) => {
   const head = Helmet.rewind();
 
@@ -102,6 +104,7 @@ const newRenderFullPage = (html) => {
   `;
 };
 
+/* istanbul ignore next */
 const newRenderError = err => {
   const softTab = '&#32;&#32;&#32;&#32;';
   const errTrace = process.env.NODE_ENV !== 'production' ?
@@ -114,6 +117,7 @@ const newRenderError = err => {
 
 app.use((req, res, next) => {
   match({ routes: MyRoutes, location: req.url }, (err, redirectLocation, renderProps) => {
+    /* istanbul ignore if */
     if (err) {
       return res.status(500).end(newRenderError(err));
     }
