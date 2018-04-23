@@ -28,5 +28,4 @@ if (process.env.NODE_ENV === 'production') {
   };
 
   var server = require('./server/server');
-  // server.default();
 }

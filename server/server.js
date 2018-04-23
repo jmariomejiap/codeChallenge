@@ -130,7 +130,6 @@ app.use((req, res, next) => {
     /* istanbul ignore if */
     if (renderProps) {
       const ReactApp = renderToString(<RouterContext {...renderProps} />);
-      // const ReactApp = renderToString( React.createElement(RouterContext, renderProps));
       return res.status(200)
         .set('Content-Type', 'text/html')
         .end(newRenderFullPage(ReactApp));

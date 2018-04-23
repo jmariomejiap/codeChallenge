@@ -25,13 +25,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hashnode/mern-starter.git"
+    "url": "git+https://github.com/jmariomejiap/codeChallenge.git"
   },
   "bugs": {
-    "url": "https://github.com/Hashnode/mern-starter/issues"
+    "url": "https://github.com/jmariomejiap/codeChallenge/issues"
   },
-  "homepage": "https://github.com/Hashnode/mern-starter#readme",
-  "author": "Prashant Abhishek <prashant.abhishek7g@gmail.com>, Mayank Chandola <imayankchd@gmail.com>, Sandeep Panda <sandeep@hashnode.com>, Syed Fazle Rahman <fazle@hashnode.com>, Alkshendra Maurya <alkshendra@hashnode.com>",
+  "homepage": "https://github.com/jmariomejiap/codeChallenge#readme",
+  "author": " Mario Mejia <jmariomejiap@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "babel-core": "6.9.1",
