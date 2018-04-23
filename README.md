@@ -7,8 +7,8 @@ It is a server-side application build using React, React-bootstrap, node.js, exp
 
 make sure mongoDB is install and running.
 
-[] add screen shots.
-[] add instructions.
-[] elaborate on CI
+- [ ] add screen shots.
+- [ ] add instructions.
+- [ ] elaborate on CI
 
 
