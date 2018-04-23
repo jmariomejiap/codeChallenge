@@ -140,21 +140,6 @@ test('successful test, should return currentStep found in challengeAttempt colle
   t.truthy(res.body.code, 'got a code');
 });
 
-/*
-// this has been skip since we are testing front end step progression.
-
-test('should fail if challengeStep contents are incomplete', async (t) => {
-  await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { currentStepId: '004' });
-
-  const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
-  const res = await internals.reqAgent
-    .get(`/api/v1/challengeStep?token=${token}`);
-
-  t.is(res.status, 500);
-  t.is(res.body.result, 'error');
-  t.is(res.body.error, 'internal_error');
-});
-*/
 
 // Unit testing evaluator function.
 
@@ -176,14 +161,15 @@ test('should return false if argument give is not a number', async (t) => {
   const solutionExample = 'function sum(a, b) {return a + b;}';
   const result = evaluator(solutionExample, ['A', 1], 0);
 
-  t.is(result, false);
+  t.is(result.passed, false);
 });
 
 test('should return false if solution has typos (ex, retun) ', async (t) => {
   const solutionExample = 'function sum(a, b) {retun a + b;}';
   const result = evaluator(solutionExample, [1, 1], 2);
 
-  t.is(result, false);
+  t.is(result.errorName, 'SyntaxError');
+  t.is(result.errorMessage, 'Unexpected identifier');
 });
 
 test('should return false if result is not equal to expected output ', async (t) => {
@@ -204,7 +190,8 @@ test('should not concatenate strings', async (t) => {
   const solutionExample = 'function sum(a, b) {return a + b;}';
   const result = evaluator(solutionExample, ['a', 'a'], 'aa');
 
-  t.is(result, false);
+  t.is(result.errorName, 'ReferenceError');
+  t.is(result.errorMessage, 'a is not defined');
 });
 
 test('safe-eval transform strings to numbers', async (t) => {
@@ -269,12 +256,12 @@ test('/score returns OK when user submits answer', async (t) => {
 });
 
 test('/score should return challenge_completed when the last step is done', async (t) => {
-  await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { currentStepId: '004' });
+  await ChallengeAttempt.update({ accessCode: 'myAccessCodeTest', passCode: 'myPassCodeTest' }, { currentStepId: '003' });
   const token = await fetchToken('myAccessCodeTest', 'myPassCodeTest');
   const args = {
     input: 'function subtract(a, b) {return a - b;}',
     token,
-    challengeStepId: '004',
+    challengeStepId: '003',
     sample: 'false',
   };
 
@@ -285,25 +272,3 @@ test('/score should return challenge_completed when the last step is done', asyn
   t.is(res.status, 200);
   t.truthy(res.body.result, 'challenge_completed');
 });
-
-
-/*
-test('/score endpoint failing when reading a challengeStep without info.json', async (t) => {
-  const token = await fetchToken('myAccessCodeFake', 'myPassCodeFake');
-  const args = {
-    input: internals.solutionExample,
-    token,
-    challengeStepId: '001',
-    sample: 'true',
-  };
-
-  const res = await internals.reqAgent
-    .post('/api/v1/challengeStep/score')
-    .send(args);
-
-  console.log(res.body);
-  t.is(res.status, 500);
-  t.is(res.body.result, 'error');
-  t.is(res.body.error, 'internal_error');
-});
-*/

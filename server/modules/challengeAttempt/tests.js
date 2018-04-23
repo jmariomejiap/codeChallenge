@@ -8,7 +8,6 @@ const internals = {};
 
 test.before('connecting to challenge?', async () => {
   internals.reqAgent = await supertest(server);
-  // internals.reqAgent = supertest('http://localhost:8080');
 });
 
 test.beforeEach(async () => {

@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { Router, browserHistory } from 'react-router';
+import ReactMarkdown from 'react-markdown';
 import Cookies from 'universal-cookie';
 import styles from './dashboard.css';
-import { Grid, Row, Col, Button} from 'react-bootstrap';
+import { Grid, Row, Col, Button, Modal } from 'react-bootstrap';
 import fetchChallengeStepInfo from '../../util/fetchChallengeStep';
 import apiDynamicTesting from '../../util/apiDynamicTest';
 import cookieValidator from '../../util/checkCookies';
@@ -12,10 +13,22 @@ import removeCookies from '../../util/removeCookies';
 import ChallengeBar from '../App/components/Header/NewHeaderChallenge';
 import TestsArea from './testsArea';
 
+const Editor = (props) => {
+  if (typeof window !== 'undefined') {
+    const Ace = require('react-ace').default;
+    require('brace/mode/javascript');
+    require('brace/theme/monokai');
+    return <Ace {...props} />;
+  }
+  return null;
+};
+
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     const cookie = cookieValidator();
+    const h = typeof window !== 'undefined' ? window.innerHeight : 400;
     this.state = {
       userName: cookie.userName,
       stepName: cookie.stepName,
@@ -25,13 +38,32 @@ class Dashboard extends React.Component {
       numberOfSteps: cookie.numberOfSteps,
       challengeStepId: cookie.challengeStepId,
       token: cookie.token,
+      loading: false,
+      currentStep: parseInt(cookie.challengeStepId, 10),
+      editorHeight: this.getEditorHeight(h),
     }
     
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmitions = this.handleSubmitions.bind(this);
     this.getNextStep = this.getNextStep.bind(this);
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.getEditorHeight = this.getEditorHeight.bind(this);
   }
-    
+
+  getEditorHeight(h) {
+    return h - 65 -180;
+  }
+  
+  updateWindowDimensions() {
+    this.setState({
+      editorHeight: this.getEditorHeight(window.innerHeight),
+    })
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
   getNextStep() {
     return fetchChallengeStepInfo(this.state.token)
       .then((result) => {
@@ -43,10 +75,12 @@ class Dashboard extends React.Component {
           cookies.set('stepDescription', stepDescription);
           cookies.set('workArea', workArea);
           cookies.set('challengeStepId', result.challengeStepId);
+          cookies.set('currentStep', parseInt(result.challengeStepId, 10));
 
           this.setState({
             stepDescription,
             workArea,
+            currentStep: parseInt(result.challengeStepId, 10),
             challengeStepId: result.challengeStepId,
           })
         }
@@ -54,8 +88,11 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    const cookie = cookieValidator();
-    
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+
+    const cookie = cookieValidator();    
+
     if (!cookie.authorized) {
       browserHistory.push('/');
       return;
@@ -70,32 +107,38 @@ class Dashboard extends React.Component {
 
   handleChange(e) {
     this.setState({
-      workArea: e.target.value
+      workArea: e
     })
   }
 
   handleSubmitions(e) {
     e.preventDefault();
     
+    this.setState({ loading: true });
+
     const body = {
       token: this.state.token,
       challengeStepId: this.state.challengeStepId,
       input: this.state.workArea,
       sample: e.target.value,
     }
-
+    
     apiDynamicTesting(body)
       .then(response => {
-        if (response.sample) {
+        if (response.sample || response.errorName) {
           this.setState({
+            loading: false,
             tests: response,
-          })
+          });
+          return;
         }
         if (response.result === 'ok') {        
           this.setState({
+            loading: false,
             tests: '',
           });
           this.getNextStep();
+          return;
         }
         if (response.result === 'challenge_completed') {
           const cookies = new Cookies();          
@@ -106,60 +149,80 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    console.log('render');
     return(
-      <div>
-        <ChallengeBar numberOfSteps={this.state.numberOfSteps} userName={this.state.userName}/>
-        <Grid fluid={true} className={styles.myGrid} >
-          <Row className={styles.box}>
-            
-            <Col className={styles.leftDiv} sm={4}>
+      <div className={styles.dashboard}>
+        <ChallengeBar numberOfSteps={this.state.numberOfSteps} current={this.state.currentStep} userName={this.state.userName} />
+        <Grid  fluid={true} className={styles.myGrid} >
+          <Row className={styles.row}>            
+            <Col className={styles.leftDiv} lg={4}>
               <div className={styles.description}>
-                <p>
-                  {this.state.stepDescription}
-                </p>
+                <ReactMarkdown source={this.state.stepDescription} />
               </div>
             </Col>
-            <Col className={styles.rightDiv} sm={8} >
-              <Row style={{height: "70%"}}>
-                <Col className={styles.topRight} sm={10}>
-                  <div className={styles.workArea} >
-                    <textarea className={styles.inputArea} value={this.state.workArea} onChange={this.handleChange} />
+            <Col className={styles.rightDiv} lg={8}>
+              <Row style={{height: "100%"}}>
+                <Col lg={12} bsClass={{padding: 0}}>
+                  <div className={styles.topRight}>                    
+                    <div className={styles.buttonSection}>
+                      <Button 
+                        bsSize="large"
+                        bsStyle="primary"
+                        block
+                        value="true"
+                        name="run"
+                        disabled={this.state.loading}
+                        onClick={this.handleSubmitions}
+                      >
+                      Run
+                      </Button>
+                      <Button
+                        bsSize="large"
+                        bsStyle="primary"
+                        block
+                        value="false"
+                        name="submit"
+                        disabled={this.state.loading}
+                        onClick={this.handleSubmitions}
+                      >
+                      Submit
+                      </Button>
+                    </div>                    
+                    <Modal
+                      animation
+                      enforceFocus
+                      bsSize="small"
+                      show={this.state.loading}
+                      onHide={this.state.loading}
+                      className={styles.loadingModal}
+                      >
+                      <Modal.Body
+                        bsClass={styles.loading}
+                      >
+                        <h3>Loading...</h3>
+                      </Modal.Body>
+                    </Modal>
+                    <div  
+                      style={{height: this.state.editorHeight}} 
+                      className={styles.editorDiv} 
+                      >
+                      <Editor 
+                        style={{height: this.state.editorHeight}} 
+                        className={styles.aceEditor}
+                        width={"100%"}
+                        mode="javascript" 
+                        fontSize="22px" 
+                        theme="monokai" 
+                        value={this.state.workArea} 
+                        onChange={this.handleChange} 
+                        showPrintMargin={false}
+                        />                    
+                    </div>
                   </div>
                 </Col>
-                <Col sm={2} className={styles.buttonSection}>
-                  <div>
-                    <Button 
-                      bsSize="large"
-                      bsStyle="primary"
-                      block
-                      value="true"
-                      onClick={this.handleSubmitions}
-                    >
-                    Run
-                    </Button>
-                    <Button 
-                      bsSize="large"
-                      bsStyle="primary"
-                      block
-                      value="false"
-                      onClick={this.handleSubmitions}
-                    >
-                    Submit
-                    </Button>
-                    <Button 
-                      className={styles.startButton}
-                      bsSize="large"
-                      bsStyle="primary"
-                      block
-                      disabled
-                    >
-                    Skip
-                    </Button>
-                  </div>        
-                </Col>
               </Row>
-              <Row style={{height: "30%"}}>
-                <Col className={styles.bottomRight} >
+              <Row>
+                <Col className={styles.bottomRight} lg={12} >
                   <TestsArea response={this.state.tests} />
                 </Col>          
               </Row>              
@@ -172,3 +235,4 @@ class Dashboard extends React.Component {
 };
 
 export default Dashboard;
+

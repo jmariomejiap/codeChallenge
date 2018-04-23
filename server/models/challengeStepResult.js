@@ -11,7 +11,6 @@ const mongoIdValidator = [
 ];
 
 const challengeStepResult = new Schema({
-  id: { type: 'String', required: true },
   challengeId: { type: 'String', required: true, validate: mongoIdValidator },
   challengeStepId: { type: 'String', required: true },
   answer: { type: 'String' },

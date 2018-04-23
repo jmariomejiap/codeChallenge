@@ -26,6 +26,8 @@ const challengeAttempt = new Schema({
   currentStepId: { type: String },
   challengeId: { type: String, required: true, validate: mongoIdValidator },
   status: { type: String, required: true, enum: ['not_started', 'in_progress', 'completed'] },
+  startDate: { type: Date },
+  finishedDate: { type: Date },
 });
 
 export default mongoose.model('ChallengeAttempt', challengeAttempt);

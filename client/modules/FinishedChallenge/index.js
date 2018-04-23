@@ -10,36 +10,32 @@ import styles from '../WelcomeChallenge/main.css';
 class Finished extends React.Component {
   constructor(props) {
     super(props);  
+    const cookie = cookieValidator();
     this.state = {
-      userName: ''
+      userName: cookie.userName,
+      authorized:cookie.challenge_completed 
     }
   }
 
   componentDidMount() {
-    const cookie = cookieValidator();
-    /*
-    // wont work since it will remove all cookies therefore login will be needed.
-    if (!cookie.challenge_completed) {
+    if (!this.state.authorized) {
       browserHistory.push('/challenge');
       return;
     }
-    */
-    this.setState({
-      userName: cookie.userName
-    })
-  }
-
-  componentWillUnmount() {
     removeCookies();
   }
-  
+
   render() {
     return (
       <div>
-        <ChallengeBar userName={this.state.userName}/>  
-        <div className={styles.welcome}>
-          <h1>Challenge Completed!</h1>
-        </div>
+        {(!this.state.authorized) ? null :
+          <div> 
+            <ChallengeBar userName={this.state.userName}/>  
+            <div className={styles.welcome}>
+              <h1>Challenge Completed!</h1>
+            </div>
+          </div>
+        }        
       </div>
     )
   }

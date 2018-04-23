@@ -62,6 +62,7 @@ app.use('/api/v1/challenge', challenge);
 app.use('/api/v1/challengeStep', challengeStep);
 
 // my new HTML
+/* istanbul ignore next */
 const newRenderFullPage = (html) => {
   const head = Helmet.rewind();
 
@@ -103,7 +104,7 @@ const newRenderFullPage = (html) => {
   `;
 };
 
-
+/* istanbul ignore next */
 const newRenderError = err => {
   const softTab = '&#32;&#32;&#32;&#32;';
   const errTrace = process.env.NODE_ENV !== 'production' ?
@@ -116,20 +117,23 @@ const newRenderError = err => {
 
 app.use((req, res, next) => {
   match({ routes: MyRoutes, location: req.url }, (err, redirectLocation, renderProps) => {
+    /* istanbul ignore if */
     if (err) {
       return res.status(500).end(newRenderError(err));
     }
+
+    /* istanbul ignore if */
     if (redirectLocation) {
       return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     }
+
+    /* istanbul ignore if */
     if (renderProps) {
       const ReactApp = renderToString(<RouterContext {...renderProps} />);
-      // const ReactApp = renderToString( React.createElement(RouterContext, renderProps));
       return res.status(200)
         .set('Content-Type', 'text/html')
         .end(newRenderFullPage(ReactApp));
     }
-    // console.log('no render props'); // eslint-disable-line no-console
     return next();
   });
 });
