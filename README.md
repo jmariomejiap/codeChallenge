@@ -7,16 +7,27 @@ It is an Isomorphic application build using React, React-bootstrap, node.js, exp
 
 
 Login
+
+
 ![screen shot 2018-04-23 at 10 53 03 am](https://user-images.githubusercontent.com/22829270/39144468-bdb8a6c2-46e5-11e8-8bd8-652185196c42.png)
 
 
 
+
+
 Challenge Description
-![screen shot 2018-04-23 at 11 21 15 am](https://user-images.githubusercontent.com/22829270/39145445-84e4292c-46e8-11e8-90dc-05d005ab0072.png)
+
+![screen shot 2018-04-23 at 11 21 15 am](https://user-images.githubusercontent.com/22829270/39146059-82253580-46ea-11e8-8647-df0dc0b1d454.png)
+
+
+
 
 
 Dashboard 
-![screen shot 2018-04-23 at 11 23 41 am](https://user-images.githubusercontent.com/22829270/39145585-101f5f70-46e9-11e8-8dd8-35ac18e53bf0.png)
+
+![screen shot 2018-04-23 at 11 07 03 am](https://user-images.githubusercontent.com/22829270/39145967-4079a49a-46ea-11e8-8c25-6e45718580b3.png)
+
+
 
 
 
