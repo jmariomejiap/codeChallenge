@@ -8,7 +8,8 @@ It is an Isomorphic application build using React, React-bootstrap, node.js, exp
 
 ###### Demo
 
-![ezgif com-optimize](https://user-images.githubusercontent.com/22829270/39159089-9d40e368-4718-11e8-89bc-f20771cb954f.gif)
+![codechallenge](https://user-images.githubusercontent.com/22829270/39161998-327fedb6-4728-11e8-9ef7-5258024605db.gif)
+
 
 
 
