@@ -1,9 +1,9 @@
 # Code Challenge
 
-Code Challenge is a platform for testing small code problems and evaluate theirs solutions
-in real-time. It supports basic Authentication and  cookies.
+Code Challenge is a platform for testing small code problems and evaluate their solutions
+in real-time. It supports basic authentication and cookies.
 
-It is an Isomorphic application built using React, React-bootstrap, node.js, express and mongoDB.
+It is an Isomorphic application built using React, React-Bootstrap, Node.js, Express and MongoDB.
 
 
 ## Demo
