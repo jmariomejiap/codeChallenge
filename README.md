@@ -8,6 +8,9 @@ It is an Isomorphic application build using React, React-bootstrap, node.js, exp
 
 ###### Login
 
+![ezgif com-optimize](https://user-images.githubusercontent.com/22829270/39159089-9d40e368-4718-11e8-89bc-f20771cb954f.gif)
+
+
 
 ![screen shot 2018-04-23 at 11 59 18 am](https://user-images.githubusercontent.com/22829270/39147323-266924e6-46ee-11e8-866c-384dff7c21cf.png)
 
@@ -29,6 +32,14 @@ It is an Isomorphic application build using React, React-bootstrap, node.js, exp
 ![screen shot 2018-04-23 at 11 56 34 am](https://user-images.githubusercontent.com/22829270/39147816-8611b952-46ef-11e8-8c13-0dfb3fdd3927.png)
 
 
+
+
+## Getting Started
+
+###### Installation
+```
+$
+```
 
 
 
