@@ -17,7 +17,7 @@ It is an Isomorphic application built using React, React-Bootstrap, Node.js, Exp
 
 ##### Installation
 
-note: make sure mongoDB is install and running.
+note: make sure mongoDB is installed and running.
 
 
 First
@@ -33,6 +33,15 @@ or
 ```
 $ yarn install
 ```
+
+I you want to run Code Challenge locally.
+
+```
+$ npm start
+```
+
+and go to *http://localhost:8000/*
+
 
 
 
@@ -53,11 +62,11 @@ New challenges can be added to the **challenge_data** folder.
 Each challenge (ex. _math_) can have multiple exercises.
 Each exercise must have 3 files.
 * **code**. will describe part of the solution for a given exercise.
-* **description**... well, will describe what must be done.
-* **info.json**. This is where we have the data that will be injected into the user answer as well as the expected result. use for **Real time** testing.
+* **description**. well, will describe what must be done.
+* **info.json**. This is where we have the data that will be injected into the user's answer as well as the expected result. use for **Real time** testing.
 
 ## Contributing
-I welcome contributions! Please open an issues if you have any feature ideas or find any bugs. I also accept pull requests with open arms. I will go over the issues when I have time. :)
+I welcome contributions! Please open an issue if you have any feature ideas or find any bugs. I also accept pull requests with open arms. I will go over the issues when I have time. :)
 
 
 
