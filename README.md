@@ -34,7 +34,7 @@ or
 $ yarn install
 ```
 
-I you want to run Code Challenge locally.
+If you want to run Code Challenge locally.
 
 ```
 $ npm start
